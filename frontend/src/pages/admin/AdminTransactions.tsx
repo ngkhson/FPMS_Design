@@ -27,7 +27,6 @@ const AdminTransactions: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Theo dõi giao dịch</h1>
       
       {/* Summary Cards */}
       <div className="grid gap-6 mb-6" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
@@ -55,7 +54,7 @@ const AdminTransactions: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Lịch sử giao dịch hôm nay</h2>
           <div className="flex gap-4">
-            <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
+            <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
               <Search size={16} className="text-muted" />
               <input 
                 type="text" 

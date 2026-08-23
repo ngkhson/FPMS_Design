@@ -46,10 +46,7 @@ const AdminBookings: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Quản lý Đơn đặt sân</h1>
-        <button className="btn btn-primary">Tạo đơn tại quầy</button>
-      </div>
+
 
       <div className="card">
         <div className="flex items-center justify-between mb-6">
@@ -75,8 +72,8 @@ const AdminBookings: React.FC = () => {
             </button>
           </div>
           
-          <div className="flex gap-4">
-            <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
+          <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
               <Search size={16} className="text-muted" />
               <input 
                 type="text" 
@@ -98,10 +95,11 @@ const AdminBookings: React.FC = () => {
               <option value="7">Sân 7 người</option>
             </select>
 
-            <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
+            <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
               <Calendar size={16} className="text-muted" />
               <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
             </div>
+            <button className="btn btn-primary">Tạo đơn tại quầy</button>
           </div>
         </div>
 

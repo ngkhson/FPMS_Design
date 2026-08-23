@@ -6,9 +6,6 @@ const AdminPricing: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Bảng giá & Ngày lễ</h1>
-      </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
         

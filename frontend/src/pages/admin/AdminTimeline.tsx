@@ -15,36 +15,41 @@ const AdminTimeline: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Timeline Sân Hôm Nay</h1>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
-            <Calendar size={18} className="text-muted" />
-            <input 
-              type="date" 
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }}
-            />
-          </div>
-          <button className="btn btn-secondary">Làm mới</button>
-        </div>
-      </div>
-
       <div className="card">
-        {/* Legends */}
-        <div className="flex items-center gap-6 mb-6 text-sm">
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-border)' }}></div>
-            <span>Trống</span>
+        <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
+          {/* Legends */}
+          <div className="flex flex-wrap items-center gap-4 text-sm font-medium">
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-border)' }}></div>
+              <span>Trống</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--color-success)' }}></div>
+              <span>Sắp đá (Đã cọc)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid var(--color-warning)' }}></div>
+              <span>Đang đá trên sân</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--color-success)' }}></div>
-            <span>Sắp đá (Đã cọc)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid var(--color-warning)' }}></div>
-            <span>Đang đá trên sân</span>
+          
+          {/* Date Filter & Refresh */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 shadow-sm transition-all" style={{ border: '1px solid var(--color-border)', borderRadius: '999px', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1.2rem' }}>
+              <Calendar size={18} className="text-muted" />
+              <input 
+                type="date" 
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', fontWeight: 'bold', cursor: 'pointer' }}
+                onClick={(e) => {
+                  if ('showPicker' in HTMLInputElement.prototype) {
+                    try { (e.target as HTMLInputElement).showPicker(); } catch (err) {}
+                  }
+                }}
+              />
+            </div>
+            <button className="btn btn-secondary shadow-sm font-semibold" style={{ padding: '0.6rem 1.2rem', borderRadius: '999px' }}>Làm mới</button>
           </div>
         </div>
 

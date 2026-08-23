@@ -26,31 +26,28 @@ const AdminUsers: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Quản lý Người dùng</h1>
-        <button className="btn btn-primary">Thêm nhân viên</button>
-      </div>
+
 
       <div className="card">
         <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', width: '300px' }}>
+          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', width: '300px', padding: '0.6rem 1rem' }}>
             <Search size={16} className="text-muted" />
             <input type="text" placeholder="Tìm theo tên, email, sđt..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} />
           </div>
           
-          <div className="flex gap-4">
-            <select className="px-3 py-2" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+          <div className="flex gap-4 items-center">
+            <select className="" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none', padding: '0.6rem 1rem' }}>
               <option value="ALL">Tất cả vai trò</option>
               <option value="ADMIN">ADMIN</option>
               <option value="STAFF">STAFF</option>
               <option value="CUSTOMER">CUSTOMER</option>
             </select>
-            
-            <select className="px-3 py-2" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+            <select className="" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none', padding: '0.6rem 1rem' }}>
               <option value="ALL">Tất cả trạng thái</option>
               <option value="ACTIVE">Đang hoạt động</option>
               <option value="LOCKED">Đã khóa</option>
             </select>
+            <button className="btn btn-primary">Thêm nhân viên</button>
           </div>
         </div>
 

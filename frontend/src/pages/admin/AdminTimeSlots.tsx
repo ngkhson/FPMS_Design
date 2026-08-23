@@ -5,14 +5,12 @@ import { mockTimeSlots } from '../../mocks/mockData';
 const AdminTimeSlots: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Cấu hình Khung giờ</h1>
-        <button className="btn btn-primary"><Plus size={18} /> Thêm ca mới</button>
-      </div>
+
 
       <div className="card h-fit">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Danh sách Khung giờ</h2>
+          <button className="btn btn-primary"><Plus size={18} /> Thêm ca mới</button>
         </div>
         <p className="text-sm text-muted mb-4">Hệ thống sẽ dựa vào khung giờ này để tạo các slot trống cho khách đặt. Việc phân loại (Thường/Vàng) sẽ quyết định giá tiền được lấy từ Bảng giá.</p>
         

@@ -45,7 +45,6 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 className="text-2xl font-bold mb-6">Tổng quan Báo cáo</h1>
       
       {/* Metric Cards */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2rem' }}>
