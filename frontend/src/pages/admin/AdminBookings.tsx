@@ -4,6 +4,8 @@ import { Search, Filter, Calendar } from 'lucide-react';
 
 const AdminBookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('ALL'); // ALL, PENDING_CANCEL, IN_PROGRESS
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pitchFilter, setPitchFilter] = useState('ALL');
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -21,9 +23,24 @@ const AdminBookings: React.FC = () => {
   };
 
   const filteredBookings = mockBookings.filter(b => {
-    if (activeTab === 'ALL') return true;
-    if (activeTab === 'PENDING_CANCEL') return b.status === 'PENDING_CANCEL';
-    if (activeTab === 'IN_PROGRESS') return b.status === 'IN_PROGRESS';
+    // Tab Filter
+    if (activeTab === 'PENDING_CANCEL' && b.status !== 'PENDING_CANCEL') return false;
+    if (activeTab === 'IN_PROGRESS' && b.status !== 'IN_PROGRESS') return false;
+    
+    // Search Filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      if (!b.id.toLowerCase().includes(term) && !b.customerName.toLowerCase().includes(term)) {
+        return false;
+      }
+    }
+    
+    // Pitch Type Filter
+    if (pitchFilter !== 'ALL') {
+      const pitch = mockPitches.find(p => p.id === b.pitchId);
+      if (pitch?.type !== pitchFilter) return false;
+    }
+    
     return true;
   });
 
@@ -60,10 +77,31 @@ const AdminBookings: React.FC = () => {
           
           <div className="flex gap-4">
             <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
+              <Search size={16} className="text-muted" />
+              <input 
+                type="text" 
+                placeholder="Tìm mã đơn, tên khách..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '180px' }} 
+              />
+            </div>
+            
+            <select 
+              className="btn btn-secondary" 
+              style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              value={pitchFilter}
+              onChange={(e) => setPitchFilter(e.target.value)}
+            >
+              <option value="ALL">Loại sân: Tất cả</option>
+              <option value="5">Sân 5 người</option>
+              <option value="7">Sân 7 người</option>
+            </select>
+
+            <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
               <Calendar size={16} className="text-muted" />
               <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
             </div>
-            <button className="btn btn-secondary"><Filter size={18} /> Lọc</button>
           </div>
         </div>
 

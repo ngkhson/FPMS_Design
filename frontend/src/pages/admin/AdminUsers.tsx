@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, MoreVertical, Shield, ShieldAlert, UserX, UserCheck } from 'lucide-react';
 
 const AdminUsers: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState('ALL');
   const users = [
     { id: 'U001', name: 'Nguyễn Văn A', email: 'nguyenvana@gmail.com', phone: '0987654321', role: 'CUSTOMER', status: 'ACTIVE' },
     { id: 'U002', name: 'Trần Thị B', email: 'tranthib@gmail.com', phone: '0912345678', role: 'CUSTOMER', status: 'LOCKED' },
     { id: 'U003', name: 'Nguyễn Thu Ngân', email: 'ngan.staff@fpms.com', phone: '0909090909', role: 'STAFF', status: 'ACTIVE' },
     { id: 'U004', name: 'Phạm Minh Admin', email: 'admin@fpms.com', phone: '0888888888', role: 'ADMIN', status: 'ACTIVE' },
   ];
+
+  const filteredUsers = users.filter(u => {
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      if (!u.name.toLowerCase().includes(term) && !u.email.toLowerCase().includes(term) && !u.phone.includes(term)) {
+        return false;
+      }
+    }
+    if (roleFilter !== 'ALL' && u.role !== roleFilter) return false;
+    if (statusFilter !== 'ALL' && u.status !== statusFilter) return false;
+    return true;
+  });
 
   return (
     <div>
@@ -20,15 +35,21 @@ const AdminUsers: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', width: '300px' }}>
             <Search size={16} className="text-muted" />
-            <input type="text" placeholder="Tìm theo tên, email, sđt..." style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} />
+            <input type="text" placeholder="Tìm theo tên, email, sđt..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} />
           </div>
           
-          <div className="flex gap-2">
-            <select className="px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
-              <option>Tất cả vai trò</option>
-              <option>ADMIN</option>
-              <option>STAFF</option>
-              <option>CUSTOMER</option>
+          <div className="flex gap-4">
+            <select className="px-3 py-2" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+              <option value="ALL">Tất cả vai trò</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="STAFF">STAFF</option>
+              <option value="CUSTOMER">CUSTOMER</option>
+            </select>
+            
+            <select className="px-3 py-2" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="ACTIVE">Đang hoạt động</option>
+              <option value="LOCKED">Đã khóa</option>
             </select>
           </div>
         </div>
@@ -45,7 +66,7 @@ const AdminUsers: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4">
                     <div className="font-semibold">{user.name}</div>

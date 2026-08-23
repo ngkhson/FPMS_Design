@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, Plus, Edit, Settings } from 'lucide-react';
 import { mockPitches } from '../../mocks/mockData';
 
 const AdminPitches: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+
+  const filteredPitches = mockPitches.filter(pitch => {
+    if (searchTerm && !pitch.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    if (typeFilter !== 'ALL' && pitch.type !== typeFilter) return false;
+    if (statusFilter !== 'ALL' && pitch.status !== statusFilter) return false;
+    return true;
+  });
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -14,19 +24,19 @@ const AdminPitches: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', width: '300px' }}>
             <Search size={16} className="text-muted" />
-            <input type="text" placeholder="Tìm theo tên sân..." style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} />
+            <input type="text" placeholder="Tìm theo tên sân..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} />
           </div>
           
           <div className="flex gap-2">
-            <select className="px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
-              <option>Tất cả loại sân</option>
-              <option>Sân 5 người</option>
-              <option>Sân 7 người</option>
+            <select className="px-3 py-2" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+              <option value="ALL">Tất cả loại sân</option>
+              <option value="5">Sân 5 người</option>
+              <option value="7">Sân 7 người</option>
             </select>
-            <select className="px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
-              <option>Tất cả trạng thái</option>
-              <option>Đang hoạt động (AVAILABLE)</option>
-              <option>Bảo trì (MAINTENANCE)</option>
+            <select className="px-3 py-2" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', outline: 'none' }}>
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="AVAILABLE">Đang hoạt động (AVAILABLE)</option>
+              <option value="MAINTENANCE">Bảo trì (MAINTENANCE)</option>
             </select>
           </div>
         </div>
@@ -42,7 +52,7 @@ const AdminPitches: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockPitches.map((pitch) => (
+              {filteredPitches.map((pitch) => (
                 <tr key={pitch.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4 font-semibold">
                     {pitch.name}

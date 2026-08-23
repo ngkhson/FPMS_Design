@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, Filter, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 const AdminTransactions: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [typeFilter, setTypeFilter] = useState('ALL');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+
+  const mockTransactions = [
+    { id: 'TX_001', time: '16:30 - Hôm nay', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_002', time: '15:15 - Hôm nay', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_003', time: '14:00 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
+    { id: 'TX_004', time: '10:00 - Hôm nay', desc: 'Khách cọc đơn #B4', method: 'VNPAY', amount: 200000, type: 'IN', status: 'FAILED' },
+  ];
+
+  const filteredTransactions = mockTransactions.filter(tx => {
+    if (searchTerm && !tx.id.toLowerCase().includes(searchTerm.toLowerCase()) && !tx.desc.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+    if (typeFilter !== 'ALL' && tx.type !== typeFilter) return false;
+    if (statusFilter !== 'ALL' && tx.status !== statusFilter) return false;
+    return true;
+  });
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
@@ -38,9 +57,36 @@ const AdminTransactions: React.FC = () => {
           <div className="flex gap-4">
             <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
               <Search size={16} className="text-muted" />
-              <input type="text" placeholder="Tìm theo mã giao dịch..." style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
+              <input 
+                type="text" 
+                placeholder="Tìm mã, nội dung..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '150px' }} 
+              />
             </div>
-            <button className="btn btn-secondary"><Filter size={18} /> Lọc Tiền mặt</button>
+            
+            <select 
+              className="btn btn-secondary" 
+              style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+            >
+              <option value="ALL">Loại: Tất cả</option>
+              <option value="IN">Tiền thu (IN)</option>
+              <option value="OUT">Tiền hoàn (OUT)</option>
+            </select>
+            
+            <select 
+              className="btn btn-secondary" 
+              style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="ALL">Trạng thái: Tất cả</option>
+              <option value="SUCCESS">Thành công</option>
+              <option value="FAILED">Thất bại</option>
+            </select>
           </div>
         </div>
 
@@ -56,33 +102,25 @@ const AdminTransactions: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <td className="p-4 font-semibold">TX_001</td>
-                <td className="p-4">16:30 - Hôm nay</td>
-                <td className="p-4">Thanh toán nốt đơn #B3</td>
-                <td className="p-4"><span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>Tiền mặt</span></td>
-                <td className="p-4 font-bold text-success text-right flex items-center justify-end gap-1">
-                  <ArrowUpRight size={16} /> +{formatPrice(250000)}
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <td className="p-4 font-semibold">TX_002</td>
-                <td className="p-4">15:15 - Hôm nay</td>
-                <td className="p-4">Khách cọc đơn #B1</td>
-                <td className="p-4"><span className="badge badge-secondary" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-secondary)' }}>VNPAY</span></td>
-                <td className="p-4 font-bold text-success text-right flex items-center justify-end gap-1">
-                  <ArrowUpRight size={16} /> +{formatPrice(105000)}
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <td className="p-4 font-semibold">TX_003</td>
-                <td className="p-4">14:00 - Hôm nay</td>
-                <td className="p-4">Hoàn tiền đơn hủy #B2</td>
-                <td className="p-4"><span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>Chuyển khoản tay</span></td>
-                <td className="p-4 font-bold text-danger text-right flex items-center justify-end gap-1">
-                  <ArrowDownRight size={16} /> -{formatPrice(105000)}
-                </td>
-              </tr>
+              {filteredTransactions.map(tx => (
+                <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                  <td className="p-4 font-semibold">{tx.id}</td>
+                  <td className="p-4">
+                    {tx.time}
+                    {tx.status === 'FAILED' && <span className="badge badge-danger ml-2" style={{ marginLeft: '8px' }}>Thất bại</span>}
+                  </td>
+                  <td className="p-4">{tx.desc}</td>
+                  <td className="p-4">
+                    <span className={`badge ${tx.method === 'VNPAY' ? 'badge-secondary' : ''}`} style={tx.method === 'VNPAY' ? { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-secondary)' } : { backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
+                      {tx.method}
+                    </span>
+                  </td>
+                  <td className={`p-4 font-bold text-right flex items-center justify-end gap-1 ${tx.type === 'IN' ? 'text-success' : 'text-danger'} ${tx.status === 'FAILED' ? 'opacity-50' : ''}`} style={tx.status === 'FAILED' ? { opacity: 0.5 } : {}}>
+                    {tx.type === 'IN' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />} 
+                    {tx.type === 'IN' ? '+' : '-'}{formatPrice(tx.amount)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

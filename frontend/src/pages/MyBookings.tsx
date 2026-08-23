@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { mockBookings, mockPitches, mockTimeSlots } from '../mocks/mockData';
 import { Search } from 'lucide-react';
 
 const MyBookings: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('ALL'); // ALL, UPCOMING, HISTORY
+  const [searchTerm, setSearchTerm] = useState('');
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
@@ -18,6 +21,16 @@ const MyBookings: React.FC = () => {
     }
   };
 
+  const filteredBookings = mockBookings.filter(b => {
+    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL') return false;
+    if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
+    
+    if (searchTerm) {
+      if (!b.id.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    }
+    return true;
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Đơn đặt sân của tôi</h1>
@@ -25,16 +38,36 @@ const MyBookings: React.FC = () => {
       <div className="card mb-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4">
-            <button className="font-semibold px-4 py-2" style={{ borderBottom: '2px solid var(--color-primary)', color: 'var(--color-primary)' }}>Tất cả</button>
-            <button className="font-semibold px-4 py-2 text-muted hover:text-base transition">Sắp tới</button>
-            <button className="font-semibold px-4 py-2 text-muted hover:text-base transition">Lịch sử</button>
+            <button 
+              className={`font-semibold px-4 py-2 ${activeTab === 'ALL' ? '' : 'text-muted hover:text-base transition'}`}
+              style={activeTab === 'ALL' ? { borderBottom: '2px solid var(--color-primary)', color: 'var(--color-primary)' } : {}}
+              onClick={() => setActiveTab('ALL')}
+            >
+              Tất cả
+            </button>
+            <button 
+              className={`font-semibold px-4 py-2 ${activeTab === 'UPCOMING' ? '' : 'text-muted hover:text-base transition'}`}
+              style={activeTab === 'UPCOMING' ? { borderBottom: '2px solid var(--color-primary)', color: 'var(--color-primary)' } : {}}
+              onClick={() => setActiveTab('UPCOMING')}
+            >
+              Sắp tới
+            </button>
+            <button 
+              className={`font-semibold px-4 py-2 ${activeTab === 'HISTORY' ? '' : 'text-muted hover:text-base transition'}`}
+              style={activeTab === 'HISTORY' ? { borderBottom: '2px solid var(--color-primary)', color: 'var(--color-primary)' } : {}}
+              onClick={() => setActiveTab('HISTORY')}
+            >
+              Lịch sử
+            </button>
           </div>
           
           <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
             <Search size={16} className="text-muted" />
             <input 
               type="text" 
-              placeholder="Tìm kiếm..."
+              placeholder="Tìm theo mã đơn..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }}
             />
           </div>
@@ -53,7 +86,7 @@ const MyBookings: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockBookings.map((booking) => {
+              {filteredBookings.map((booking) => {
                 const pitch = mockPitches.find(p => p.id === booking.pitchId);
                 const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
                 
