@@ -63,6 +63,10 @@ const BookPitch: React.FC = () => {
               <span>Trống</span>
             </div>
             <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid #f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)' }}></div>
+              <span>Giờ vàng</span>
+            </div>
+            <div className="flex items-center gap-2">
               <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)' }}></div>
               <span>Đã đặt</span>
             </div>
@@ -169,18 +173,23 @@ const BookPitch: React.FC = () => {
                 }
 
                 // Available
+                const isPeak = slot.isPeak;
+                const baseBg = isPeak ? 'rgba(245, 158, 11, 0.1)' : 'var(--color-primary-light)';
+                const baseBorder = isPeak ? '#f59e0b' : 'var(--color-primary)';
+                const hoverBg = isPeak ? '#f59e0b' : 'var(--color-primary)';
+
                 return (
                   <div key={slot.id} className="matrix-cell p-1">
                     <div 
                       className="flex flex-col items-center justify-center transition-all matrix-slot-inner"
                       onClick={() => navigate(`/checkout/${slot.id}/${pitch.id}`)}
-                      style={{ height: '100%', borderRadius: '6px', backgroundColor: 'var(--color-primary-light)', border: '1px solid var(--color-primary)', cursor: 'pointer', padding: '0.25rem' }}
+                      style={{ height: '100%', borderRadius: '6px', backgroundColor: baseBg, border: `1px solid ${baseBorder}`, cursor: 'pointer', padding: '0.25rem' }}
                       title="Nhấn để đặt sân"
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-primary)'; e.currentTarget.style.color = 'white'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-primary-light)'; e.currentTarget.style.color = 'inherit'; }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = hoverBg; e.currentTarget.style.color = 'white'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = baseBg; e.currentTarget.style.color = 'inherit'; }}
                     >
                       <span className="font-bold text-sm">{formatPrice(slot.basePrice)}</span>
-                      <span className="text-xs mt-1 opacity-90">Trống</span>
+                      <span className="text-xs mt-1 opacity-90">{isPeak ? 'Giờ vàng' : 'Trống'}</span>
                     </div>
                   </div>
                 );

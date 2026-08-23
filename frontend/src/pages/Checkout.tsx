@@ -64,12 +64,34 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto pt-4 px-4 pb-12">
-      <div className="flex items-center mb-8 gap-4">
-        <button className="btn btn-secondary flex items-center gap-2" onClick={() => navigate(-1)} style={{ padding: '0.5rem 1rem' }}>
-          <ArrowLeft size={18} /> Quay lại
-        </button>
-        <h1 className="text-2xl font-bold ml-2">Xác nhận đặt sân</h1>
+    <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
+      <button 
+        className="flex items-center gap-2 text-muted hover:text-primary transition-all mb-4" 
+        onClick={() => navigate(-1)}
+        style={{ fontWeight: 500 }}
+      >
+        <ArrowLeft size={18} /> Quay lại
+      </button>
+
+      <div 
+        className="mb-8 shadow-lg relative overflow-hidden"
+        style={{ 
+          borderRadius: '1rem',
+          background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
+          color: 'white',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <h1 className="text-4xl font-bold mb-3 flex items-center justify-center gap-3 text-white">
+          <CheckCircle size={36} />
+          <span>Xác nhận đặt sân</span>
+        </h1>
+        <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Vui lòng kiểm tra kỹ thông tin và tiến hành thanh toán.</p>
       </div>
 
       <div className="grid grid-cols-auto gap-8" style={{ gridTemplateColumns: '1fr 400px' }}>

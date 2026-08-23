@@ -47,8 +47,11 @@ const CustomerLayout: React.FC = () => {
                 <User size={20} />
               </Link>
               
-              <Link to="/login" className="btn btn-primary">
-                Đăng xuất
+              <Link to="/register" className="btn btn-secondary font-semibold" style={{ padding: '0.5rem 1.2rem' }}>
+                Đăng ký
+              </Link>
+              <Link to="/login" className="btn btn-primary font-semibold" style={{ padding: '0.5rem 1.2rem' }}>
+                Đăng nhập
               </Link>
             </div>
           </nav>

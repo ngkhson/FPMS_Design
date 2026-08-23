@@ -1,10 +1,29 @@
 import React from 'react';
-import { Save } from 'lucide-react';
+import { Save, User } from 'lucide-react';
 
 const Profile: React.FC = () => {
   return (
-    <div className="max-w-3xl mx-auto pt-4 px-4 flex flex-col gap-6">
-      <h1 className="text-2xl font-bold px-2">Hồ sơ cá nhân</h1>
+    <div className="max-w-3xl mx-auto pt-8 px-4 flex flex-col gap-6 pb-12">
+      <div 
+        className="shadow-lg relative overflow-hidden"
+        style={{ 
+          borderRadius: '1rem',
+          background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
+          color: 'white',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <h1 className="text-4xl font-bold mb-3 flex items-center justify-center gap-3 text-white">
+          <User size={36} />
+          <span>Hồ sơ cá nhân</span>
+        </h1>
+        <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Quản lý thông tin và cài đặt bảo mật của bạn.</p>
+      </div>
       
       {/* Contact Info Card */}
       <div className="card">

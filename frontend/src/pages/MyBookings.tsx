@@ -55,26 +55,28 @@ const MyBookings: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
-      <div className="card mb-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-          <div>
-            <h2 className="text-2xl font-bold">Quản lý đơn sân</h2>
-            <p className="text-sm text-muted mt-1">Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
-          </div>
-          
-          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
-            <Search size={16} className="text-muted" />
-            <input
-              type="text"
-              placeholder="Tìm theo mã đơn..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '200px' }}
-            />
-          </div>
-        </div>
+      <div 
+        className="mb-8 shadow-lg"
+        style={{ 
+          borderRadius: '1rem',
+          background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
+          color: 'white',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <h1 className="text-4xl font-bold mb-3 text-white">
+          Quản lý đơn sân
+        </h1>
+        <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
+      </div>
 
-        <div className="flex items-center justify-between mb-4">
+      <div className="card mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
           <div className="flex gap-4">
             <button
               className={`font-semibold text-lg px-4 py-2 ${activeTab === 'ALL' ? '' : 'text-muted hover:text-base transition'}`}
@@ -97,6 +99,17 @@ const MyBookings: React.FC = () => {
             >
               Lịch sử
             </button>
+          </div>
+          
+          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
+            <Search size={16} className="text-muted" />
+            <input
+              type="text"
+              placeholder="Tìm theo mã đơn..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '200px' }}
+            />
           </div>
         </div>
 
