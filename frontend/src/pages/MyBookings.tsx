@@ -54,10 +54,26 @@ const MyBookings: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto pt-4 px-4 pb-12">
-      <h1 className="text-2xl font-bold mb-6">Đơn đặt sân của tôi</h1>
-
+    <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
       <div className="card mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+          <div>
+            <h2 className="text-2xl font-bold">Quản lý đơn sân</h2>
+            <p className="text-sm text-muted mt-1">Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
+          </div>
+          
+          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
+            <Search size={16} className="text-muted" />
+            <input
+              type="text"
+              placeholder="Tìm theo mã đơn..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '200px' }}
+            />
+          </div>
+        </div>
+
         <div className="flex items-center justify-between mb-4">
           <div className="flex gap-4">
             <button
@@ -81,17 +97,6 @@ const MyBookings: React.FC = () => {
             >
               Lịch sử
             </button>
-          </div>
-
-          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
-            <Search size={16} className="text-muted" />
-            <input
-              type="text"
-              placeholder="Tìm theo mã đơn..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '200px' }}
-            />
           </div>
         </div>
 
