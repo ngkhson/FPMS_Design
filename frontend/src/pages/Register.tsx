@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Register: React.FC = () => {
   return (
-    <div className="flex justify-center items-center" style={{ minHeight: '60vh', padding: '2rem 0' }}>
+    <div className="flex justify-center items-start pt-4">
       <div className="card" style={{ width: '100%', maxWidth: '500px' }}>
         <h2 className="text-2xl font-bold text-center mb-6">Đăng ký tài khoản</h2>
         
