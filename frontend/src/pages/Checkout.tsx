@@ -6,21 +6,21 @@ import { CreditCard, CheckCircle, ArrowLeft } from 'lucide-react';
 const Checkout: React.FC = () => {
   const { pitchId, timeSlotId } = useParams<{ pitchId: string, timeSlotId: string }>();
   const navigate = useNavigate();
-  
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const pitch = mockPitches.find(p => p.id === pitchId);
   const slot = mockTimeSlots.find(t => t.id === timeSlotId);
-  
+
   if (!pitch || !slot) {
     return <div className="text-center mt-8 text-danger">Không tìm thấy thông tin sân hoặc khung giờ!</div>;
   }
-  
+
   const depositRatio = 0.3; // 30% cọc
   const depositAmount = slot.basePrice * depositRatio;
   const remainingAmount = slot.basePrice - depositAmount;
-  
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
@@ -64,73 +64,97 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-4">
-      <button className="btn btn-secondary mb-6" onClick={() => navigate(-1)}>
-        <ArrowLeft size={18} /> Quay lại
-      </button>
-      
-      <div className="grid grid-cols-auto gap-6" style={{ gridTemplateColumns: '1fr 350px' }}>
+    <div className="max-w-5xl mx-auto pt-4 px-4 pb-12">
+      <div className="flex items-center mb-8 gap-4">
+        <button className="btn btn-secondary flex items-center gap-2" onClick={() => navigate(-1)} style={{ padding: '0.5rem 1rem' }}>
+          <ArrowLeft size={18} /> Quay lại
+        </button>
+        <h1 className="text-2xl font-bold ml-2">Xác nhận đặt sân</h1>
+      </div>
+
+      <div className="grid grid-cols-auto gap-8" style={{ gridTemplateColumns: '1fr 400px' }}>
         {/* Cột trái: Form thông tin người đặt */}
-        <div className="card">
-          <h2 className="text-xl font-semibold mb-6">Thông tin người đặt</h2>
-          <form className="flex flex-col gap-4">
-            <div>
-              <label className="font-semibold text-sm">Họ và tên</label>
-              <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="Nguyễn Văn A" />
+        <div className="card flex flex-col">
+          <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Thông tin người đặt</h2>
+          <form className="flex flex-col gap-4 flex-grow">
+            <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr' }}>
+              <div>
+                <label className="font-semibold text-sm">Họ và tên</label>
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="Nguyễn Văn A" />
+              </div>
+              <div>
+                <label className="font-semibold text-sm">Số điện thoại</label>
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="0987654321" />
+              </div>
             </div>
-            <div>
-              <label className="font-semibold text-sm">Số điện thoại</label>
-              <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="0987654321" />
-            </div>
-            <div>
+            <div className="flex-grow flex flex-col">
               <label className="font-semibold text-sm">Ghi chú (Tùy chọn)</label>
-              <textarea className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} rows={3} placeholder="Yêu cầu thêm (VD: thuê bóng, áo bib...)" />
+              <textarea className="mt-2 w-full flex-grow mb-4" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', minHeight: '120px' }} placeholder="Yêu cầu thêm (VD: thuê bóng, áo bib, nước suối...)" />
             </div>
+
+            <div className="p-4 rounded-lg text-sm mb-4" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}>
+              <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> Bạn có thể hủy đặt sân miễn phí trước 24h so với giờ bắt đầu để được hoàn lại 100% tiền cọc.
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-primary w-full flex items-center justify-center gap-2 mt-auto"
+              style={{ padding: '1rem', fontSize: '1rem' }}
+              onClick={handlePayment}
+              disabled={isProcessing}
+            >
+              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán {formatPrice(depositAmount)}</>}
+            </button>
+
+            <p className="text-xs text-center text-muted">
+              Bằng việc bấm Thanh toán, bạn đồng ý với Điều khoản đặt sân của chúng tôi.
+            </p>
           </form>
         </div>
-        
+
         {/* Cột phải: Hóa đơn & Thanh toán */}
-        <div className="card h-fit">
-          <h2 className="text-xl font-semibold mb-6">Chi tiết đơn</h2>
-          
-          <div className="flex justify-between mb-3 text-sm">
-            <span className="text-muted">Sân bóng:</span>
-            <span className="font-semibold">{pitch.name}</span>
+        <div className="card flex flex-col justify-between">
+          <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Chi tiết đơn đặt sân</h2>
+
+          <div className="flex flex-col gap-2 mb-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-base)' }}>
+            <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{pitch.name}</h3>
           </div>
-          <div className="flex justify-between mb-3 text-sm">
+
+          <div className="flex justify-between mb-3 text-sm items-center">
+            <span className="text-muted">Ngày đá:</span>
+            <span className="font-semibold px-2 py-1 bg-base rounded">Hôm nay</span>
+          </div>
+          <div className="flex justify-between mb-3 text-sm items-center">
             <span className="text-muted">Khung giờ:</span>
-            <span className="font-semibold">{slot.startTime} - {slot.endTime}</span>
+            <span className="font-bold">{slot.startTime} - {slot.endTime}</span>
           </div>
-          {slot.isPeak && (
-            <div className="flex justify-between mb-3 text-sm">
-              <span className="text-muted">Phụ phí:</span>
-              <span className="badge badge-warning">Giờ vàng</span>
-            </div>
-          )}
-          
-          <hr style={{ borderColor: 'var(--color-border)', margin: '1rem 0' }} />
-          
+          <div className="flex justify-between mb-3 text-sm items-center">
+            <span className="text-muted">Loại sân:</span>
+            <span className="font-semibold">{pitch.type}</span>
+          </div>
+
+          <hr style={{ borderColor: 'var(--color-border)', margin: '1.5rem 0' }} />
+
           <div className="flex justify-between mb-3 text-sm">
-            <span className="text-muted">Tổng tiền sân:</span>
+            <span className="text-muted">Tiền thuê sân:</span>
             <span className="font-semibold">{formatPrice(slot.basePrice)}</span>
           </div>
-          <div className="flex justify-between mb-3 text-sm">
-            <span className="text-muted">Cần thanh toán cọc (30%):</span>
-            <span className="font-bold text-lg text-primary">{formatPrice(depositAmount)}</span>
+
+          {slot.isPeak && (
+            <div className="flex justify-between mb-3 text-sm">
+              <span className="text-muted">Phụ phí giờ vàng:</span>
+              <span className="badge badge-warning">Đã bao gồm</span>
+            </div>
+          )}
+
+          <div className="flex justify-between mt-4 mb-2 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-primary-light)' }}>
+            <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>Cần đặt cọc (30%):</span>
+            <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{formatPrice(depositAmount)}</span>
           </div>
-          <div className="flex justify-between mb-6 text-sm">
-            <span className="text-muted">Thanh toán tại sân:</span>
+          <div className="flex justify-between mt-4 mb-2 px-2 text-sm">
+            <span className="text-muted">Còn lại thanh toán tại sân:</span>
             <span className="font-semibold text-warning">{formatPrice(remainingAmount)}</span>
           </div>
-          
-          <button 
-            className="btn btn-primary w-full py-3" 
-            style={{ padding: '1rem', fontSize: '1rem' }}
-            onClick={handlePayment}
-            disabled={isProcessing}
-          >
-            {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán VNPAY</>}
-          </button>
         </div>
       </div>
     </div>
