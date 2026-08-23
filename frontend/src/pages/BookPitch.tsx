@@ -33,21 +33,51 @@ const BookPitch: React.FC = () => {
   return (
     <div className="animate-fade-in pt-8 px-4 md:px-8 mx-auto" style={{ maxWidth: '1600px' }}>
       <div>
-        <div className="flex flex-wrap justify-between items-end mb-8 gap-4">
-          <div>
-            <h1 className="text-4xl font-bold mb-2 flex items-center gap-4" style={{ color: 'var(--color-primary)' }}>
-              <Calendar size={36} />
-              <span>Đặt Sân</span>
-            </h1>
-            <p className="text-muted text-lg">Chọn ngày và sân bóng phù hợp với bạn.</p>
+        <div 
+          className="mb-8 shadow-lg"
+          style={{ 
+            borderRadius: '1rem',
+            background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
+            color: 'white',
+            padding: '3rem 2rem',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <h1 className="text-4xl font-bold mb-3 flex items-center justify-center gap-3 text-white">
+            <Calendar size={36} />
+            <span>Đặt Sân</span>
+          </h1>
+          <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Chọn ngày và sân bóng phù hợp với bạn.</p>
+        </div>
+
+      <div className="card">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+          {/* Legends */}
+          <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm font-medium">
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}></div>
+              <span>Trống</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)' }}></div>
+              <span>Đã đặt</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}></div>
+              <span>Bảo trì</span>
+            </div>
           </div>
-          
+
           {/* Filters */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             {/* Pitch Type Filter */}
             <label 
-              className="flex items-center gap-2 px-4 py-2 shadow-sm transition-all" 
-              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer' }}
+              className="flex items-center gap-2 shadow-sm transition-all" 
+              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.6rem 1.2rem' }}
             >
               <span className="text-muted text-sm font-medium">Loại sân:</span>
               <select 
@@ -66,8 +96,8 @@ const BookPitch: React.FC = () => {
             
             {/* Date Filter */}
             <div 
-              className="flex items-center gap-2 px-4 py-2 shadow-sm transition-all" 
-              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer' }}
+              className="flex items-center gap-2 shadow-sm transition-all" 
+              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.6rem 1.2rem' }}
               onClick={() => {
                 const input = document.getElementById('date-picker-input') as HTMLInputElement;
                 if (input && 'showPicker' in HTMLInputElement.prototype) {
@@ -92,23 +122,6 @@ const BookPitch: React.FC = () => {
                 }}
               />
             </div>
-          </div>
-        </div>
-
-      <div className="card">
-        {/* Legends */}
-        <div className="flex items-center gap-6 mb-6 text-sm font-medium">
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)' }}></div>
-            <span>Trống</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)' }}></div>
-            <span>Đã đặt</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}></div>
-            <span>Bảo trì</span>
           </div>
         </div>
 
