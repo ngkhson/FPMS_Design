@@ -23,11 +23,11 @@ export interface Booking {
 }
 
 export const mockPitches: Pitch[] = [
-  { id: 'p1', name: 'Sân 1 (5 người)', type: '5', status: 'AVAILABLE' },
-  { id: 'p2', name: 'Sân 2 (5 người)', type: '5', status: 'AVAILABLE' },
-  { id: 'p3', name: 'Sân 3 (5 người)', type: '5', status: 'MAINTENANCE' },
-  { id: 'p4', name: 'Sân 4 (7 người)', type: '7', status: 'AVAILABLE' },
-  { id: 'p5', name: 'Sân VIP (7 người)', type: '7', status: 'AVAILABLE' },
+  { id: 'p1', name: 'Sân 1', type: '5', status: 'AVAILABLE' },
+  { id: 'p2', name: 'Sân 2', type: '5', status: 'AVAILABLE' },
+  { id: 'p3', name: 'Sân 3', type: '5', status: 'MAINTENANCE' },
+  { id: 'p4', name: 'Sân 4', type: '7', status: 'AVAILABLE' },
+  { id: 'p5', name: 'Sân VIP', type: '7', status: 'AVAILABLE' },
 ];
 
 export const mockTimeSlots: TimeSlot[] = [

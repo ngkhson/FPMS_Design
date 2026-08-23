@@ -8,6 +8,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Checkout from './pages/Checkout';
 import MyBookings from './pages/MyBookings';
 import Profile from './pages/Profile';
+import BookPitch from './pages/BookPitch';
 
 // Admin Imports
 import AdminLayout from './layouts/AdminLayout';
@@ -26,6 +27,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<CustomerLayout />}>
           <Route index element={<Home />} />
+          <Route path="book-pitch" element={<BookPitch />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="forgot-password" element={<ForgotPassword />} />

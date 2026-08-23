@@ -1,141 +1,96 @@
-import React, { useState } from 'react';
-import { Calendar, Search } from 'lucide-react';
-import { mockPitches, mockTimeSlots, mockBookings } from '../mocks/mockData';
+import React from 'react';
+import { Calendar, CreditCard, Ticket, Search, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
-  
-  // Format price
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-  };
-
-  const getSlotStatus = (pitchId: string, timeSlotId: string) => {
-    const pitch = mockPitches.find(p => p.id === pitchId);
-    if (pitch?.status === 'MAINTENANCE') return 'maintenance';
-    
-    // Check if booked
-    const booking = mockBookings.find(
-      b => b.pitchId === pitchId && b.timeSlotId === timeSlotId && b.date === selectedDate
-    );
-    
-    if (booking) return 'booked';
-    return 'available';
-  };
 
   return (
-    <div>
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold mt-4" style={{ color: 'var(--color-primary)' }}>
-          Hệ thống Đặt Sân Bóng Online
-        </h1>
-        <p className="text-muted mt-2">Vui lòng chọn ngày và khung giờ bạn muốn đặt</p>
-      </div>
-
-      <div className="card">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">Timeline Sân Bóng</h2>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
-              <Calendar size={18} className="text-muted" />
-              <input 
-                type="date" 
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }}
-              />
-            </div>
-            
-            <button className="btn btn-primary">
-              <Search size={18} /> Lọc sân
-            </button>
-          </div>
-        </div>
-        
-        {/* Legends */}
-        <div className="flex items-center gap-6 mb-6 text-sm">
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-border)' }}></div>
-            <span>Sân trống</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)' }}></div>
-            <span>Đã đặt</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-bg-base)' }}></div>
-            <span>Bảo trì</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="badge badge-warning">⚡ Giờ vàng</span>
-            <span>(Phụ thu)</span>
-          </div>
-        </div>
-
-        {/* Matrix */}
-        <div className="matrix-container">
-          <div className="matrix-header">
-            <div className="matrix-cell matrix-pitch-name">Sân / Khung giờ</div>
-            {mockTimeSlots.map(slot => (
-              <div key={slot.id} className="matrix-cell font-semibold">
-                <div>{slot.startTime} - {slot.endTime}</div>
-                {slot.isPeak && <div className="mt-1"><span className="badge badge-warning">Giờ vàng</span></div>}
-              </div>
-            ))}
+    <div className="animate-fade-in">
+      {/* 1. Hero Section */}
+      <section className="hero-section" style={{ minHeight: '65vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '4rem', background: 'linear-gradient(135deg, rgba(16,185,129,0.9) 0%, rgba(5,150,105,0.95) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat' }}>
+        <div className="container">
+          <div className="inline-block mb-6 px-4 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', border: '1px solid rgba(255, 255, 255, 0.2)', fontSize: '0.875rem' }}>
+            ⚡ Đặt sân — Thanh toán — Nhận vé QR chỉ trong 2 phút
           </div>
           
-          {mockPitches.map(pitch => (
-            <div key={pitch.id} className="matrix-row">
-              <div className="matrix-cell matrix-pitch-name">
-                <div>
-                  <div>{pitch.name}</div>
-                  <div className="text-sm text-muted font-normal mt-1">Loại sân: {pitch.type}</div>
-                </div>
-              </div>
-              
-              {mockTimeSlots.map(slot => {
-                const status = getSlotStatus(pitch.id, slot.id);
-                
-                return (
-                  <div 
-                    key={`${pitch.id}-${slot.id}`} 
-                    className={`matrix-cell matrix-slot ${status}`}
-                    onClick={() => {
-                      if (status === 'available') {
-                        navigate(`/checkout/${slot.id}/${pitch.id}`);
-                      }
-                    }}
-                  >
-                    {status === 'available' && (
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <span className="font-semibold text-primary">{formatPrice(slot.basePrice)}</span>
-                        <span className="text-sm text-muted mt-1">Trống</span>
-                      </div>
-                    )}
-                    
-                    {status === 'booked' && (
-                      <div className="flex flex-col items-center justify-center h-full text-danger font-semibold">
-                        Đã đặt
-                      </div>
-                    )}
-                    
-                    {status === 'maintenance' && (
-                      <div className="flex flex-col items-center justify-center h-full text-muted">
-                        Bảo trì
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Đặt sân bóng đá<br/>trực tuyến dễ dàng
+          </h1>
+          
+          <p className="text-lg md:text-xl opacity-90 mb-12 max-w-2xl mx-auto">
+            Tìm sân trống, chọn giờ, thanh toán tiền cọc online và nhận vé QR điện tử ngay tức thì.
+          </p>
+          
+          <button 
+            className="btn btn-primary shadow-lg hover:shadow-xl transition-shadow text-lg px-8 py-4 rounded-full"
+            style={{ backgroundColor: 'white', color: 'var(--color-primary-hover)', border: 'none' }}
+            onClick={() => navigate('/book-pitch')}
+          >
+            <Search size={20} className="mr-2" /> Đặt sân ngay
+          </button>
+        </div>
+      </section>
+
+      <div className="container">
+        {/* Stats */}
+        <div className="flex justify-center gap-12 text-center mb-16">
+          <div>
+            <div className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>24+</div>
+            <div className="text-sm text-muted font-medium">Sân bóng</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>2.8K+</div>
+            <div className="text-sm text-muted font-medium">Lượt đặt</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold flex items-center justify-center gap-1" style={{ color: 'var(--color-primary)' }}>
+              4.9<Star size={24} className="fill-warning text-warning" />
             </div>
-          ))}
+            <div className="text-sm text-muted font-medium">Đánh giá</div>
+          </div>
         </div>
       </div>
+
+      {/* 2. Features Section */}
+      <section className="container mb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Tại sao chọn FPMS?</h2>
+          <p className="text-muted">Giải pháp đặt sân bóng số 1, được hàng nghìn team tin dùng</p>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon-wrapper">
+              <Calendar size={48} />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Đặt lịch trực quan</h3>
+            <p className="text-sm text-muted leading-relaxed">
+              Chọn sân bằng bảng trực quan theo thời gian. Thấy ngay slot nào còn trống, click là đặt.
+            </p>
+          </div>
+          
+          <div className="feature-card highlight" style={{ backgroundColor: 'var(--color-primary-light)', borderColor: 'var(--color-primary)' }}>
+            <div className="feature-icon-wrapper">
+              <CreditCard size={48} />
+            </div>
+            <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--color-primary-hover)' }}>Thanh toán VNPAY</h3>
+            <p className="text-sm text-muted leading-relaxed">
+              Đặt cọc 30% qua VNPAY QR an toàn. Xác nhận tức thì, nhận vé ngay mà không cần chờ đợi.
+            </p>
+          </div>
+          
+          <div className="feature-card">
+            <div className="feature-icon-wrapper">
+              <Ticket size={48} />
+            </div>
+            <h3 className="text-xl font-bold mb-3">Vé QR điện tử</h3>
+            <p className="text-sm text-muted leading-relaxed">
+              Mỗi đơn đặt có mã QR riêng. Nhân viên quét mã nhận sân trong vài giây, không cần giấy tờ.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

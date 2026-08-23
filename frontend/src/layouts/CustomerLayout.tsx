@@ -35,6 +35,7 @@ const CustomerLayout: React.FC = () => {
           
           <nav className="flex items-center gap-6">
             <Link to="/" className="font-semibold">Trang Chủ</Link>
+            <Link to="/book-pitch" className="font-semibold">Đặt Sân</Link>
             <Link to="/my-bookings" className="font-semibold">Đơn Của Tôi</Link>
             
             <div className="flex items-center gap-4">
@@ -54,7 +55,7 @@ const CustomerLayout: React.FC = () => {
         </div>
       </header>
 
-      <main className="customer-main container">
+      <main className="customer-main">
         <div className="animate-fade-in">
           <Outlet />
         </div>
