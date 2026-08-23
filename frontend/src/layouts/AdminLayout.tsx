@@ -33,9 +33,9 @@ const AdminLayout: React.FC = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--color-bg-base)' }}>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', backgroundColor: 'var(--color-bg-base)' }}>
       {/* Sidebar */}
-      <aside style={{ width: '250px', backgroundColor: 'var(--color-bg-surface)', borderRight: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
+      <aside style={{ width: '250px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderRight: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--color-border)' }}>
           <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>FPMS Admin</h2>
           <p className="text-muted text-sm mt-1">Phần mềm quản lý sân bóng</p>
@@ -71,9 +71,9 @@ const AdminLayout: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100vh' }}>
         {/* Topbar */}
-        <header style={{ height: '64px', backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
+        <header style={{ height: '64px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
           <div>
             <span className="badge badge-success">Đang trong ca trực: Nguyễn Thu Ngân</span>
           </div>

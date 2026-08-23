@@ -100,9 +100,6 @@ const AdminTimeline: React.FC = () => {
                     style={{ backgroundColor: bgColor, borderLeft: `3px solid ${borderColor}` }}
                   >
                     <div className="flex flex-col items-center justify-center h-full">
-                      <span className="font-semibold">{booking.customerName}</span>
-                      <span className="text-sm mt-1 mb-2">#{booking.id.toUpperCase()}</span>
-                      
                       {booking.status === 'CONFIRMED' && (
                         <button className="btn btn-primary text-sm p-1" style={{ width: '100%' }}>
                           <Play size={14} /> Nhận sân
@@ -114,6 +111,14 @@ const AdminTimeline: React.FC = () => {
                       {booking.status === 'COMPLETED' && (
                         <span className="badge text-muted"><CheckCircle size={14} className="mr-1"/> Xong</span>
                       )}
+                    </div>
+                    
+                    <div className="timeline-tooltip">
+                      <div className="font-bold text-sm mb-1">{booking.customerName}</div>
+                      <div className="text-xs text-muted mb-1">Mã đơn: #{booking.id.toUpperCase()}</div>
+                      <div className="text-xs font-semibold" style={{ color: borderColor }}>
+                         {booking.status === 'CONFIRMED' ? 'Đã cọc' : booking.status === 'IN_PROGRESS' ? 'Đang đá' : 'Đã xong'}
+                      </div>
                     </div>
                   </div>
                 );

@@ -219,7 +219,6 @@ button {
 
 /* Matrix */
 .matrix-container {
-  overflow-x: auto;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-bg-surface);
@@ -227,7 +226,7 @@ button {
 
 .matrix-header, .matrix-row {
   display: flex;
-  min-width: max-content;
+  width: 100%;
 }
 
 .matrix-header {
@@ -237,11 +236,12 @@ button {
 
 .matrix-cell {
   flex: 1;
-  min-width: 120px;
-  padding: 1rem;
+  min-width: 0;
+  padding: 0.5rem 0.1rem;
   border-right: 1px solid var(--color-border);
   text-align: center;
   position: relative;
+  font-size: 0.75rem;
 }
 
 .matrix-cell:last-child {
@@ -257,11 +257,16 @@ button {
 }
 
 .matrix-pitch-name {
-  min-width: 150px;
+  flex: 0 0 140px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   background-color: var(--color-bg-elevated);
+  position: sticky;
+  left: 0;
+  z-index: 10;
 }
 
 .matrix-slot {
@@ -283,4 +288,25 @@ button {
   background-color: var(--color-bg-base);
   color: var(--color-text-muted);
   cursor: not-allowed;
+}
+
+.timeline-tooltip {
+  display: none;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  min-width: 150px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.75rem;
+  z-index: 50;
+  text-align: left;
+}
+
+.matrix-slot:hover .timeline-tooltip {
+  display: block;
 }
