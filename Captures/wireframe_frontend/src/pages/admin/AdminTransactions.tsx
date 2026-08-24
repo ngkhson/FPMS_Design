@@ -17,7 +17,7 @@ const AdminTransactions: React.FC = () => {
     return createPortal(
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
-        <div 
+        <div
           className="card"
           style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
         >
@@ -31,7 +31,7 @@ const AdminTransactions: React.FC = () => {
   const filteredTransactions = mockTransactions.filter(tx => {
     // Check Date Range
     if (tx.date < startDate || tx.date > endDate) return false;
-    
+
     // Check Search
     if (searchTerm && !tx.id.toLowerCase().includes(searchTerm.toLowerCase()) && !tx.desc.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
@@ -94,7 +94,7 @@ const AdminTransactions: React.FC = () => {
 
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
-      
+
       {/* Summary Cards */}
       <div className="grid gap-6 mb-6" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-primary)' }}>
@@ -102,13 +102,13 @@ const AdminTransactions: React.FC = () => {
           <div className="text-2xl font-bold text-primary">{formatPrice(1250000)}</div>
           <div className="text-xs text-muted mt-2">Dùng để giao ca / nộp két</div>
         </div>
-        
+
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
-          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (VNPAY)</div>
+          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (CHUYỂN KHOẢN)</div>
           <div className="text-2xl font-bold">{formatPrice(2500000)}</div>
           <div className="text-xs text-muted mt-2">Đã cộng vào tài khoản ngân hàng</div>
         </div>
-        
+
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-danger)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG HOÀN TRẢ (REFUND)</div>
           <div className="text-2xl font-bold text-danger">{formatPrice(105000)}</div>
@@ -128,42 +128,42 @@ const AdminTransactions: React.FC = () => {
 
           {/* Row 2: Filters */}
           <div className="flex flex-wrap items-center" style={{ gap: '1rem' }}>
-            
+
             {/* Search */}
             <div className="flex items-center gap-2" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem', flex: '1 1 200px', minWidth: '200px' }}>
               <Search size={16} className="text-muted" />
-              <input 
-                type="text" 
-                placeholder="Tìm mã, nội dung..." 
+              <input
+                type="text"
+                placeholder="Tìm mã, nội dung..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} 
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }}
               />
             </div>
-            
+
             {/* Date Picker */}
             <div className="flex items-center gap-2 flex-wrap" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem' }}>
               <span className="text-sm font-semibold whitespace-nowrap text-muted">Ngày:</span>
-              <input 
-                type="date" 
-                value={startDate} 
+              <input
+                type="date"
+                value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }}
               />
               <span className="text-muted">-</span>
-              <input 
-                type="date" 
-                value={endDate} 
+              <input
+                type="date"
+                value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }}
               />
             </div>
 
             {/* Type */}
-            <select 
-              className="btn btn-secondary" 
+            <select
+              className="btn btn-secondary"
               style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)', padding: '0 0.8rem' }}
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
@@ -172,10 +172,10 @@ const AdminTransactions: React.FC = () => {
               <option value="IN">Tiền thu (IN)</option>
               <option value="OUT">Tiền hoàn (OUT)</option>
             </select>
-            
+
             {/* Status */}
-            <select 
-              className="btn btn-secondary" 
+            <select
+              className="btn btn-secondary"
               style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)', padding: '0 0.8rem' }}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -203,7 +203,7 @@ const AdminTransactions: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredTransactions.map(tx => (
+              {filteredTransactions.slice(0, 3).map(tx => (
                 <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4 font-semibold">{tx.id}</td>
                   <td className="p-4">
@@ -217,7 +217,7 @@ const AdminTransactions: React.FC = () => {
                     </span>
                   </td>
                   <td className={`p-4 font-bold text-right flex items-center justify-end gap-1 ${tx.type === 'IN' ? 'text-success' : 'text-danger'} ${tx.status === 'FAILED' ? 'opacity-50' : ''}`} style={tx.status === 'FAILED' ? { opacity: 0.5 } : {}}>
-                    {tx.type === 'IN' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />} 
+                    {tx.type === 'IN' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
                     {tx.type === 'IN' ? '+' : '-'}{formatPrice(tx.amount)}
                   </td>
                 </tr>

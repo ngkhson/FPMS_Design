@@ -14,7 +14,7 @@ const AdminTimeline: React.FC = () => {
     );
   };
 
-  const filteredPitches = mockPitches.filter(p => selectedPitchType === 'all' || p.type.toString() === selectedPitchType);
+  const filteredPitches = mockPitches.filter(p => selectedPitchType === 'all' || p.type.toString() === selectedPitchType).slice(0, 7);
 
   return (
     <div>

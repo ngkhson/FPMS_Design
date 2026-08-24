@@ -70,7 +70,7 @@ export const mockBookings: Booking[] = [
 export const mockTransactions = [
   { id: 'TX_001', date: '2026-08-18', time: '16:30', desc: 'Thanh toán nốt đơn #B9', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
   { id: 'TX_002', date: '2026-08-18', time: '15:15', desc: 'Khách cọc đơn #B10', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
-  { id: 'TX_003', date: '2026-08-20', time: '14:00', desc: 'Khách cọc đơn #B11', method: 'VNPAY', amount: 150000, type: 'IN', status: 'SUCCESS' },
+  // TX_003 removed for wireframe variety
   { id: 'TX_004', date: '2026-08-21', time: '09:00', desc: 'Hoàn tiền đơn hủy #B12', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
   { id: 'TX_005', date: '2026-08-22', time: '18:30', desc: 'Thanh toán nốt đơn #B13', method: 'Tiền mặt', amount: 200000, type: 'IN', status: 'SUCCESS' },
   { id: 'TX_006', date: today, time: '16:30', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },

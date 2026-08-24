@@ -42,14 +42,11 @@ const AdminTimeSlots: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockTimeSlots.map((slot) => (
-                <tr key={slot.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+              {mockTimeSlots.slice(0, 6).map((slot, index) => (
+                <tr key={index} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4 font-semibold text-lg">[ Khung giờ ]</td>
                   <td className="p-4">
-                    {slot.isPeak
-                      ? <span className="badge">[ Loại giờ ]</span>
-                      : <span className="badge">[ Loại giờ ]</span>
-                    }
+                    <span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>[ Loại giờ ]</span>
                   </td>
                   <td className="p-4 font-semibold text-muted">
                     [ Số tiền ]
