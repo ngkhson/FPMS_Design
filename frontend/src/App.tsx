@@ -45,6 +45,7 @@ const App: React.FC = () => {
           <Route path="pitches" element={<AdminPitches />} />
           <Route path="timeslots" element={<AdminTimeSlots />} />
           <Route path="pricing" element={<AdminPricing />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

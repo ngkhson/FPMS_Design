@@ -66,7 +66,6 @@ const AdminUsers: React.FC = () => {
               <option value="ACTIVE">Đang hoạt động</option>
               <option value="LOCKED">Đã khóa</option>
             </select>
-            <button className="btn btn-primary" style={{ height: '42px' }} onClick={() => setIsAddModalOpen(true)}>Thêm nhân viên</button>
           </div>
         </div>
 
@@ -193,7 +192,7 @@ const AdminUsers: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} disabled={viewUser.role === 'CUSTOMER'}>
+              <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
                 <option value="CUSTOMER">Khách hàng (CUSTOMER)</option>
                 <option value="STAFF">Nhân viên (STAFF)</option>
                 <option value="ADMIN">Quản trị viên (ADMIN)</option>

@@ -82,9 +82,9 @@ const AdminLayout: React.FC = () => {
             <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }}>
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+            <Link to="/admin/profile" style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', textDecoration: 'none' }}>
               AD
-            </div>
+            </Link>
           </div>
         </header>
 
