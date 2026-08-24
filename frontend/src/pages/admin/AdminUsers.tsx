@@ -27,6 +27,9 @@ const AdminUsers: React.FC = () => {
     { id: 'U002', name: 'Trần Thị B', email: 'tranthib@gmail.com', phone: '0912345678', role: 'CUSTOMER', status: 'LOCKED' },
     { id: 'U003', name: 'Nguyễn Thu Ngân', email: 'ngan.staff@fpms.com', phone: '0909090909', role: 'STAFF', status: 'ACTIVE' },
     { id: 'U004', name: 'Phạm Minh Admin', email: 'admin@fpms.com', phone: '0888888888', role: 'ADMIN', status: 'ACTIVE' },
+    { id: 'U005', name: 'Lê Hoàng C', email: 'lehoangc@gmail.com', phone: '0933333333', role: 'CUSTOMER', status: 'ACTIVE' },
+    { id: 'U006', name: 'Vũ Thị D', email: 'vuthid@gmail.com', phone: '0944444444', role: 'CUSTOMER', status: 'ACTIVE' },
+    { id: 'U007', name: 'Hoàng Văn E', email: 'hoangvane@gmail.com', phone: '0955555555', role: 'CUSTOMER', status: 'LOCKED' },
   ];
 
   const filteredUsers = users.filter(u => {
