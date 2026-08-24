@@ -47,41 +47,41 @@ const BookPitch: React.FC = () => {
             justifyContent: 'center'
           }}
         >
-          <h1 className="text-4xl font-bold mb-3 flex items-center justify-center gap-3 text-white">
-            <Calendar size={36} />
+          <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3 text-white">
+            <Calendar size={32} />
             <span>Đặt Sân</span>
           </h1>
-          <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Chọn ngày và sân bóng phù hợp với bạn.</p>
+          <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Chọn ngày và sân bóng phù hợp với bạn.</p>
         </div>
 
-      <div className="card">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+      <div className="card" style={{ minWidth: 0 }}>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4" style={{ minWidth: 0 }}>
           {/* Legends */}
-          <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm font-medium">
-            <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}></div>
+          <div className="flex items-center gap-5 md:gap-6 text-sm font-medium overflow-x-auto pb-2 no-scrollbar w-full md:w-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <div style={{ width: 16, height: 16, flexShrink: 0, borderRadius: 4, border: '1px solid var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}></div>
               <span>Trống</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px solid #f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)' }}></div>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <div style={{ width: 16, height: 16, flexShrink: 0, borderRadius: 4, border: '1px solid #f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.15)' }}></div>
               <span>Giờ vàng</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)' }}></div>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <div style={{ width: 16, height: 16, flexShrink: 0, borderRadius: 4, backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid var(--color-danger)' }}></div>
               <span>Đã đặt</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}></div>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <div style={{ width: 16, height: 16, flexShrink: 0, borderRadius: 4, backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}></div>
               <span>Bảo trì</span>
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto ml-auto">
             {/* Pitch Type Filter */}
             <label 
-              className="flex items-center gap-2 shadow-sm transition-all" 
-              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.6rem 1.2rem' }}
+              className="flex items-center justify-between gap-2 shadow-sm transition-all" 
+              style={{ backgroundColor: 'white', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.8rem 1.2rem' }}
             >
               <span className="text-muted text-sm font-medium">Loại sân:</span>
               <select 
@@ -90,7 +90,7 @@ const BookPitch: React.FC = () => {
                   setSelectedPitchType(e.target.value);
                   setSearchParams({ type: e.target.value, date: selectedDate }, { replace: true });
                 }}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', fontWeight: 'bold', cursor: 'pointer', paddingRight: '0.5rem' }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', fontWeight: 'bold', cursor: 'pointer', paddingRight: '0.5rem', textAlign: 'right' }}
               >
                 <option value="all">Tất cả</option>
                 <option value="5">Sân 5 người</option>
@@ -100,8 +100,8 @@ const BookPitch: React.FC = () => {
             
             {/* Date Filter */}
             <div 
-              className="flex items-center gap-2 shadow-sm transition-all" 
-              style={{ backgroundColor: 'white', borderRadius: '999px', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.6rem 1.2rem' }}
+              className="flex items-center justify-between gap-2 shadow-sm transition-all" 
+              style={{ backgroundColor: 'white', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', cursor: 'pointer', padding: '0.8rem 1.2rem' }}
               onClick={() => {
                 const input = document.getElementById('date-picker-input') as HTMLInputElement;
                 if (input && 'showPicker' in HTMLInputElement.prototype) {
@@ -118,7 +118,7 @@ const BookPitch: React.FC = () => {
                   setSelectedDate(e.target.value);
                   setSearchParams({ type: selectedPitchType, date: e.target.value }, { replace: true });
                 }}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', fontWeight: 'bold', cursor: 'pointer' }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', fontWeight: 'bold', cursor: 'pointer', textAlign: 'right' }}
                 onClick={(e) => {
                   if ('showPicker' in HTMLInputElement.prototype) {
                     try { (e.target as HTMLInputElement).showPicker(); } catch (err) {}
@@ -129,8 +129,8 @@ const BookPitch: React.FC = () => {
           </div>
         </div>
 
-        {/* Matrix Gantt for Customer */}
-        <div className="matrix-container">
+        {/* Matrix Gantt for Desktop */}
+        <div className="hidden md:block matrix-container" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
           <div className="matrix-header">
             <div className="matrix-cell matrix-pitch-name">Sân / Khung giờ</div>
             {mockTimeSlots.map(slot => (
@@ -194,6 +194,58 @@ const BookPitch: React.FC = () => {
                   </div>
                 );
               })}
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Cards (Pitch list) */}
+        <div className="md:hidden flex flex-col gap-6 mt-4">
+          <div className="text-sm font-semibold text-muted px-1">
+            Hiển thị {mockPitches.filter(p => selectedPitchType === 'all' || p.type.toString() === selectedPitchType).length} sân
+          </div>
+          {mockPitches.filter(p => selectedPitchType === 'all' || p.type.toString() === selectedPitchType).map(pitch => (
+            <div key={`mobile-${pitch.id}`} className="pitch-card">
+              <div className="flex justify-between items-center mb-4 border-b pb-3" style={{ borderBottomColor: 'var(--color-border)' }}>
+                <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{pitch.name}</h3>
+                <span className="badge badge-success text-sm">{pitch.type} người</span>
+              </div>
+              
+              <div className="time-pills-grid">
+                {mockTimeSlots.map(slot => {
+                  const status = getSlotStatus(pitch.id, slot.id);
+                  const isPeak = slot.isPeak;
+
+                  if (status === 'maintenance') {
+                    return (
+                      <div key={slot.id} className="time-pill maintenance">
+                        <span className="time-text">{slot.startTime}</span>
+                        <span className="text-xs font-medium mt-1">Bảo trì</span>
+                      </div>
+                    );
+                  }
+
+                  if (status === 'booked') {
+                    return (
+                      <div key={slot.id} className="time-pill booked">
+                        <span className="time-text">{slot.startTime}</span>
+                        <span className="text-xs font-medium mt-1">Đã đặt</span>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div 
+                      key={slot.id} 
+                      className={`time-pill ${isPeak ? 'is-peak' : ''}`}
+                      onClick={() => navigate(`/checkout/${slot.id}/${pitch.id}`)}
+                      style={isPeak ? { borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.05)' } : {}}
+                    >
+                      <span className="time-text">{slot.startTime}</span>
+                      <span className="price-text" style={isPeak ? { color: '#f59e0b' } : {}}>{formatPrice(slot.basePrice)}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>

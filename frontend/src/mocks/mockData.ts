@@ -28,6 +28,11 @@ export const mockPitches: Pitch[] = [
   { id: 'p3', name: 'Sân 3', type: '5', status: 'MAINTENANCE' },
   { id: 'p4', name: 'Sân 4', type: '7', status: 'AVAILABLE' },
   { id: 'p5', name: 'Sân VIP', type: '7', status: 'AVAILABLE' },
+  { id: 'p6', name: 'Sân 6', type: '5', status: 'AVAILABLE' },
+  { id: 'p7', name: 'Sân 7', type: '5', status: 'AVAILABLE' },
+  { id: 'p8', name: 'Sân 8', type: '5', status: 'AVAILABLE' },
+  { id: 'p9', name: 'Sân 9', type: '7', status: 'AVAILABLE' },
+  { id: 'p10', name: 'Sân 10', type: '7', status: 'AVAILABLE' },
 ];
 
 export const mockTimeSlots: TimeSlot[] = [

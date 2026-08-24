@@ -55,9 +55,9 @@ const MyBookings: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
-      <div 
+      <div
         className="mb-8 shadow-lg"
-        style={{ 
+        style={{
           borderRadius: '1rem',
           background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
           color: 'white',
@@ -69,10 +69,10 @@ const MyBookings: React.FC = () => {
           justifyContent: 'center'
         }}
       >
-        <h1 className="text-4xl font-bold mb-3 text-white">
-          Quản lý đơn sân
+        <h1 className="text-2xl md:text-4xl font-bold mb-3 text-white">
+          Quản lý đơn đặt sân
         </h1>
-        <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
+        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
       </div>
 
       <div className="card mb-6">
@@ -100,7 +100,7 @@ const MyBookings: React.FC = () => {
               Lịch sử
             </button>
           </div>
-          
+
           <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
             <Search size={16} className="text-muted" />
             <input
@@ -113,7 +113,8 @@ const MyBookings: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
+        {/* Desktop Table */}
+        <div className="hidden md:block" style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
@@ -156,6 +157,57 @@ const MyBookings: React.FC = () => {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden flex flex-col gap-4 mt-4">
+          {filteredBookings.length === 0 && (
+            <div className="text-center p-8 text-muted">Không có đơn đặt sân nào.</div>
+          )}
+          {filteredBookings.map((booking) => {
+            const pitch = mockPitches.find(p => p.id === booking.pitchId);
+            const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
+
+            return (
+              <div key={`mobile-${booking.id}`} className="flex flex-col gap-3 p-4" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-surface)', boxShadow: 'var(--shadow-sm)' }}>
+                <div className="flex justify-between items-center border-b pb-3" style={{ borderBottomColor: 'var(--color-border)' }}>
+                  <span className="font-bold text-lg">#{booking.id.toUpperCase()}</span>
+                  {getStatusBadge(booking.status)}
+                </div>
+
+                <div className="flex flex-col gap-2 text-sm mt-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted">Sân bóng:</span>
+                    <span className="font-semibold">{pitch?.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted">Ngày đá:</span>
+                    <span className="font-medium">{booking.date}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted">Khung giờ:</span>
+                    <span className="font-medium">{slot?.startTime} - {slot?.endTime}</span>
+                  </div>
+                  <div className="flex justify-between mt-2 pt-3 border-t" style={{ borderTopColor: 'var(--color-border)' }}>
+                    <span className="font-semibold text-muted">Tổng tiền:</span>
+                    <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{formatPrice(slot?.basePrice || 0)}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 mt-4">
+                  {booking.status === 'CONFIRMED' && (
+                    <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
+                  )}
+                  {booking.status === 'COMPLETED' && (
+                    <button className="btn btn-primary text-sm flex-1 justify-center py-2" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
+                  )}
+                  {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
+                    <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

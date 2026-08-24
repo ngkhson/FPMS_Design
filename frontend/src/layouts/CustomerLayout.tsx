@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { Moon, Sun, User, LogOut } from 'lucide-react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Moon, Sun, User, LogOut, Menu, X } from 'lucide-react';
 
 const CustomerLayout: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   useEffect(() => {
     // Check local storage or system preference on mount
@@ -33,7 +40,8 @@ const CustomerLayout: React.FC = () => {
             FPMS
           </Link>
           
-          <nav className="flex items-center gap-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="font-semibold">Trang Chủ</Link>
             <Link to="/book-pitch" className="font-semibold">Đặt Sân</Link>
             <Link to="/my-bookings" className="font-semibold">Đơn Của Tôi</Link>
@@ -55,7 +63,38 @@ const CustomerLayout: React.FC = () => {
               </Link>
             </div>
           </nav>
+
+          {/* Mobile Menu Toggle Button */}
+          <div className="flex md:hidden items-center gap-4">
+            <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }}>
+              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            </button>
+            <button className="btn btn-secondary" style={{ padding: '0.5rem' }} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Sidebar/Drawer Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t" style={{ borderTopColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-surface)' }}>
+            <div className="flex flex-col p-4 gap-4">
+              <Link to="/" className="font-semibold text-lg py-2 border-b" style={{ borderBottomColor: 'var(--color-border)' }}>Trang Chủ</Link>
+              <Link to="/book-pitch" className="font-semibold text-lg py-2 border-b" style={{ borderBottomColor: 'var(--color-border)' }}>Đặt Sân</Link>
+              <Link to="/my-bookings" className="font-semibold text-lg py-2 border-b" style={{ borderBottomColor: 'var(--color-border)' }}>Đơn Của Tôi</Link>
+              <Link to="/profile" className="font-semibold text-lg py-2 border-b" style={{ borderBottomColor: 'var(--color-border)' }}>Hồ Sơ Của Tôi</Link>
+              
+              <div className="flex flex-col gap-3 mt-4">
+                <Link to="/login" className="btn btn-primary font-semibold w-full">
+                  Đăng nhập
+                </Link>
+                <Link to="/register" className="btn btn-secondary font-semibold w-full">
+                  Đăng ký
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="customer-main">

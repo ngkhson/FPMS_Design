@@ -8,20 +8,20 @@ const AdminPricing: React.FC = () => {
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
-        
+
         {/* LÊN BẢNG GIÁ MA TRẬN */}
         <div className="card" style={{ flex: '1 1 600px' }}>
-          
+
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-xl font-bold">Ma trận Bảng giá</h2>
+              <h2 className="text-xl font-bold">Bảng giá sân</h2>
               <p className="text-sm text-muted mt-2">Hệ thống tự động áp dụng giá theo thời điểm đặt sân.</p>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-primary)', borderRadius: 'var(--radius-full)', padding: '0.35rem 1rem', backgroundColor: 'rgba(16, 185, 129, 0.05)', color: 'var(--color-primary)' }}>
                 <MapPin size={16} />
-                <select 
+                <select
                   value={pitchType}
                   onChange={(e) => setPitchType(e.target.value)}
                   style={{ background: 'transparent', border: 'none', outline: 'none', color: 'inherit', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'inherit' }}
@@ -130,7 +130,7 @@ const AdminPricing: React.FC = () => {
               </tbody>
             </table>
           </div>
-          
+
           <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
             <button className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }}>
               <Save size={18} /> Lưu Bảng giá
@@ -147,58 +147,58 @@ const AdminPricing: React.FC = () => {
               </div>
               <h2 className="text-xl font-bold">Ngày Lễ</h2>
             </div>
-            
+
             <div style={{ flex: 1, overflowY: 'auto', paddingRight: '0.5rem' }}>
               <div style={{ marginBottom: '1.5rem', padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}>
-              <div className="mb-4">
-                <label className="font-semibold text-sm" style={{ display: 'block', marginBottom: '0.5rem' }}>Chọn ngày</label>
-                <input type="date" style={{ width: '100%', boxSizing: 'border-box', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-base)', outline: 'none', fontFamily: 'inherit' }} />
-              </div>
-              <div className="mb-4">
-                <label className="font-semibold text-sm" style={{ display: 'block', marginBottom: '0.5rem' }}>Tên sự kiện</label>
-                <input type="text" placeholder="VD: Lễ Quốc khánh 2/9" style={{ width: '100%', boxSizing: 'border-box', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-base)', outline: 'none', fontFamily: 'inherit' }} />
-              </div>
-              <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid rgba(16, 185, 129, 0.5)' }}>
-                <Plus size={18} /> Thêm vào danh sách
-              </button>
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <h3 className="font-semibold text-sm text-muted mb-2">DANH SÁCH ĐÃ THÊM</h3>
-              
-              <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
-                <div>
-                  <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>02/09/2026</div>
-                  <div className="text-sm font-semibold mt-1">Quốc khánh</div>
+                <div className="mb-4">
+                  <label className="font-semibold text-sm" style={{ display: 'block', marginBottom: '0.5rem' }}>Chọn ngày</label>
+                  <input type="date" style={{ width: '100%', boxSizing: 'border-box', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-base)', outline: 'none', fontFamily: 'inherit' }} />
                 </div>
-                <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
-                  <Trash2 size={18} />
+                <div className="mb-4">
+                  <label className="font-semibold text-sm" style={{ display: 'block', marginBottom: '0.5rem' }}>Tên sự kiện</label>
+                  <input type="text" placeholder="VD: Lễ Quốc khánh 2/9" style={{ width: '100%', boxSizing: 'border-box', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-base)', outline: 'none', fontFamily: 'inherit' }} />
+                </div>
+                <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid rgba(16, 185, 129, 0.5)' }}>
+                  <Plus size={18} /> Thêm vào danh sách
                 </button>
               </div>
-              
-              <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
-                <div>
-                  <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>30/04/2026</div>
-                  <div className="text-sm font-semibold mt-1">Giải phóng Miền Nam</div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <h3 className="font-semibold text-sm text-muted mb-2">DANH SÁCH ĐÃ THÊM</h3>
+
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                  <div>
+                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>02/09/2026</div>
+                    <div className="text-sm font-semibold mt-1">Quốc khánh</div>
+                  </div>
+                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                    <Trash2 size={18} />
+                  </button>
                 </div>
-                <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
-                  <Trash2 size={18} />
-                </button>
-              </div>
-              
-              {/* Thêm một số item mockup để test thanh cuộn */}
-              <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
-                <div>
-                  <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>01/05/2026</div>
-                  <div className="text-sm font-semibold mt-1">Quốc tế Lao động</div>
+
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                  <div>
+                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>30/04/2026</div>
+                    <div className="text-sm font-semibold mt-1">Giải phóng Miền Nam</div>
+                  </div>
+                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                    <Trash2 size={18} />
+                  </button>
                 </div>
-                <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
-                  <Trash2 size={18} />
-                </button>
+
+                {/* Thêm một số item mockup để test thanh cuộn */}
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                  <div>
+                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>01/05/2026</div>
+                    <div className="text-sm font-semibold mt-1">Quốc tế Lao động</div>
+                  </div>
+                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>

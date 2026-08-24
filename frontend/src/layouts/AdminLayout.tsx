@@ -23,13 +23,13 @@ const AdminLayout: React.FC = () => {
 
   const menuItems = [
     { path: '/admin', icon: <BarChart3 size={20} />, label: 'Thống kê' },
-    { path: '/admin/timeline', icon: <Calendar size={20} />, label: 'Timeline Sân' },
+    { path: '/admin/timeline', icon: <Calendar size={20} />, label: 'Quản lý Ca Đá' },
     { path: '/admin/bookings', icon: <CreditCard size={20} />, label: 'Quản lý Đơn' },
     { path: '/admin/transactions', icon: <CreditCard size={20} />, label: 'Giao dịch' },
     { path: '/admin/users', icon: <Users size={20} />, label: 'Người dùng' },
     { path: '/admin/pitches', icon: <Settings size={20} />, label: 'Quản lý Sân' },
     { path: '/admin/timeslots', icon: <Calendar size={20} />, label: 'Khung giờ' },
-    { path: '/admin/pricing', icon: <CreditCard size={20} />, label: 'Bảng giá & Lễ' },
+    { path: '/admin/pricing', icon: <CreditCard size={20} />, label: 'Bảng giá sân' },
   ];
 
   return (
@@ -40,15 +40,15 @@ const AdminLayout: React.FC = () => {
           <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>FPMS Admin</h2>
           <p className="text-muted text-sm mt-1">Phần mềm quản lý sân bóng</p>
         </div>
-        
+
         <nav style={{ padding: '1rem 0', flexGrow: 1 }}>
           {menuItems.map(item => {
             const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname.startsWith(item.path));
             return (
-              <Link 
-                key={item.path} 
+              <Link
+                key={item.path}
                 to={item.path}
-                style={{ 
+                style={{
                   display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1.5rem',
                   backgroundColor: isActive ? 'var(--color-primary-light)' : 'transparent',
                   color: isActive ? 'var(--color-primary)' : 'var(--color-text-base)',
@@ -62,7 +62,7 @@ const AdminLayout: React.FC = () => {
             );
           })}
         </nav>
-        
+
         <div style={{ padding: '1rem', borderTop: '1px solid var(--color-border)' }}>
           <Link to="/" className="btn w-full" style={{ justifyContent: 'flex-start', color: 'var(--color-danger)' }}>
             <LogOut size={20} /> Đăng xuất
@@ -77,7 +77,7 @@ const AdminLayout: React.FC = () => {
           <div>
             <span className="badge badge-success">Đang trong ca trực: Nguyễn Thu Ngân</span>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }}>
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
@@ -87,7 +87,7 @@ const AdminLayout: React.FC = () => {
             </div>
           </div>
         </header>
-        
+
         {/* Page Content */}
         <main style={{ padding: '2rem', flexGrow: 1, overflowY: 'auto' }}>
           <div className="animate-fade-in max-w-7xl mx-auto">

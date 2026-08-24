@@ -87,55 +87,16 @@ const Checkout: React.FC = () => {
           justifyContent: 'center'
         }}
       >
-        <h1 className="text-4xl font-bold mb-3 flex items-center justify-center gap-3 text-white">
-          <CheckCircle size={36} />
+        <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3 text-white">
+          <CheckCircle size={32} />
           <span>Xác nhận đặt sân</span>
         </h1>
-        <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Vui lòng kiểm tra kỹ thông tin và tiến hành thanh toán.</p>
+        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Vui lòng kiểm tra kỹ thông tin và tiến hành thanh toán.</p>
       </div>
 
-      <div className="grid grid-cols-auto gap-8" style={{ gridTemplateColumns: '1fr 400px' }}>
-        {/* Cột trái: Form thông tin người đặt */}
-        <div className="card flex flex-col">
-          <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Thông tin người đặt</h2>
-          <form className="flex flex-col gap-4 flex-grow">
-            <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr' }}>
-              <div>
-                <label className="font-semibold text-sm">Họ và tên</label>
-                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="Nguyễn Văn A" />
-              </div>
-              <div>
-                <label className="font-semibold text-sm">Số điện thoại</label>
-                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="0987654321" />
-              </div>
-            </div>
-            <div className="flex-grow flex flex-col">
-              <label className="font-semibold text-sm">Ghi chú (Tùy chọn)</label>
-              <textarea className="mt-2 w-full flex-grow mb-4" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', minHeight: '120px' }} placeholder="Yêu cầu thêm (VD: thuê bóng, áo bib, nước suối...)" />
-            </div>
-
-            <div className="p-4 rounded-lg text-sm mb-4" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}>
-              <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> Bạn có thể hủy đặt sân miễn phí trước 24h so với giờ bắt đầu để được hoàn lại 100% tiền cọc.
-            </div>
-
-            <button
-              type="button"
-              className="btn btn-primary w-full flex items-center justify-center gap-2 mt-auto"
-              style={{ padding: '1rem', fontSize: '1rem' }}
-              onClick={handlePayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán {formatPrice(depositAmount)}</>}
-            </button>
-
-            <p className="text-xs text-center text-muted">
-              Bằng việc bấm Thanh toán, bạn đồng ý với Điều khoản đặt sân của chúng tôi.
-            </p>
-          </form>
-        </div>
-
-        {/* Cột phải: Hóa đơn & Thanh toán */}
-        <div className="card flex flex-col justify-between">
+      <div className="checkout-grid gap-6 md:gap-8">
+        {/* Cột trái: Hóa đơn & Thanh toán */}
+        <div className="card flex flex-col justify-between checkout-invoice">
           <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Chi tiết đơn đặt sân</h2>
 
           <div className="flex flex-col gap-2 mb-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-base)' }}>
@@ -177,6 +138,45 @@ const Checkout: React.FC = () => {
             <span className="text-muted">Còn lại thanh toán tại sân:</span>
             <span className="font-semibold text-warning">{formatPrice(remainingAmount)}</span>
           </div>
+        </div>
+
+        {/* Cột phải: Form thông tin người đặt */}
+        <div className="card flex flex-col checkout-form">
+          <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Thông tin người đặt</h2>
+          <form className="flex flex-col gap-4 flex-grow">
+            <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+              <div>
+                <label className="font-semibold text-sm">Họ và tên</label>
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="Nguyễn Văn A" />
+              </div>
+              <div>
+                <label className="font-semibold text-sm">Số điện thoại</label>
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="0987654321" />
+              </div>
+            </div>
+            <div className="flex-grow flex flex-col">
+              <label className="font-semibold text-sm">Ghi chú (Tùy chọn)</label>
+              <textarea className="mt-2 w-full flex-grow mb-4" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', minHeight: '120px' }} placeholder="Yêu cầu thêm (VD: thuê bóng, áo bib, nước suối...)" />
+            </div>
+
+            <div className="p-4 rounded-lg text-sm mb-4" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}>
+              <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> Bạn có thể hủy đặt sân miễn phí trước 24h so với giờ bắt đầu để được hoàn lại 100% tiền cọc.
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-primary w-full flex items-center justify-center gap-2 mt-auto"
+              style={{ padding: '1rem', fontSize: '1rem' }}
+              onClick={handlePayment}
+              disabled={isProcessing}
+            >
+              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán {formatPrice(depositAmount)}</>}
+            </button>
+
+            <p className="text-xs text-center text-muted">
+              Bằng việc bấm Thanh toán, bạn đồng ý với Điều khoản đặt sân của chúng tôi.
+            </p>
+          </form>
         </div>
       </div>
     </div>
