@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Calendar, CreditCard, LayoutDashboard, Settings, Users, LogOut, Sun, Moon, BarChart3 } from 'lucide-react';
+import { Calendar, CreditCard, Settings, Users, LogOut, Sun, Moon, BarChart3, Menu, X } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -34,11 +35,21 @@ const AdminLayout: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', backgroundColor: 'var(--color-bg-base)' }}>
+      {/* Sidebar Overlay (Mobile/Tablet) */}
+      {sidebarOpen && (
+        <div className="admin-sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>
+      )}
+
       {/* Sidebar */}
-      <aside style={{ width: '250px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderRight: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--color-border)' }}>
-          <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>FPMS Admin</h2>
-          <p className="text-muted text-sm mt-1">Phần mềm quản lý sân bóng</p>
+      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ width: '250px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderRight: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>FPMS Admin</h2>
+            <p className="text-muted text-sm mt-1">Phần mềm quản lý sân bóng</p>
+          </div>
+          <button className="menu-toggle-btn text-muted" onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
         </div>
 
         <nav style={{ padding: '1rem 0', flexGrow: 1 }}>
@@ -56,6 +67,7 @@ const AdminLayout: React.FC = () => {
                   fontWeight: isActive ? 600 : 500,
                   transition: 'all var(--transition-fast)'
                 }}
+                onClick={() => setSidebarOpen(false)}
               >
                 {item.icon} {item.label}
               </Link>
@@ -73,8 +85,11 @@ const AdminLayout: React.FC = () => {
       {/* Main Content */}
       <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100vh' }}>
         {/* Topbar */}
-        <header style={{ height: '64px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
-          <div>
+        <header className="admin-header" style={{ height: '64px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
+          <div className="flex items-center gap-4">
+            <button className="menu-toggle-btn btn btn-secondary" style={{ padding: '0.5rem', borderRadius: 'var(--radius-sm)' }} onClick={() => setSidebarOpen(true)}>
+              <Menu size={20} />
+            </button>
             {/* Can put Breadcrumbs or Page Title here in the future */}
           </div>
 
@@ -98,7 +113,7 @@ const AdminLayout: React.FC = () => {
         </header>
 
         {/* Page Content */}
-        <main style={{ padding: '2rem', flexGrow: 1, overflowY: 'auto' }}>
+        <main className="admin-main-content" style={{ padding: '2rem', flexGrow: 1, overflowY: 'auto' }}>
           <div className="animate-fade-in max-w-7xl mx-auto">
             <Outlet />
           </div>
