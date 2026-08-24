@@ -195,23 +195,23 @@ const AdminDashboard: React.FC = () => {
       <div className="grid gap-6 mb-8" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
         <div className="card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">DOANH THU KỲ NÀY</div>
-          <div className="text-3xl font-bold text-primary">32,450,000 đ</div>
-          <div className="text-xs mt-2" style={{ color: 'var(--color-success)' }}>↑ 15% so với kỳ trước</div>
+          <div className="text-3xl font-bold text-primary">[ Doanh thu ]</div>
+          <div className="text-xs mt-2" style={{ color: 'var(--color-success)' }}>[ Thay đổi so với kỳ trước ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG SỐ ĐƠN</div>
-          <div className="text-3xl font-bold">105 đơn</div>
-          <div className="text-xs mt-2 text-muted">98 đơn hoàn thành, 7 đơn đang đá</div>
+          <div className="text-3xl font-bold">[ Số lượng ]</div>
+          <div className="text-xs mt-2 text-muted">[ Chi tiết đơn ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-danger)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỈ LỆ HỦY ĐƠN</div>
-          <div className="text-3xl font-bold text-danger">4.5%</div>
-          <div className="text-xs mt-2 text-muted">Giảm 1.2% so với kỳ trước</div>
+          <div className="text-3xl font-bold text-danger">[ Tỉ lệ ]</div>
+          <div className="text-xs mt-2 text-muted">[ Thay đổi so với kỳ trước ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-warning)' }}>
           <div className="text-muted text-sm font-semibold mb-1">LƯỢT KHÁCH MỚI</div>
-          <div className="text-3xl font-bold">28 người</div>
-          <div className="text-xs mt-2 text-muted">Tỉ lệ quay lại: 68%</div>
+          <div className="text-3xl font-bold">[ Số lượng ]</div>
+          <div className="text-xs mt-2 text-muted">[ Tỉ lệ quay lại ]</div>
         </div>
       </div>
 
