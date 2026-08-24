@@ -20,7 +20,7 @@ const AdminPitches: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
 
-  const filteredPitches = mockPitches.filter(pitch => {
+  const filteredPitches = mockPitches.slice(0, 5).filter(pitch => {
     if (searchTerm && !pitch.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (typeFilter !== 'ALL' && pitch.type !== typeFilter) return false;
     if (statusFilter !== 'ALL' && pitch.status !== statusFilter) return false;
@@ -69,16 +69,16 @@ const AdminPitches: React.FC = () => {
               {filteredPitches.map((pitch) => (
                 <tr key={pitch.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4 font-semibold">
-                    {pitch.name}
-                    <div className="text-xs text-muted font-normal mt-1">Mã: {pitch.id}</div>
+                    [ Tên sân ]
+                    <div className="text-xs text-muted font-normal mt-1">[ Mã sân ]</div>
                   </td>
                   <td className="p-4">
-                    <span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>Sân {pitch.type} người</span>
+                    <span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>[ Loại sân ]</span>
                   </td>
                   <td className="p-4">
                     {pitch.status === 'AVAILABLE' 
-                      ? <span className="badge badge-success">Đang hoạt động</span>
-                      : <span className="badge badge-warning">Đang bảo trì</span>
+                      ? <span className="badge">[ Trạng thái ]</span>
+                      : <span className="badge">[ Trạng thái ]</span>
                     }
                   </td>
                   <td className="p-4 text-right">
@@ -140,7 +140,7 @@ const AdminPitches: React.FC = () => {
           <div className="grid gap-4 mb-6" style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
             <div>
               <label className="block text-sm font-semibold mb-2">Tên sân</label>
-              <input type="text" className="w-full" defaultValue={editPitch.name} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" placeholder="[ Tên sân ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Loại sân</label>

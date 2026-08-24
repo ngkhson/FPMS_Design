@@ -19,12 +19,12 @@ const MyBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
-      case 'IN_PROGRESS': return <span className="badge badge-warning">Đang sử dụng sân</span>;
-      case 'COMPLETED': return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
-      case 'PENDING_CANCEL': return <span className="badge badge-warning">Chờ duyệt hủy</span>;
-      case 'CANCELLED': return <span className="badge badge-danger">Đã hủy</span>;
-      default: return <span className="badge">Chưa rõ</span>;
+      case 'CONFIRMED': return <span className="badge">[ Trạng thái ]</span>;
+      case 'IN_PROGRESS': return <span className="badge">[ Trạng thái ]</span>;
+      case 'COMPLETED': return <span className="badge">[ Trạng thái ]</span>;
+      case 'PENDING_CANCEL': return <span className="badge">[ Trạng thái ]</span>;
+      case 'CANCELLED': return <span className="badge">[ Trạng thái ]</span>;
+      default: return <span className="badge">[ Trạng thái ]</span>;
     }
   };
 
@@ -59,8 +59,9 @@ const MyBookings: React.FC = () => {
         className="mb-8 shadow-lg"
         style={{
           borderRadius: '1rem',
-          background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
-          color: 'white',
+          background: 'var(--color-bg-elevated)',
+          border: '1px solid var(--color-border)',
+          color: 'var(--color-text-base)',
           padding: '3rem 2rem',
           textAlign: 'center',
           display: 'flex',
@@ -69,10 +70,10 @@ const MyBookings: React.FC = () => {
           justifyContent: 'center'
         }}
       >
-        <h1 className="text-2xl md:text-4xl font-bold mb-3 text-white">
+        <h1 className="text-2xl md:text-4xl font-bold mb-3">
           Quản lý đơn đặt sân
         </h1>
-        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
+        <p className="text-base md:text-lg text-muted">[ Đoạn mô tả phụ ]</p>
       </div>
 
       <div className="card mb-6">
@@ -133,14 +134,14 @@ const MyBookings: React.FC = () => {
 
                 return (
                   <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
-                    <td className="p-4">{booking.date}</td>
+                    <td className="p-4 font-semibold">[ Mã đơn ]</td>
+                    <td className="p-4">[ Ngày ]</td>
                     <td className="p-4">
-                      <div className="font-semibold">{pitch?.name}</div>
-                      <div className="text-sm text-muted">{slot?.startTime} - {slot?.endTime}</div>
+                      <div className="font-semibold">[ Tên sân ]</div>
+                      <div className="text-sm text-muted">[ Khung giờ ]</div>
                     </td>
                     <td className="p-4">{getStatusBadge(booking.status)}</td>
-                    <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
+                    <td className="p-4 font-semibold">[ Số tiền ]</td>
                     <td className="p-4 text-right">
                       {booking.status === 'CONFIRMED' && (
                         <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
@@ -171,26 +172,26 @@ const MyBookings: React.FC = () => {
             return (
               <div key={`mobile-${booking.id}`} className="flex flex-col gap-3 p-4" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-surface)', boxShadow: 'var(--shadow-sm)' }}>
                 <div className="flex justify-between items-center border-b pb-3" style={{ borderBottomColor: 'var(--color-border)' }}>
-                  <span className="font-bold text-lg">#{booking.id.toUpperCase()}</span>
+                  <span className="font-bold text-lg">[ Mã đơn ]</span>
                   {getStatusBadge(booking.status)}
                 </div>
 
                 <div className="flex flex-col gap-2 text-sm mt-2">
                   <div className="flex justify-between">
                     <span className="text-muted">Sân bóng:</span>
-                    <span className="font-semibold">{pitch?.name}</span>
+                    <span className="font-semibold">[ Tên sân ]</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted">Ngày đá:</span>
-                    <span className="font-medium">{booking.date}</span>
+                    <span className="font-medium">[ Ngày ]</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted">Khung giờ:</span>
-                    <span className="font-medium">{slot?.startTime} - {slot?.endTime}</span>
+                    <span className="font-medium">[ Khung giờ ]</span>
                   </div>
                   <div className="flex justify-between mt-2 pt-3 border-t" style={{ borderTopColor: 'var(--color-border)' }}>
                     <span className="font-semibold text-muted">Tổng tiền:</span>
-                    <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{formatPrice(slot?.basePrice || 0)}</span>
+                    <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>[ Số tiền ]</span>
                   </div>
                 </div>
 
@@ -223,7 +224,7 @@ const MyBookings: React.FC = () => {
                 <AlertTriangle size={24} />
               </div>
               <h2 className="text-xl font-bold mb-2">Yêu cầu hủy đơn</h2>
-              <p className="text-muted mb-6">Bạn có chắc chắn muốn hủy đơn <strong>#{selectedBooking.id}</strong> không? Nếu hủy trước 24h, bạn sẽ được hoàn lại 100% tiền cọc.</p>
+              <p className="text-muted mb-6">[ Ghi chú cảnh báo/Xác nhận về việc hủy đơn ]</p>
 
               <div className="flex gap-4 w-full">
                 <button className="btn btn-secondary flex-1" style={{ flex: 1 }} onClick={() => setIsCancelModalOpen(false)}>Không, Quay lại</button>
@@ -247,12 +248,12 @@ const MyBookings: React.FC = () => {
                 <CheckCircle size={24} />
               </div>
               <h2 className="text-xl font-bold mb-2">Thanh toán hóa đơn</h2>
-              <p className="text-muted mb-6">Đơn hàng <strong>#{selectedBooking.id}</strong> đang chờ thanh toán phần còn lại.</p>
+              <p className="text-muted mb-6">[ Ghi chú/Lưu ý phụ về việc thanh toán ]</p>
 
               <div className="w-full bg-base p-4 rounded-lg mb-6 flex justify-between items-center" style={{ backgroundColor: 'var(--color-bg-base)' }}>
                 <span className="font-semibold text-muted">Số tiền cần thanh toán:</span>
                 <span className="font-bold text-lg text-primary">
-                  {formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.7)}
+                  [ Số tiền ]
                 </span>
               </div>
 
@@ -277,15 +278,15 @@ const MyBookings: React.FC = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <span className="text-muted">Mã đơn:</span>
-                <span className="font-bold">#{selectedBooking.id}</span>
+                <span className="font-bold">[ Mã đơn ]</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted">Sân bóng:</span>
-                <span className="font-semibold">{mockPitches.find(p => p.id === selectedBooking.pitchId)?.name}</span>
+                <span className="font-semibold">[ Tên sân ]</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted">Ngày đá:</span>
-                <span className="font-semibold">{selectedBooking.date}</span>
+                <span className="font-semibold">[ Ngày ]</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted">Trạng thái:</span>
@@ -296,15 +297,15 @@ const MyBookings: React.FC = () => {
 
               <div className="flex justify-between items-center">
                 <span className="text-muted">Tổng tiền:</span>
-                <span className="font-semibold">{formatPrice(mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0)}</span>
+                <span className="font-semibold">[ Số tiền ]</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted">Đã đặt cọc (30%):</span>
-                <span className="text-primary font-semibold">{formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.3)}</span>
+                <span className="text-primary font-semibold">[ Số tiền ]</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted">Còn lại:</span>
-                <span className="text-warning font-semibold">{formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.7)}</span>
+                <span className="text-warning font-semibold">[ Số tiền ]</span>
               </div>
             </div>
 

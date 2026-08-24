@@ -37,8 +37,9 @@ const BookPitch: React.FC = () => {
           className="mb-8 shadow-lg"
           style={{ 
             borderRadius: '1rem',
-            background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
-            color: 'white',
+            background: 'var(--color-bg-elevated)',
+            border: '1px solid var(--color-border)',
+            color: 'var(--color-text-base)',
             padding: '3rem 2rem',
             textAlign: 'center',
             display: 'flex',
@@ -47,11 +48,11 @@ const BookPitch: React.FC = () => {
             justifyContent: 'center'
           }}
         >
-          <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3 text-white">
+          <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3">
             <Calendar size={32} />
             <span>Đặt Sân</span>
           </h1>
-          <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Chọn ngày và sân bóng phù hợp với bạn.</p>
+          <p className="text-base md:text-lg text-muted">[ Đoạn mô tả phụ ]</p>
         </div>
 
       <div className="card" style={{ minWidth: 0 }}>
@@ -129,13 +130,14 @@ const BookPitch: React.FC = () => {
           </div>
         </div>
 
+
         {/* Matrix Gantt for Desktop */}
         <div className="hidden md:block matrix-container" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
           <div className="matrix-header">
             <div className="matrix-cell matrix-pitch-name">Sân / Khung giờ</div>
             {mockTimeSlots.map(slot => (
-              <div key={slot.id} className="matrix-cell font-semibold">
-                <div>{slot.startTime} - {slot.endTime}</div>
+              <div key={slot.id} className="matrix-cell font-semibold" style={{ flexDirection: 'column' }}>
+                <div>[ Khung giờ ]</div>
               </div>
             ))}
           </div>
@@ -144,8 +146,8 @@ const BookPitch: React.FC = () => {
             <div key={pitch.id} className="matrix-row">
               <div className="matrix-cell matrix-pitch-name">
                 <div>
-                  <div>{pitch.name}</div>
-                  <div className="text-sm text-muted font-normal mt-1">{pitch.type} người</div>
+                  <div>[ Tên sân ]</div>
+                  <div className="text-sm text-muted font-normal mt-1">[ Loại sân ]</div>
                 </div>
               </div>
               
@@ -165,7 +167,7 @@ const BookPitch: React.FC = () => {
                 if (status === 'booked') {
                   return (
                     <div key={slot.id} className="matrix-cell p-1">
-                      <div className="flex flex-col items-center justify-center font-semibold" style={{ height: '100%', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', color: 'var(--color-danger)', cursor: 'not-allowed', padding: '0.25rem' }}>
+                      <div className="flex flex-col items-center justify-center font-semibold" style={{ height: '100%', borderRadius: '6px', backgroundColor: 'var(--color-bg-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)', cursor: 'not-allowed', padding: '0.25rem' }}>
                         Đã đặt
                       </div>
                     </div>
@@ -174,9 +176,9 @@ const BookPitch: React.FC = () => {
 
                 // Available
                 const isPeak = slot.isPeak;
-                const baseBg = isPeak ? 'rgba(245, 158, 11, 0.1)' : 'var(--color-primary-light)';
-                const baseBorder = isPeak ? '#f59e0b' : 'var(--color-primary)';
-                const hoverBg = isPeak ? '#f59e0b' : 'var(--color-primary)';
+                const baseBg = 'var(--color-bg-base)';
+                const baseBorder = 'var(--color-border)';
+                const hoverBg = 'var(--color-bg-surface)';
 
                 return (
                   <div key={slot.id} className="matrix-cell p-1">
@@ -185,11 +187,11 @@ const BookPitch: React.FC = () => {
                       onClick={() => navigate(`/checkout/${slot.id}/${pitch.id}`)}
                       style={{ height: '100%', borderRadius: '6px', backgroundColor: baseBg, border: `1px solid ${baseBorder}`, cursor: 'pointer', padding: '0.25rem' }}
                       title="Nhấn để đặt sân"
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = hoverBg; e.currentTarget.style.color = 'white'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = baseBg; e.currentTarget.style.color = 'inherit'; }}
+                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = hoverBg; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = baseBg; }}
                     >
-                      <span className="font-bold text-sm">{formatPrice(slot.basePrice)}</span>
-                      <span className="text-xs mt-1 opacity-90">{isPeak ? 'Giờ vàng' : 'Trống'}</span>
+                      <span className="font-bold text-sm" style={{ whiteSpace: 'nowrap' }}>[ Giá ]</span>
+                      <span className="text-xs mt-1 opacity-90" style={{ whiteSpace: 'nowrap' }}>[ Trạng thái ]</span>
                     </div>
                   </div>
                 );
@@ -206,8 +208,8 @@ const BookPitch: React.FC = () => {
           {mockPitches.filter(p => selectedPitchType === 'all' || p.type.toString() === selectedPitchType).map(pitch => (
             <div key={`mobile-${pitch.id}`} className="pitch-card">
               <div className="flex justify-between items-center mb-4 border-b pb-3" style={{ borderBottomColor: 'var(--color-border)' }}>
-                <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{pitch.name}</h3>
-                <span className="badge badge-success text-sm">{pitch.type} người</span>
+                <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>[ Tên sân ]</h3>
+                <span className="badge text-sm">[ Loại sân ]</span>
               </div>
               
               <div className="time-pills-grid">
@@ -218,7 +220,7 @@ const BookPitch: React.FC = () => {
                   if (status === 'maintenance') {
                     return (
                       <div key={slot.id} className="time-pill maintenance">
-                        <span className="time-text">{slot.startTime}</span>
+                        <span className="time-text">[ Giờ ]</span>
                         <span className="text-xs font-medium mt-1">Bảo trì</span>
                       </div>
                     );
@@ -227,7 +229,7 @@ const BookPitch: React.FC = () => {
                   if (status === 'booked') {
                     return (
                       <div key={slot.id} className="time-pill booked">
-                        <span className="time-text">{slot.startTime}</span>
+                        <span className="time-text">[ Giờ ]</span>
                         <span className="text-xs font-medium mt-1">Đã đặt</span>
                       </div>
                     );
@@ -240,8 +242,8 @@ const BookPitch: React.FC = () => {
                       onClick={() => navigate(`/checkout/${slot.id}/${pitch.id}`)}
                       style={isPeak ? { borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.05)' } : {}}
                     >
-                      <span className="time-text">{slot.startTime}</span>
-                      <span className="price-text" style={isPeak ? { color: '#f59e0b' } : {}}>{formatPrice(slot.basePrice)}</span>
+                      <span className="time-text">[ Giờ ]</span>
+                      <span className="price-text" style={isPeak ? { color: '#f59e0b' } : {}}>[ Giá ]</span>
                     </div>
                   );
                 })}

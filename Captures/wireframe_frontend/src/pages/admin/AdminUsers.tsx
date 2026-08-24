@@ -24,12 +24,10 @@ const AdminUsers: React.FC = () => {
   const [lockUser, setLockUser] = useState<any>(null);
   const users = [
     { id: 'U001', name: 'Nguyễn Văn A', email: 'nguyenvana@gmail.com', phone: '0987654321', role: 'CUSTOMER', status: 'ACTIVE' },
-    { id: 'U002', name: 'Trần Thị B', email: 'tranthib@gmail.com', phone: '0912345678', role: 'CUSTOMER', status: 'LOCKED' },
-    { id: 'U003', name: 'Nguyễn Thu Ngân', email: 'ngan.staff@fpms.com', phone: '0909090909', role: 'STAFF', status: 'ACTIVE' },
-    { id: 'U004', name: 'Phạm Minh Admin', email: 'admin@fpms.com', phone: '0888888888', role: 'ADMIN', status: 'ACTIVE' },
-    { id: 'U005', name: 'Lê Hoàng C', email: 'lehoangc@gmail.com', phone: '0933333333', role: 'CUSTOMER', status: 'ACTIVE' },
-    { id: 'U006', name: 'Vũ Thị D', email: 'vuthid@gmail.com', phone: '0944444444', role: 'CUSTOMER', status: 'ACTIVE' },
-    { id: 'U007', name: 'Hoàng Văn E', email: 'hoangvane@gmail.com', phone: '0955555555', role: 'CUSTOMER', status: 'LOCKED' },
+    { id: 'U002', name: 'Nguyễn Thu Ngân', email: 'ngan.staff@fpms.com', phone: '0909090909', role: 'STAFF', status: 'ACTIVE' },
+    { id: 'U003', name: 'Phạm Minh Admin', email: 'admin@fpms.com', phone: '0888888888', role: 'ADMIN', status: 'ACTIVE' },
+    { id: 'U004', name: 'Khách hàng 4', email: 'kh4@gmail.com', phone: '0911111111', role: 'CUSTOMER', status: 'LOCKED' },
+    { id: 'U005', name: 'Nhân viên 5', email: 'nv5@fpms.com', phone: '0922222222', role: 'STAFF', status: 'ACTIVE' },
   ];
 
   const filteredUsers = users.filter(u => {
@@ -84,35 +82,27 @@ const AdminUsers: React.FC = () => {
               {filteredUsers.map((user) => (
                 <tr key={user.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4">
-                    <div className="font-semibold">{user.name}</div>
-                    <div className="text-xs text-muted">ID: {user.id}</div>
+                    <div className="font-semibold">[ Họ và tên ]</div>
+                    <div className="text-xs text-muted">[ Mã ID ]</div>
                   </td>
                   <td className="p-4">
-                    <div>{user.email}</div>
-                    <div className="text-sm text-muted">{user.phone}</div>
+                    <div>[ Email ]</div>
+                    <div className="text-sm text-muted">[ SĐT ]</div>
                   </td>
                   <td className="p-4">
-                    {user.role === 'ADMIN' && <span className="badge" style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: 'var(--color-danger)' }}><ShieldAlert size={14} className="mr-1" /> ADMIN</span>}
-                    {user.role === 'STAFF' && <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}><Shield size={14} className="mr-1" /> STAFF</span>}
-                    {user.role === 'CUSTOMER' && <span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>CUSTOMER</span>}
+                    <span className="badge">[ Vai trò ]</span>
                   </td>
                   <td className="p-4">
                     {user.status === 'ACTIVE' 
-                      ? <span className="badge badge-success">Đang hoạt động</span>
-                      : <span className="badge badge-danger">Đã khóa</span>
+                      ? <span className="badge">[ Trạng thái ]</span>
+                      : <span className="badge">[ Trạng thái ]</span>
                     }
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">
-                      {user.status === 'ACTIVE' && user.role === 'CUSTOMER' ? (
-                        <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Khóa tài khoản" onClick={() => setLockUser(user)}>
-                          <UserX size={16} />
-                        </button>
-                      ) : user.status === 'LOCKED' ? (
-                        <button className="btn btn-secondary text-success" style={{ padding: '0.5rem' }} title="Mở khóa tài khoản">
-                          <UserCheck size={16} />
-                        </button>
-                      ) : null}
+                      <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Thay đổi trạng thái" onClick={() => setLockUser(user)}>
+                        {user.status === 'LOCKED' ? <UserCheck size={16} /> : <UserX size={16} />}
+                      </button>
                       <button className="btn btn-secondary" style={{ padding: '0.5rem' }} onClick={() => setViewUser(user)}>
                         <MoreVertical size={16} />
                       </button>

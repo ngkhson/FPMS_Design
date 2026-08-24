@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       <section className="hero-section" style={{ minHeight: '65vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '4rem', background: 'var(--color-bg-elevated)', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container">
           <div className="inline-block mb-6 px-4 py-1.5" style={{ border: '1px solid var(--color-border)', fontSize: '0.875rem' }}>
-            ⚡ Đặt sân — Thanh toán — Xác nhận đơn chỉ trong 2 phút
+            [ Mô tả ngắn gọn về quy trình ]
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold mb-6 mt-4 md:mt-0 px-2" style={{ lineHeight: 1.2 }}>
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
           </h1>
 
           <p className="text-lg md:text-xl opacity-90 mb-12 max-w-2xl mx-auto">
-            Tìm sân trống, chọn giờ, thanh toán tiền cọc online và nhận thông báo xác nhận ngay tức thì.
+            [ Đoạn văn mô tả chi tiết các lợi ích và cách thức hoạt động của nền tảng... ]
           </p>
 
           <div className="home-search-bar transition-all">
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
       <section className="container mb-24">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Tại sao chọn FPMS?</h2>
-          <p className="text-muted">Giải pháp đặt sân bóng số 1, được hàng nghìn team tin dùng</p>
+          <p className="text-muted">[ Thông tin mô tả phụ về lý do chọn nền tảng ]</p>
         </div>
 
         <div className="features-grid">
@@ -120,7 +120,7 @@ const Home: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">Đặt lịch trực quan</h3>
             <p className="text-sm text-muted leading-relaxed">
-              Chọn sân bằng bảng trực quan theo thời gian. Thấy ngay slot nào còn trống, click là đặt.
+              [ Mô tả chi tiết tính năng hiển thị lịch trực quan... ]
             </p>
           </div>
 
@@ -130,7 +130,7 @@ const Home: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold mb-3" style={{ color: 'var(--color-primary-hover)' }}>Thanh toán VNPAY</h3>
             <p className="text-sm text-muted leading-relaxed">
-              Đặt cọc 30% qua VNPAY QR an toàn. Xác nhận tức thì, nhận vé ngay mà không cần chờ đợi.
+              [ Mô tả chi tiết về phương thức thanh toán an toàn... ]
             </p>
           </div>
 
@@ -140,7 +140,7 @@ const Home: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold mb-3">Truy cập mọi lúc mọi nơi</h3>
             <p className="text-sm text-muted leading-relaxed">
-              Hỗ trợ đa nền tảng. Dễ dàng đặt sân, theo dõi đơn và thanh toán tiện lợi ngay trên điện thoại.
+              [ Mô tả chi tiết về khả năng tương thích đa nền tảng... ]
             </p>
           </div>
         </div>

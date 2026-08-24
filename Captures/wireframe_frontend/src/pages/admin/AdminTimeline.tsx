@@ -27,15 +27,15 @@ const AdminTimeline: React.FC = () => {
               <span>Trống</span>
             </div>
             <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--color-success)' }}></div>
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-bg-base)', border: '2px solid var(--color-border)' }}></div>
               <span>Đã cọc</span>
             </div>
             <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid var(--color-warning)' }}></div>
+              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'var(--color-border)' }}></div>
               <span>Đang đá</span>
             </div>
             <div className="flex items-center gap-2">
-              <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(59, 130, 246, 0.15)', border: '1px solid var(--color-primary)' }}></div>
+              <div style={{ width: 16, height: 16, borderRadius: 4, border: '1px dashed var(--color-border)' }}></div>
               <span>Chờ duyệt</span>
             </div>
           </div>
@@ -77,7 +77,7 @@ const AdminTimeline: React.FC = () => {
             <div className="matrix-cell matrix-pitch-name">Sân / Khung giờ</div>
             {mockTimeSlots.map(slot => (
               <div key={slot.id} className="matrix-cell font-semibold">
-                <div>{slot.startTime} - {slot.endTime}</div>
+                <div>[ Khung giờ ]</div>
               </div>
             ))}
           </div>
@@ -86,8 +86,8 @@ const AdminTimeline: React.FC = () => {
             <div key={pitch.id} className="matrix-row">
               <div className="matrix-cell matrix-pitch-name">
                 <div>
-                  <div>{pitch.name}</div>
-                  <div className="text-sm text-muted font-normal mt-1">{pitch.type} người</div>
+                  <div>[ Tên sân ]</div>
+                  <div className="text-sm text-muted font-normal mt-1">[ Loại sân ]</div>
                 </div>
               </div>
               
@@ -106,20 +106,20 @@ const AdminTimeline: React.FC = () => {
                 let borderColor = '';
                 
                 if (booking.status === 'CONFIRMED') {
-                  bgColor = 'rgba(16, 185, 129, 0.15)';
-                  borderColor = 'var(--color-success)';
+                  bgColor = 'var(--color-bg-base)';
+                  borderColor = 'var(--color-text-base)';
                 } else if (booking.status === 'IN_PROGRESS') {
-                  bgColor = 'rgba(245, 158, 11, 0.15)';
-                  borderColor = 'var(--color-warning)';
+                  bgColor = 'var(--color-bg-base)';
+                  borderColor = 'var(--color-text-base)';
                 } else if (booking.status === 'COMPLETED') {
                   bgColor = 'var(--color-bg-base)';
                   borderColor = 'var(--color-border)';
                 } else if (booking.status === 'PENDING') {
-                  bgColor = 'rgba(59, 130, 246, 0.15)'; // Blue tint
-                  borderColor = 'var(--color-primary)';
+                  bgColor = 'var(--color-bg-base)';
+                  borderColor = 'var(--color-text-muted)';
                 } else if (booking.status === 'PENDING_CANCEL') {
-                  bgColor = 'rgba(239, 68, 68, 0.15)'; // Red tint
-                  borderColor = 'var(--color-danger)';
+                  bgColor = 'var(--color-bg-base)';
+                  borderColor = 'var(--color-text-muted)';
                 }
 
                 return (
@@ -130,21 +130,21 @@ const AdminTimeline: React.FC = () => {
                   >
                     <div className="flex flex-col items-center justify-center h-full w-full">
                       {booking.status === 'CONFIRMED' && (
-                        <button className="btn btn-primary text-sm p-1" style={{ width: '100%' }}>
-                          <Play size={14} /> Nhận sân
+                        <button className="btn btn-primary" style={{ width: '80%', padding: '0.2rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
+                          [ Nút ]
                         </button>
                       )}
                       {booking.status === 'IN_PROGRESS' && (
-                        <span className="badge badge-warning">Đang đá</span>
+                        <span className="badge" style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>[ Trạng thái ]</span>
                       )}
                       {booking.status === 'COMPLETED' && (
-                        <span className="badge text-muted"><CheckCircle size={14} className="mr-1"/> Xong</span>
+                        <span className="badge" style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>[ Trạng thái ]</span>
                       )}
                       {booking.status === 'PENDING' && (
-                        <span className="badge text-primary" style={{ backgroundColor: 'var(--color-primary-light)' }}>Chờ duyệt</span>
+                        <span className="badge" style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>[ Trạng thái ]</span>
                       )}
                       {booking.status === 'PENDING_CANCEL' && (
-                        <span className="badge text-danger" style={{ backgroundColor: 'var(--color-danger-light)' }}>Yêu cầu hủy</span>
+                        <span className="badge" style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>[ Trạng thái ]</span>
                       )}
                     </div>
                     

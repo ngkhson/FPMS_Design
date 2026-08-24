@@ -31,13 +31,13 @@ const AdminBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
-      case 'CONFIRMED': return <span className="badge badge-success">Đã cọc (Sắp đá)</span>;
-      case 'IN_PROGRESS': return <span className="badge badge-warning">Đang đá</span>;
-      case 'COMPLETED': return <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Đã hoàn thành</span>;
-      case 'PENDING_CANCEL': return <span className="badge badge-danger">Yêu cầu hủy</span>;
-      case 'CANCELLED': return <span className="badge badge-danger" style={{ opacity: 0.7 }}>Đã hủy</span>;
-      default: return <span className="badge">{status}</span>;
+      case 'PENDING': return <span className="badge">[ Trạng thái ]</span>;
+      case 'CONFIRMED': return <span className="badge">[ Trạng thái ]</span>;
+      case 'IN_PROGRESS': return <span className="badge">[ Trạng thái ]</span>;
+      case 'COMPLETED': return <span className="badge">[ Trạng thái ]</span>;
+      case 'PENDING_CANCEL': return <span className="badge">[ Trạng thái ]</span>;
+      case 'CANCELLED': return <span className="badge">[ Trạng thái ]</span>;
+      default: return <span className="badge">[ Trạng thái ]</span>;
     }
   };
 
@@ -158,21 +158,21 @@ const AdminBookings: React.FC = () => {
 
                 return (
                   <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
+                    <td className="p-4 font-semibold">[ Mã đơn ]</td>
                     <td className="p-4">
-                      <div className="font-semibold">{booking.customerName}</div>
-                      <div className="text-sm text-muted">0987xxx</div>
+                      <div className="font-semibold">[ Tên khách hàng ]</div>
+                      <div className="text-sm text-muted">[ SĐT ]</div>
                     </td>
                     <td className="p-4">
-                      <div className="font-semibold">{pitch?.name}</div>
-                      <div className="text-sm text-muted">{booking.date} | {slot?.startTime} - {slot?.endTime}</div>
+                      <div className="font-semibold">[ Tên sân ]</div>
+                      <div className="text-sm text-muted">[ Ngày | Khung giờ ]</div>
                     </td>
                     <td className="p-4">{getStatusBadge(booking.status)}</td>
                     <td className="p-4">
-                      <div className="text-sm">Tổng: {formatPrice(price)}</div>
-                      <div className="text-sm text-success">Đã cọc: {formatPrice(deposit)}</div>
+                      <div className="text-sm">Tổng: [ Số tiền ]</div>
+                      <div className="text-sm text-success">Đã cọc: [ Số tiền ]</div>
                       {booking.status === 'IN_PROGRESS' && (
-                        <div className="text-sm font-semibold text-danger">Còn nợ: {formatPrice(price - deposit)}</div>
+                        <div className="text-sm font-semibold text-danger">Còn nợ: [ Số tiền ]</div>
                       )}
                     </td>
                     <td className="p-4 text-right flex gap-2 justify-end">
@@ -275,31 +275,31 @@ const AdminBookings: React.FC = () => {
             <div style={{ background: 'var(--color-bg-base)', padding: '1rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
               <div className="flex justify-between mb-2">
                 <span className="text-muted">Đơn hàng:</span>
-                <span className="font-semibold">#{checkoutBooking.id.toUpperCase()}</span>
+                <span className="font-semibold">[ Mã đơn ]</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-muted">Khách hàng:</span>
-                <span className="font-semibold">{checkoutBooking.customerName}</span>
+                <span className="font-semibold">[ Tên khách hàng ]</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Sân / Khung giờ:</span>
-                <span className="font-semibold">{pitch?.name} ({slot?.startTime} - {slot?.endTime})</span>
+                <span className="font-semibold">[ Tên sân ] ([ Khung giờ ])</span>
               </div>
             </div>
 
             <div className="mb-6">
               <div className="flex justify-between mb-2 text-lg">
                 <span>Tổng tiền sân:</span>
-                <span className="font-semibold">{formatPrice(price)}</span>
+                <span className="font-semibold">[ Số tiền ]</span>
               </div>
               <div className="flex justify-between mb-4 text-success">
                 <span>Đã thanh toán (Cọc):</span>
-                <span>- {formatPrice(deposit)}</span>
+                <span>- [ Số tiền ]</span>
               </div>
               <div style={{ height: 1, backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
               <div className="flex justify-between text-xl font-bold text-danger">
                 <span>Khách cần thanh toán:</span>
-                <span>{formatPrice(remaining)}</span>
+                <span>[ Số tiền ]</span>
               </div>
             </div>
 
@@ -321,11 +321,11 @@ const AdminBookings: React.FC = () => {
             </div>
 
             <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
-              <p className="mb-4 text-base">Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>{cancelBooking.customerName}</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>#{cancelBooking.id.toUpperCase()}</strong>.</p>
+              <p className="mb-4 text-base">[ Thông báo về việc khách hàng yêu cầu hủy đơn ]</p>
 
               <div className="flex justify-between items-center p-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
                 <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-2xl font-bold text-danger">{formatPrice(deposit)}</span>
+                <span className="text-2xl font-bold text-danger">[ Số tiền ]</span>
               </div>
             </div>
 

@@ -10,10 +10,6 @@ const AdminDashboard: React.FC = () => {
     { name: 'Thứ 2', revenue: 2400000, bookings: 8 },
     { name: 'Thứ 3', revenue: 1398000, bookings: 5 },
     { name: 'Thứ 4', revenue: 4800000, bookings: 15 },
-    { name: 'Thứ 5', revenue: 3908000, bookings: 12 },
-    { name: 'Thứ 6', revenue: 4800000, bookings: 15 },
-    { name: 'Thứ 7', revenue: 6800000, bookings: 22 },
-    { name: 'Chủ Nhật', revenue: 8300000, bookings: 28 },
   ];
 
   const pieData = [
@@ -59,9 +55,9 @@ const AdminDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
             <Calendar size={16} className="text-muted" />
-            <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} defaultValue="2026-08-17" />
+            <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
             <span className="text-muted">-</span>
-            <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} defaultValue="2026-08-23" />
+            <input type="date" style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
           </div>
           
           <button className="btn btn-secondary" style={{ padding: '0.6rem 1rem', fontWeight: '500' }}>
@@ -79,23 +75,23 @@ const AdminDashboard: React.FC = () => {
       <div className="grid gap-6 mb-8" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
         <div className="card" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">DOANH THU KỲ NÀY</div>
-          <div className="text-3xl font-bold text-primary">32,450,000 đ</div>
-          <div className="text-xs mt-2" style={{ color: 'var(--color-success)' }}>↑ 15% so với kỳ trước</div>
+          <div className="text-3xl font-bold text-primary">[ Số tiền ]</div>
+          <div className="text-xs mt-2" style={{ color: 'var(--color-success)' }}>[ Thay đổi ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG SỐ ĐƠN</div>
-          <div className="text-3xl font-bold">105 đơn</div>
-          <div className="text-xs mt-2 text-muted">98 đơn hoàn thành, 7 đơn đang đá</div>
+          <div className="text-3xl font-bold">[ Số lượng ]</div>
+          <div className="text-xs mt-2 text-muted">[ Chi tiết đơn ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-danger)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỈ LỆ HỦY ĐƠN</div>
-          <div className="text-3xl font-bold text-danger">4.5%</div>
-          <div className="text-xs mt-2 text-muted">Giảm 1.2% so với kỳ trước</div>
+          <div className="text-3xl font-bold text-danger">[ Tỉ lệ ]</div>
+          <div className="text-xs mt-2 text-muted">[ Thay đổi ]</div>
         </div>
         <div className="card" style={{ borderLeft: '4px solid var(--color-warning)' }}>
           <div className="text-muted text-sm font-semibold mb-1">LƯỢT KHÁCH MỚI</div>
-          <div className="text-3xl font-bold">28 người</div>
-          <div className="text-xs mt-2 text-muted">Tỉ lệ quay lại: 68%</div>
+          <div className="text-3xl font-bold">[ Số lượng ]</div>
+          <div className="text-xs mt-2 text-muted">[ Chi tiết khách ]</div>
         </div>
       </div>
 

@@ -10,15 +10,6 @@ const AdminTransactions: React.FC = () => {
     { id: 'TX_001', time: '16:30 - Hôm nay', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
     { id: 'TX_002', time: '15:15 - Hôm nay', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
     { id: 'TX_003', time: '14:00 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
-    { id: 'TX_004', time: '10:00 - Hôm nay', desc: 'Khách cọc đơn #B4', method: 'VNPAY', amount: 200000, type: 'IN', status: 'FAILED' },
-    { id: 'TX_005', time: '09:30 - Hôm nay', desc: 'Khách cọc đơn #B5', method: 'Tiền mặt', amount: 150000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_006', time: '08:45 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B6', method: 'VNPAY', amount: 120000, type: 'OUT', status: 'SUCCESS' },
-    { id: 'TX_007', time: '08:00 - Hôm nay', desc: 'Khách cọc đơn #B7', method: 'VNPAY', amount: 175000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_008', time: '07:30 - Hôm nay', desc: 'Khách cọc đơn #B8', method: 'Tiền mặt', amount: 210000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_009', time: '19:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B9', method: 'VNPAY', amount: 300000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_010', time: '18:15 - Hôm qua', desc: 'Hoàn tiền đơn hủy #B10', method: 'VNPAY', amount: 150000, type: 'OUT', status: 'FAILED' },
-    { id: 'TX_011', time: '16:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B11', method: 'Tiền mặt', amount: 180000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_012', time: '14:30 - Hôm qua', desc: 'Thanh toán nốt đơn #B12', method: 'VNPAY', amount: 220000, type: 'IN', status: 'SUCCESS' },
   ];
 
   const filteredTransactions = mockTransactions.filter(tx => {
@@ -35,24 +26,24 @@ const AdminTransactions: React.FC = () => {
 
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
-      
+
       {/* Summary Cards */}
       <div className="grid gap-6 mb-6" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (TIỀN MẶT)</div>
-          <div className="text-2xl font-bold text-primary">{formatPrice(1250000)}</div>
+          <div className="text-2xl font-bold text-primary">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Dùng để giao ca / nộp két</div>
         </div>
-        
+
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
-          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (VNPAY)</div>
-          <div className="text-2xl font-bold">{formatPrice(2500000)}</div>
+          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (CHUYỂN KHOẢN)</div>
+          <div className="text-2xl font-bold">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Đã cộng vào tài khoản ngân hàng</div>
         </div>
-        
+
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-danger)' }}>
-          <div className="text-muted text-sm font-semibold mb-1">TỔNG HOÀN TRẢ (REFUND)</div>
-          <div className="text-2xl font-bold text-danger">{formatPrice(105000)}</div>
+          <div className="text-muted text-sm font-semibold mb-1">TỔNG HOÀN TRẢ</div>
+          <div className="text-2xl font-bold text-danger">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Các đơn khách hủy hợp lệ</div>
         </div>
       </div>
@@ -64,17 +55,17 @@ const AdminTransactions: React.FC = () => {
           <div className="flex gap-4">
             <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
               <Search size={16} className="text-muted" />
-              <input 
-                type="text" 
-                placeholder="Tìm mã, nội dung..." 
+              <input
+                type="text"
+                placeholder="Tìm mã, nội dung..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '150px' }} 
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '150px' }}
               />
             </div>
-            
-            <select 
-              className="btn btn-secondary" 
+
+            <select
+              className="btn btn-secondary"
               style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
@@ -83,9 +74,9 @@ const AdminTransactions: React.FC = () => {
               <option value="IN">Tiền thu (IN)</option>
               <option value="OUT">Tiền hoàn (OUT)</option>
             </select>
-            
-            <select 
-              className="btn btn-secondary" 
+
+            <select
+              className="btn btn-secondary"
               style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -111,20 +102,17 @@ const AdminTransactions: React.FC = () => {
             <tbody>
               {filteredTransactions.map(tx => (
                 <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  <td className="p-4 font-semibold">{tx.id}</td>
+                  <td className="p-4 font-semibold">[ Mã giao dịch ]</td>
                   <td className="p-4">
-                    {tx.time}
-                    {tx.status === 'FAILED' && <span className="badge badge-danger ml-2" style={{ marginLeft: '8px' }}>Thất bại</span>}
+                    [ Thời gian ]
+                    {tx.status === 'FAILED' && <span className="badge ml-2" style={{ marginLeft: '8px' }}>[ Trạng thái ]</span>}
                   </td>
-                  <td className="p-4">{tx.desc}</td>
+                  <td className="p-4">[ Nội dung giao dịch ]</td>
                   <td className="p-4">
-                    <span className={`badge ${tx.method === 'VNPAY' ? 'badge-secondary' : ''}`} style={tx.method === 'VNPAY' ? { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-secondary)' } : { backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
-                      {tx.method}
-                    </span>
+                    <span className="badge">[ Phương thức ]</span>
                   </td>
-                  <td className={`p-4 font-bold text-right flex items-center justify-end gap-1 ${tx.type === 'IN' ? 'text-success' : 'text-danger'} ${tx.status === 'FAILED' ? 'opacity-50' : ''}`} style={tx.status === 'FAILED' ? { opacity: 0.5 } : {}}>
-                    {tx.type === 'IN' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />} 
-                    {tx.type === 'IN' ? '+' : '-'}{formatPrice(tx.amount)}
+                  <td className="p-4 font-bold text-right" style={tx.status === 'FAILED' ? { opacity: 0.5 } : {}}>
+                    [ Số tiền ]
                   </td>
                 </tr>
               ))}

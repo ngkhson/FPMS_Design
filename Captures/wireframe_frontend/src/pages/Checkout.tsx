@@ -77,8 +77,9 @@ const Checkout: React.FC = () => {
         className="mb-8 shadow-lg relative overflow-hidden"
         style={{ 
           borderRadius: '1rem',
-          background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
-          color: 'white',
+          background: 'var(--color-bg-elevated)',
+          border: '1px solid var(--color-border)',
+          color: 'var(--color-text-base)',
           padding: '3rem 2rem',
           textAlign: 'center',
           display: 'flex',
@@ -87,11 +88,11 @@ const Checkout: React.FC = () => {
           justifyContent: 'center'
         }}
       >
-        <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3 text-white">
+        <h1 className="text-2xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-2 md:gap-3">
           <CheckCircle size={32} />
           <span>Xác nhận đặt sân</span>
         </h1>
-        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Vui lòng kiểm tra kỹ thông tin và tiến hành thanh toán.</p>
+        <p className="text-base md:text-lg text-muted">[ Đoạn mô tả phụ ]</p>
       </div>
 
       <div className="checkout-grid gap-6 md:gap-8">
@@ -100,27 +101,27 @@ const Checkout: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Chi tiết đơn đặt sân</h2>
 
           <div className="flex flex-col gap-2 mb-6 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-base)' }}>
-            <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{pitch.name}</h3>
+            <h3 className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>[ Tên sân ]</h3>
           </div>
 
           <div className="flex justify-between mb-3 text-sm items-center">
             <span className="text-muted">Ngày đá:</span>
-            <span className="font-semibold px-2 py-1 bg-base rounded">Hôm nay</span>
+            <span className="font-semibold px-2 py-1 bg-base rounded">[ Ngày ]</span>
           </div>
           <div className="flex justify-between mb-3 text-sm items-center">
             <span className="text-muted">Khung giờ:</span>
-            <span className="font-bold">{slot.startTime} - {slot.endTime}</span>
+            <span className="font-bold">[ Khung giờ ]</span>
           </div>
           <div className="flex justify-between mb-3 text-sm items-center">
             <span className="text-muted">Loại sân:</span>
-            <span className="font-semibold">{pitch.type}</span>
+            <span className="font-semibold">[ Loại sân ]</span>
           </div>
 
           <hr style={{ borderColor: 'var(--color-border)', margin: '1.5rem 0' }} />
 
           <div className="flex justify-between mb-3 text-sm">
             <span className="text-muted">Tiền thuê sân:</span>
-            <span className="font-semibold">{formatPrice(slot.basePrice)}</span>
+            <span className="font-semibold">[ Số tiền ]</span>
           </div>
 
           {slot.isPeak && (
@@ -132,11 +133,11 @@ const Checkout: React.FC = () => {
 
           <div className="flex justify-between mt-4 mb-2 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-primary-light)' }}>
             <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>Cần đặt cọc (30%):</span>
-            <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{formatPrice(depositAmount)}</span>
+            <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>[ Số tiền ]</span>
           </div>
           <div className="flex justify-between mt-4 mb-2 px-2 text-sm">
             <span className="text-muted">Còn lại thanh toán tại sân:</span>
-            <span className="font-semibold text-warning">{formatPrice(remainingAmount)}</span>
+            <span className="font-semibold text-warning">[ Số tiền ]</span>
           </div>
         </div>
 
@@ -147,11 +148,11 @@ const Checkout: React.FC = () => {
             <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
               <div>
                 <label className="font-semibold text-sm">Họ và tên</label>
-                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="Nguyễn Văn A" />
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} placeholder="[ Nhập họ tên... ]" />
               </div>
               <div>
                 <label className="font-semibold text-sm">Số điện thoại</label>
-                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="0987654321" />
+                <input type="text" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} placeholder="[ Nhập số điện thoại... ]" />
               </div>
             </div>
             <div className="flex-grow flex flex-col">
@@ -160,7 +161,7 @@ const Checkout: React.FC = () => {
             </div>
 
             <div className="p-4 rounded-lg text-sm mb-4" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px dashed var(--color-border)' }}>
-              <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> Bạn có thể hủy đặt sân miễn phí trước 24h so với giờ bắt đầu để được hoàn lại 100% tiền cọc.
+              <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> [ Ghi chú/Lưu ý phụ ]
             </div>
 
             <button
@@ -170,11 +171,11 @@ const Checkout: React.FC = () => {
               onClick={handlePayment}
               disabled={isProcessing}
             >
-              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán {formatPrice(depositAmount)}</>}
+              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán [ Số tiền ]</>}
             </button>
 
             <p className="text-xs text-center text-muted">
-              Bằng việc bấm Thanh toán, bạn đồng ý với Điều khoản đặt sân của chúng tôi.
+              [ Văn bản thông báo nhỏ ]
             </p>
           </form>
         </div>

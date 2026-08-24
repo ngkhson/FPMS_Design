@@ -44,18 +44,18 @@ const AdminTimeSlots: React.FC = () => {
             <tbody>
               {mockTimeSlots.map((slot) => (
                 <tr key={slot.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  <td className="p-4 font-semibold text-lg">{slot.startTime} - {slot.endTime}</td>
+                  <td className="p-4 font-semibold text-lg">[ Khung giờ ]</td>
                   <td className="p-4">
                     {slot.isPeak
-                      ? <span className="badge badge-warning">⚡ Giờ vàng</span>
-                      : <span className="badge badge-success" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-primary)' }}>Giờ thường</span>
+                      ? <span className="badge">[ Loại giờ ]</span>
+                      : <span className="badge">[ Loại giờ ]</span>
                     }
                   </td>
                   <td className="p-4 font-semibold text-muted">
-                    {new Intl.NumberFormat('vi-VN').format(slot.basePrice)} đ
+                    [ Số tiền ]
                   </td>
                   <td className="p-4 font-semibold text-muted">
-                    {new Intl.NumberFormat('vi-VN').format(slot.basePrice + 100000)} đ
+                    [ Số tiền ]
                   </td>
                   <td className="p-4 text-right flex gap-2 justify-end">
                     <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Chỉnh sửa" onClick={() => setEditSlot(slot)}><Edit size={16} /></button>
@@ -141,7 +141,7 @@ const AdminTimeSlots: React.FC = () => {
             <button onClick={() => setDeleteSlot(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
           </div>
           <div className="mb-6">
-            <p>Bạn có chắc chắn muốn xóa ca <strong>{deleteSlot.startTime} - {deleteSlot.endTime}</strong> không?</p>
+            <p>Bạn có chắc chắn muốn xóa ca <strong>[ Khung giờ ]</strong> không?</p>
             <p className="text-muted text-sm mt-2">Lưu ý: Bạn không thể xóa ca nếu đang có khách hàng đặt lịch trong khung giờ này vào những ngày sắp tới.</p>
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>

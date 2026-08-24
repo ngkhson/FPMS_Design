@@ -19,7 +19,7 @@ const AdminPricing: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-primary)', borderRadius: 'var(--radius-full)', padding: '0.35rem 1rem', backgroundColor: 'rgba(16, 185, 129, 0.05)', color: 'var(--color-primary)' }}>
+              <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-full)', padding: '0.35rem 1rem', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}>
                 <MapPin size={16} />
                 <select
                   value={pitchType}
@@ -40,10 +40,10 @@ const AdminPricing: React.FC = () => {
                   <th className="font-bold text-sm" style={{ padding: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)' }}>
                     PHÂN LOẠI NGÀY
                   </th>
-                  <th className="font-bold text-sm" style={{ padding: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'rgba(16, 185, 129, 0.05)', color: 'var(--color-primary)' }}>
+                  <th className="font-bold text-sm" style={{ padding: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}>
                     <div className="flex items-center gap-2"><Clock size={18} /> GIỜ THƯỜNG</div>
                   </th>
-                  <th className="font-bold text-sm" style={{ padding: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'rgba(245, 158, 11, 0.05)', color: 'var(--color-warning)' }}>
+                  <th className="font-bold text-sm" style={{ padding: '1rem', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}>
                     <div className="flex items-center gap-2"><Zap size={18} /> GIỜ VÀNG (CAO ĐIỂM)</div>
                   </th>
                 </tr>
@@ -64,13 +64,13 @@ const AdminPricing: React.FC = () => {
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "200,000" : "300,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "350,000" : "450,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-warning)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
@@ -80,49 +80,49 @@ const AdminPricing: React.FC = () => {
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-4">
                       <div style={{ padding: '0.5rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
-                        <SunDim size={20} className="text-muted" style={{ color: 'var(--color-secondary)' }} />
+                        <SunDim size={20} className="text-muted" />
                       </div>
                       <div>
-                        <div className="font-bold" style={{ color: 'var(--color-secondary)' }}>Cuối tuần</div>
+                        <div className="font-bold">Cuối tuần</div>
                         <div className="text-sm text-muted mt-1" style={{ whiteSpace: 'nowrap' }}>Thứ 7, Chủ Nhật</div>
                       </div>
                     </div>
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "250,000" : "350,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-secondary)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "400,000" : "500,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-warning)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
                 </tr>
                 {/* Ngày Lễ */}
-                <tr style={{ backgroundColor: 'rgba(239, 68, 68, 0.02)' }}>
+                <tr style={{ backgroundColor: 'var(--color-bg-base)' }}>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-4">
-                      <div style={{ padding: '0.5rem', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-                        <Gift size={20} style={{ color: 'var(--color-danger)' }} />
+                      <div style={{ padding: '0.5rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
+                        <Gift size={20} />
                       </div>
                       <div>
-                        <div className="font-bold" style={{ color: 'var(--color-danger)' }}>Ngày Lễ</div>
+                        <div className="font-bold">Ngày Lễ</div>
                         <div className="text-sm text-muted mt-1" style={{ whiteSpace: 'nowrap' }}>Áp dụng phụ thu</div>
                       </div>
                     </div>
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "300,000" : "400,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-danger)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
                   <td style={{ padding: '1.25rem 1rem', border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center gap-2" style={{ backgroundColor: 'var(--color-bg-base)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                      <input type="text" defaultValue={pitchType === '5' ? "450,000" : "600,000"} style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-danger)', fontFamily: 'inherit' }} />
+                      <input type="text" placeholder="[ Số tiền ]" style={{ width: '100%', textAlign: 'right', fontSize: '1.125rem', fontWeight: 'bold', background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} />
                       <span className="font-bold text-muted">đ</span>
                     </div>
                   </td>
@@ -142,8 +142,8 @@ const AdminPricing: React.FC = () => {
         <div style={{ flex: '1 1 350px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="card" style={{ height: '530px', display: 'flex', flexDirection: 'column' }}>
             <div className="flex items-center gap-4 mb-6" style={{ flexShrink: 0 }}>
-              <div style={{ padding: '0.5rem', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
-                <Gift size={24} style={{ color: 'var(--color-danger)' }} />
+              <div style={{ padding: '0.5rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
+                <Gift size={24} />
               </div>
               <h2 className="text-xl font-bold">Ngày Lễ</h2>
             </div>
@@ -158,7 +158,7 @@ const AdminPricing: React.FC = () => {
                   <label className="font-semibold text-sm" style={{ display: 'block', marginBottom: '0.5rem' }}>Tên sự kiện</label>
                   <input type="text" placeholder="VD: Lễ Quốc khánh 2/9" style={{ width: '100%', boxSizing: 'border-box', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-surface)', color: 'var(--color-text-base)', outline: 'none', fontFamily: 'inherit' }} />
                 </div>
-                <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid rgba(16, 185, 129, 0.5)' }}>
+                <button className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', color: 'var(--color-text-base)', border: '1px solid var(--color-border)' }}>
                   <Plus size={18} /> Thêm vào danh sách
                 </button>
               </div>
@@ -166,20 +166,20 @@ const AdminPricing: React.FC = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <h3 className="font-semibold text-sm text-muted mb-2">DANH SÁCH ĐÃ THÊM</h3>
 
-                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
                   <div>
-                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>02/09/2026</div>
-                    <div className="text-sm font-semibold mt-1">Quốc khánh</div>
+                    <div className="font-bold text-lg">[ Ngày ]</div>
+                    <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
                   <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
                     <Trash2 size={18} />
                   </button>
                 </div>
 
-                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
                   <div>
-                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>30/04/2026</div>
-                    <div className="text-sm font-semibold mt-1">Giải phóng Miền Nam</div>
+                    <div className="font-bold text-lg">[ Ngày ]</div>
+                    <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
                   <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
                     <Trash2 size={18} />
@@ -187,10 +187,10 @@ const AdminPricing: React.FC = () => {
                 </div>
 
                 {/* Thêm một số item mockup để test thanh cuộn */}
-                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                <div className="flex justify-between items-center" style={{ padding: '1rem', backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
                   <div>
-                    <div className="font-bold text-lg" style={{ color: 'var(--color-danger)' }}>01/05/2026</div>
-                    <div className="text-sm font-semibold mt-1">Quốc tế Lao động</div>
+                    <div className="font-bold text-lg">[ Ngày ]</div>
+                    <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
                   <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
                     <Trash2 size={18} />

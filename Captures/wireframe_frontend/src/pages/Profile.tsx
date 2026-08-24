@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
           <User size={36} />
           <span>Hồ sơ cá nhân</span>
         </h1>
-        <p className="text-lg text-muted">Quản lý thông tin và cài đặt bảo mật của bạn.</p>
+        <p className="text-lg text-muted">[ Đoạn mô tả phụ ]</p>
       </div>
       
       {/* Contact Info Card */}
@@ -45,7 +45,7 @@ const Profile: React.FC = () => {
           <div>
             <label className="font-semibold text-sm">Email</label>
             <input type="email" className="mt-2 w-full" style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }} defaultValue="nguyenvana@example.com" disabled />
-            <p className="text-xs text-muted mt-1">Email không thể thay đổi sau khi đăng ký.</p>
+            <p className="text-xs text-muted mt-1">[ Ghi chú phụ ]</p>
           </div>
           
           <div className="mt-4 flex justify-end">

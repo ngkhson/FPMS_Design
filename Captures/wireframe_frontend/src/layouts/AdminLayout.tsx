@@ -75,7 +75,7 @@ const AdminLayout: React.FC = () => {
         {/* Topbar */}
         <header style={{ height: '64px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
           <div>
-            <span className="badge badge-success">Đang trong ca trực: Nguyễn Thu Ngân</span>
+            <span className="badge">[ Tên nhân viên ]</span>
           </div>
 
           <div className="flex items-center gap-4">
