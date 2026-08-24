@@ -1,36 +1,95 @@
 import React, { useState } from 'react';
-import { Search, Filter, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Search, Download, Calendar, ArrowUpRight, ArrowDownRight, X } from 'lucide-react';
+import { mockTransactions } from '../../mocks/mockData';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 const AdminTransactions: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [startDate, setStartDate] = useState('2026-08-17');
+  const [endDate, setEndDate] = useState('2026-08-23');
+  const [showConfirmExport, setShowConfirmExport] = useState(false);
 
-  const mockTransactions = [
-    { id: 'TX_001', time: '16:30 - Hôm nay', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_002', time: '15:15 - Hôm nay', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_003', time: '14:00 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
-    { id: 'TX_004', time: '10:00 - Hôm nay', desc: 'Khách cọc đơn #B4', method: 'VNPAY', amount: 200000, type: 'IN', status: 'FAILED' },
-    { id: 'TX_005', time: '09:30 - Hôm nay', desc: 'Khách cọc đơn #B5', method: 'Tiền mặt', amount: 150000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_006', time: '08:45 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B6', method: 'VNPAY', amount: 120000, type: 'OUT', status: 'SUCCESS' },
-    { id: 'TX_007', time: '08:00 - Hôm nay', desc: 'Khách cọc đơn #B7', method: 'VNPAY', amount: 175000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_008', time: '07:30 - Hôm nay', desc: 'Khách cọc đơn #B8', method: 'Tiền mặt', amount: 210000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_009', time: '19:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B9', method: 'VNPAY', amount: 300000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_010', time: '18:15 - Hôm qua', desc: 'Hoàn tiền đơn hủy #B10', method: 'VNPAY', amount: 150000, type: 'OUT', status: 'FAILED' },
-    { id: 'TX_011', time: '16:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B11', method: 'Tiền mặt', amount: 180000, type: 'IN', status: 'SUCCESS' },
-    { id: 'TX_012', time: '14:30 - Hôm qua', desc: 'Thanh toán nốt đơn #B12', method: 'VNPAY', amount: 220000, type: 'IN', status: 'SUCCESS' },
-  ];
+  const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
+    return createPortal(
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
+        <div 
+          className="card"
+          style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
+        >
+          {children}
+        </div>
+      </div>,
+      document.body
+    );
+  };
 
   const filteredTransactions = mockTransactions.filter(tx => {
+    // Check Date Range
+    if (tx.date < startDate || tx.date > endDate) return false;
+    
+    // Check Search
     if (searchTerm && !tx.id.toLowerCase().includes(searchTerm.toLowerCase()) && !tx.desc.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
+    // Check Filters
     if (typeFilter !== 'ALL' && tx.type !== typeFilter) return false;
     if (statusFilter !== 'ALL' && tx.status !== statusFilter) return false;
     return true;
   });
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  };
+
+  const handleExportExcelClick = () => {
+    setShowConfirmExport(true);
+  };
+
+  const executeExportExcel = async () => {
+    setShowConfirmExport(false);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Giao Dịch');
+
+    worksheet.columns = [
+      { header: 'Mã Giao Dịch', key: 'id', width: 15 },
+      { header: 'Ngày', key: 'date', width: 15 },
+      { header: 'Giờ', key: 'time', width: 10 },
+      { header: 'Nội Dung', key: 'desc', width: 30 },
+      { header: 'Phương Thức', key: 'method', width: 18 },
+      { header: 'Loại', key: 'type', width: 10 },
+      { header: 'Số Tiền', key: 'amount', width: 15 },
+      { header: 'Trạng Thái', key: 'status', width: 15 },
+    ];
+
+    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF16A34A' } };
+    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+
+    filteredTransactions.forEach(tx => {
+      const row = worksheet.addRow({
+        id: tx.id,
+        date: tx.date,
+        time: tx.time,
+        desc: tx.desc,
+        method: tx.method,
+        type: tx.type === 'IN' ? 'Thu' : 'Chi',
+        amount: tx.type === 'IN' ? tx.amount : -tx.amount,
+        status: tx.status === 'SUCCESS' ? 'Thành công' : 'Thất bại'
+      });
+
+      row.getCell('amount').numFmt = '#,##0" đ"';
+      row.alignment = { vertical: 'middle' };
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, `BaoCao_GiaoDich_${startDate}_den_${endDate}.xlsx`);
   };
 
   return (
@@ -56,26 +115,56 @@ const AdminTransactions: React.FC = () => {
           <div className="text-xs text-muted mt-2">Các đơn khách hủy hợp lệ</div>
         </div>
       </div>
-
       {/* Transactions Table */}
       <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
-          <h2 className="text-xl font-semibold">Lịch sử giao dịch hôm nay</h2>
-          <div className="flex gap-4">
-            <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
+        <div className="flex flex-col gap-4 mb-6">
+          {/* Row 1: Title and Primary Action */}
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Lịch sử giao dịch</h2>
+            <button className="btn btn-primary flex items-center" style={{ gap: '0.5rem', padding: '0.6rem 1.2rem' }} onClick={handleExportExcelClick}>
+              <Download size={16} /> Xuất Excel
+            </button>
+          </div>
+
+          {/* Row 2: Filters */}
+          <div className="flex flex-wrap items-center" style={{ gap: '1rem' }}>
+            
+            {/* Search */}
+            <div className="flex items-center gap-2" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem', flex: '1 1 200px', minWidth: '200px' }}>
               <Search size={16} className="text-muted" />
               <input 
                 type="text" 
                 placeholder="Tìm mã, nội dung..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '150px' }} 
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '100%' }} 
               />
             </div>
             
+            {/* Date Picker */}
+            <div className="flex items-center gap-2 flex-wrap" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem' }}>
+              <span className="text-sm font-semibold whitespace-nowrap text-muted">Ngày:</span>
+              <input 
+                type="date" 
+                value={startDate} 
+                onChange={(e) => setStartDate(e.target.value)}
+                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+              />
+              <span className="text-muted">-</span>
+              <input 
+                type="date" 
+                value={endDate} 
+                onChange={(e) => setEndDate(e.target.value)}
+                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+              />
+            </div>
+
+            {/* Type */}
             <select 
               className="btn btn-secondary" 
-              style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)', padding: '0 0.8rem' }}
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
             >
@@ -84,9 +173,10 @@ const AdminTransactions: React.FC = () => {
               <option value="OUT">Tiền hoàn (OUT)</option>
             </select>
             
+            {/* Status */}
             <select 
               className="btn btn-secondary" 
-              style={{ fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)', padding: '0 0.8rem' }}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -94,6 +184,10 @@ const AdminTransactions: React.FC = () => {
               <option value="SUCCESS">Thành công</option>
               <option value="FAILED">Thất bại</option>
             </select>
+
+            <button className="btn btn-secondary font-semibold" style={{ height: '42px', padding: '0 1.2rem' }}>
+              Lọc
+            </button>
           </div>
         </div>
 
@@ -113,7 +207,7 @@ const AdminTransactions: React.FC = () => {
                 <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                   <td className="p-4 font-semibold">{tx.id}</td>
                   <td className="p-4">
-                    {tx.time}
+                    {tx.time} - {tx.date}
                     {tx.status === 'FAILED' && <span className="badge badge-danger ml-2" style={{ marginLeft: '8px' }}>Thất bại</span>}
                   </td>
                   <td className="p-4">{tx.desc}</td>
@@ -132,6 +226,26 @@ const AdminTransactions: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Confirm Export Modal */}
+      {showConfirmExport && (
+        <ModalOverlay onClose={() => setShowConfirmExport(false)}>
+          <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
+            <h2 className="text-xl font-bold">Xác Nhận Xuất File</h2>
+            <button onClick={() => setShowConfirmExport(false)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+          </div>
+          <div className="mb-6">
+            <p>
+              Bạn có chắc chắn muốn xuất sổ giao dịch từ ngày <strong>{startDate}</strong> đến ngày <strong>{endDate}</strong> không?
+            </p>
+            <p className="text-muted text-sm mt-2">File báo cáo (định dạng .xlsx) sẽ tự động được tải xuống sau vài giây.</p>
+          </div>
+          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
+            <button className="btn btn-secondary w-1/2" onClick={() => setShowConfirmExport(false)}>Hủy Bỏ</button>
+            <button className="btn btn-primary w-1/2" onClick={executeExportExcel}>Xuất Excel</button>
+          </div>
+        </ModalOverlay>
+      )}
     </div>
   );
 };

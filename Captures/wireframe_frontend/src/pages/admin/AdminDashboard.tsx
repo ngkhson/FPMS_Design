@@ -3,6 +3,7 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
 import { Download, Calendar } from 'lucide-react';
+import { mockBookings, mockPitches, mockTimeSlots } from '../../mocks/mockData';
 
 const AdminDashboard: React.FC = () => {
 
@@ -17,6 +18,56 @@ const AdminDashboard: React.FC = () => {
     { name: 'Sân 7 người', value: 35 },
   ];
   const COLORS = ['var(--color-primary)', 'var(--color-secondary)'];
+
+  const handleExportExcel = () => {
+    const headers = [
+      "Mã đơn", "Tên khách hàng", "Số điện thoại", "Ngày sử dụng sân", 
+      "Tên sân", "Khung giờ", "Tổng tiền sân", "Tiền cọc", 
+      "Tiền mặt thu tại sân", "Tiền hoàn trả", "Trạng thái đơn", "Nhân viên xử lý"
+    ];
+
+    const rows = mockBookings.map(b => {
+      const pitch = mockPitches.find(p => p.id === b.pitchId);
+      const slot = mockTimeSlots.find(t => t.id === b.timeSlotId);
+      const price = slot?.basePrice || 0;
+      const deposit = price * 0.3;
+      const remaining = price - deposit;
+      let cashCollected = 0;
+      let refund = 0;
+      
+      if (b.status === 'COMPLETED') cashCollected = remaining;
+      if (b.status === 'CANCELLED') refund = deposit;
+
+      return [
+        b.id,
+        b.customerName,
+        "0987654321",
+        b.date,
+        pitch?.name || '',
+        `${slot?.startTime} - ${slot?.endTime}`,
+        price,
+        deposit,
+        cashCollected,
+        refund,
+        b.status,
+        "Nguyễn Thu Ngân"
+      ];
+    });
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `BaoCao_DoanhThu_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const formatYAxis = (tickItem: number) => {
     if (tickItem >= 1000000) {
@@ -65,7 +116,7 @@ const AdminDashboard: React.FC = () => {
           </button>
         </div>
         
-        <button className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', gap: '0.5rem' }}>
+        <button className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', gap: '0.5rem' }} onClick={handleExportExcel}>
           <Download size={18} />
           Xuất Excel
         </button>

@@ -59,4 +59,21 @@ export const mockBookings: Booking[] = [
   { id: 'b6', pitchId: 'p2', timeSlotId: 't04', date: today, status: 'CANCELLED', customerName: 'Hoàng Văn E' },
   { id: 'b7', pitchId: 'p4', timeSlotId: 't10', date: today, status: 'PENDING', customerName: 'Vũ Thị F' },
   { id: 'b8', pitchId: 'p1', timeSlotId: 't02', date: today, status: 'COMPLETED', customerName: 'Đặng Văn G' },
+  // Past dates for Excel Export testing
+  { id: 'b9', pitchId: 'p2', timeSlotId: 't08', date: '2026-08-18', status: 'COMPLETED', customerName: 'Bùi Văn H' },
+  { id: 'b10', pitchId: 'p5', timeSlotId: 't09', date: '2026-08-18', status: 'COMPLETED', customerName: 'Đinh Thị I' },
+  { id: 'b11', pitchId: 'p1', timeSlotId: 't05', date: '2026-08-20', status: 'COMPLETED', customerName: 'Ngô Văn K' },
+  { id: 'b12', pitchId: 'p4', timeSlotId: 't10', date: '2026-08-21', status: 'CANCELLED', customerName: 'Phan Thị L' },
+  { id: 'b13', pitchId: 'p2', timeSlotId: 't07', date: '2026-08-22', status: 'COMPLETED', customerName: 'Đỗ Văn M' },
+];
+
+export const mockTransactions = [
+  { id: 'TX_001', date: '2026-08-18', time: '16:30', desc: 'Thanh toán nốt đơn #B9', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_002', date: '2026-08-18', time: '15:15', desc: 'Khách cọc đơn #B10', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_003', date: '2026-08-20', time: '14:00', desc: 'Khách cọc đơn #B11', method: 'VNPAY', amount: 150000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_004', date: '2026-08-21', time: '09:00', desc: 'Hoàn tiền đơn hủy #B12', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
+  { id: 'TX_005', date: '2026-08-22', time: '18:30', desc: 'Thanh toán nốt đơn #B13', method: 'Tiền mặt', amount: 200000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_006', date: today, time: '16:30', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_007', date: today, time: '15:15', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_008', date: today, time: '14:00', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'FAILED' },
 ];
