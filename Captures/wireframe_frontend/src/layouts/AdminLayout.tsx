@@ -75,15 +75,24 @@ const AdminLayout: React.FC = () => {
         {/* Topbar */}
         <header style={{ height: '64px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 2rem' }}>
           <div>
-            <span className="badge">[ Tên nhân viên ]</span>
+            {/* Can put Breadcrumbs or Page Title here in the future */}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }}>
+          <div className="flex items-center gap-6">
+            <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }} title="Đổi giao diện">
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <Link to="/admin/profile" style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', textDecoration: 'none' }}>
-              AD
+            
+            <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)' }}></div>
+
+            <Link to="/admin/profile" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                <span className="font-bold text-sm" style={{ color: 'var(--color-text-base)' }}>[ Tên nhân viên ]</span>
+                <span className="text-xs text-muted font-medium">[ Vai trò ]</span>
+              </div>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                AD
+              </div>
             </Link>
           </div>
         </header>

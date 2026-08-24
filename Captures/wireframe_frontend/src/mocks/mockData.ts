@@ -24,11 +24,15 @@ export interface Booking {
 
 export const mockPitches: Pitch[] = [
   { id: 'p1', name: 'Sân 1', type: '5', status: 'AVAILABLE' },
-  { id: 'p2', name: 'Sân 2', type: '7', status: 'AVAILABLE' },
-  { id: 'p3', name: 'Sân VIP', type: '7', status: 'AVAILABLE' },
-  { id: 'p4', name: 'Sân 4', type: '5', status: 'AVAILABLE' },
-  { id: 'p5', name: 'Sân 5', type: '5', status: 'MAINTENANCE' },
-  { id: 'p6', name: 'Sân 6', type: '7', status: 'AVAILABLE' },
+  { id: 'p2', name: 'Sân 2', type: '5', status: 'AVAILABLE' },
+  { id: 'p3', name: 'Sân 3', type: '5', status: 'MAINTENANCE' },
+  { id: 'p4', name: 'Sân 4', type: '7', status: 'AVAILABLE' },
+  { id: 'p5', name: 'Sân VIP', type: '7', status: 'AVAILABLE' },
+  { id: 'p6', name: 'Sân 6', type: '5', status: 'AVAILABLE' },
+  { id: 'p7', name: 'Sân 7', type: '5', status: 'AVAILABLE' },
+  { id: 'p8', name: 'Sân 8', type: '5', status: 'AVAILABLE' },
+  { id: 'p9', name: 'Sân 9', type: '7', status: 'AVAILABLE' },
+  { id: 'p10', name: 'Sân 10', type: '7', status: 'AVAILABLE' },
 ];
 
 export const mockTimeSlots: TimeSlot[] = [
@@ -47,9 +51,29 @@ export const mockTimeSlots: TimeSlot[] = [
 const today = new Date().toISOString().split('T')[0];
 
 export const mockBookings: Booking[] = [
-  { id: 'b1', pitchId: 'p1', timeSlotId: 't03', date: today, status: 'PENDING', customerName: 'Khách 1' },
-  { id: 'b2', pitchId: 'p1', timeSlotId: 't05', date: today, status: 'CONFIRMED', customerName: 'Khách 2' },
-  { id: 'b3', pitchId: 'p2', timeSlotId: 't06', date: today, status: 'IN_PROGRESS', customerName: 'Khách 3' },
-  { id: 'b4', pitchId: 'p2', timeSlotId: 't08', date: today, status: 'COMPLETED', customerName: 'Khách 4' },
-  { id: 'b5', pitchId: 'p3', timeSlotId: 't09', date: today, status: 'PENDING_CANCEL', customerName: 'Khách 5' },
+  { id: 'b1', pitchId: 'p1', timeSlotId: 't08', date: today, status: 'CONFIRMED', customerName: 'Nguyễn Văn A' },
+  { id: 'b2', pitchId: 'p4', timeSlotId: 't09', date: today, status: 'CONFIRMED', customerName: 'Trần Thị B' },
+  { id: 'b3', pitchId: 'p2', timeSlotId: 't07', date: today, status: 'IN_PROGRESS', customerName: 'Khách vãng lai' },
+  { id: 'b4', pitchId: 'p5', timeSlotId: 't08', date: today, status: 'PENDING_CANCEL', customerName: 'Lê Văn C' },
+  { id: 'b5', pitchId: 'p1', timeSlotId: 't05', date: today, status: 'COMPLETED', customerName: 'Phạm Thị D' },
+  { id: 'b6', pitchId: 'p2', timeSlotId: 't04', date: today, status: 'CANCELLED', customerName: 'Hoàng Văn E' },
+  { id: 'b7', pitchId: 'p4', timeSlotId: 't10', date: today, status: 'PENDING', customerName: 'Vũ Thị F' },
+  { id: 'b8', pitchId: 'p1', timeSlotId: 't02', date: today, status: 'COMPLETED', customerName: 'Đặng Văn G' },
+  // Past dates for Excel Export testing
+  { id: 'b9', pitchId: 'p2', timeSlotId: 't08', date: '2026-08-18', status: 'COMPLETED', customerName: 'Bùi Văn H' },
+  { id: 'b10', pitchId: 'p5', timeSlotId: 't09', date: '2026-08-18', status: 'COMPLETED', customerName: 'Đinh Thị I' },
+  { id: 'b11', pitchId: 'p1', timeSlotId: 't05', date: '2026-08-20', status: 'COMPLETED', customerName: 'Ngô Văn K' },
+  { id: 'b12', pitchId: 'p4', timeSlotId: 't10', date: '2026-08-21', status: 'CANCELLED', customerName: 'Phan Thị L' },
+  { id: 'b13', pitchId: 'p2', timeSlotId: 't07', date: '2026-08-22', status: 'COMPLETED', customerName: 'Đỗ Văn M' },
+];
+
+export const mockTransactions = [
+  { id: 'TX_001', date: '2026-08-18', time: '16:30', desc: 'Thanh toán nốt đơn #B9', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_002', date: '2026-08-18', time: '15:15', desc: 'Khách cọc đơn #B10', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_003', date: '2026-08-20', time: '14:00', desc: 'Khách cọc đơn #B11', method: 'VNPAY', amount: 150000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_004', date: '2026-08-21', time: '09:00', desc: 'Hoàn tiền đơn hủy #B12', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
+  { id: 'TX_005', date: '2026-08-22', time: '18:30', desc: 'Thanh toán nốt đơn #B13', method: 'Tiền mặt', amount: 200000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_006', date: today, time: '16:30', desc: 'Thanh toán nốt đơn #B3', method: 'Tiền mặt', amount: 250000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_007', date: today, time: '15:15', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
+  { id: 'TX_008', date: today, time: '14:00', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'FAILED' },
 ];

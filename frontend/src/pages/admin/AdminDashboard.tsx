@@ -161,29 +161,31 @@ const AdminDashboard: React.FC = () => {
       {/* Filters & Export */}
       <div className="card mb-6 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
-            <Calendar size={16} className="text-muted" />
+          <div className="flex items-center gap-2 flex-wrap" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem' }}>
+            <span className="text-sm font-semibold whitespace-nowrap text-muted">Ngày:</span>
             <input 
               type="date" 
               value={startDate} 
               onChange={(e) => setStartDate(e.target.value)}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} 
+              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
             />
             <span className="text-muted">-</span>
             <input 
               type="date" 
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit' }} 
+              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
             />
           </div>
           
-          <button className="btn btn-secondary" style={{ padding: '0.6rem 1rem', fontWeight: '500' }}>
+          <button className="btn btn-secondary font-semibold" style={{ height: '42px', padding: '0 1.2rem' }}>
             Lọc
           </button>
         </div>
         
-        <button className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', gap: '0.5rem' }} onClick={handleExportExcelClick}>
+        <button className="btn btn-primary" style={{ height: '42px', padding: '0 1.2rem', gap: '0.5rem' }} onClick={handleExportExcelClick}>
           <Download size={18} />
           Xuất Excel
         </button>
