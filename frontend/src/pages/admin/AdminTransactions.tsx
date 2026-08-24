@@ -11,6 +11,14 @@ const AdminTransactions: React.FC = () => {
     { id: 'TX_002', time: '15:15 - Hôm nay', desc: 'Khách cọc đơn #B1', method: 'VNPAY', amount: 105000, type: 'IN', status: 'SUCCESS' },
     { id: 'TX_003', time: '14:00 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B2', method: 'Chuyển khoản tay', amount: 105000, type: 'OUT', status: 'SUCCESS' },
     { id: 'TX_004', time: '10:00 - Hôm nay', desc: 'Khách cọc đơn #B4', method: 'VNPAY', amount: 200000, type: 'IN', status: 'FAILED' },
+    { id: 'TX_005', time: '09:30 - Hôm nay', desc: 'Khách cọc đơn #B5', method: 'Tiền mặt', amount: 150000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_006', time: '08:45 - Hôm nay', desc: 'Hoàn tiền đơn hủy #B6', method: 'VNPAY', amount: 120000, type: 'OUT', status: 'SUCCESS' },
+    { id: 'TX_007', time: '08:00 - Hôm nay', desc: 'Khách cọc đơn #B7', method: 'VNPAY', amount: 175000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_008', time: '07:30 - Hôm nay', desc: 'Khách cọc đơn #B8', method: 'Tiền mặt', amount: 210000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_009', time: '19:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B9', method: 'VNPAY', amount: 300000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_010', time: '18:15 - Hôm qua', desc: 'Hoàn tiền đơn hủy #B10', method: 'VNPAY', amount: 150000, type: 'OUT', status: 'FAILED' },
+    { id: 'TX_011', time: '16:00 - Hôm qua', desc: 'Thanh toán nốt đơn #B11', method: 'Tiền mặt', amount: 180000, type: 'IN', status: 'SUCCESS' },
+    { id: 'TX_012', time: '14:30 - Hôm qua', desc: 'Thanh toán nốt đơn #B12', method: 'VNPAY', amount: 220000, type: 'IN', status: 'SUCCESS' },
   ];
 
   const filteredTransactions = mockTransactions.filter(tx => {
@@ -26,7 +34,7 @@ const AdminTransactions: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
       
       {/* Summary Cards */}
       <div className="grid gap-6 mb-6" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
@@ -50,8 +58,8 @@ const AdminTransactions: React.FC = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="card">
-        <div className="flex justify-between items-center mb-6">
+      <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
           <h2 className="text-xl font-semibold">Lịch sử giao dịch hôm nay</h2>
           <div className="flex gap-4">
             <div className="flex items-center gap-2" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0.6rem 1rem' }}>
@@ -89,9 +97,9 @@ const AdminTransactions: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', borderTop: '1px solid var(--color-border)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
+            <thead style={{ position: 'sticky', top: 0, backgroundColor: 'var(--color-bg-surface)', zIndex: 10 }}>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <th className="p-4 font-semibold text-muted text-sm">MÃ GIAO DỊCH</th>
                 <th className="p-4 font-semibold text-muted text-sm">THỜI GIAN</th>

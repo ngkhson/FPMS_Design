@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Calendar, CreditCard, LayoutDashboard, Settings, Users, LogOut, Sun, Moon } from 'lucide-react';
+import { Calendar, CreditCard, LayoutDashboard, Settings, Users, LogOut, Sun, Moon, BarChart3 } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -22,7 +22,7 @@ const AdminLayout: React.FC = () => {
   };
 
   const menuItems = [
-    { path: '/admin', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
+    { path: '/admin', icon: <BarChart3 size={20} />, label: 'Thống kê' },
     { path: '/admin/timeline', icon: <Calendar size={20} />, label: 'Timeline Sân' },
     { path: '/admin/bookings', icon: <CreditCard size={20} />, label: 'Quản lý Đơn' },
     { path: '/admin/transactions', icon: <CreditCard size={20} />, label: 'Giao dịch' },

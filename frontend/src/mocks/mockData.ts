@@ -49,4 +49,9 @@ export const mockBookings: Booking[] = [
   { id: 'b1', pitchId: 'p1', timeSlotId: 't08', date: today, status: 'CONFIRMED', customerName: 'Nguyễn Văn A' },
   { id: 'b2', pitchId: 'p4', timeSlotId: 't09', date: today, status: 'CONFIRMED', customerName: 'Trần Thị B' },
   { id: 'b3', pitchId: 'p2', timeSlotId: 't07', date: today, status: 'IN_PROGRESS', customerName: 'Khách vãng lai' },
+  { id: 'b4', pitchId: 'p5', timeSlotId: 't08', date: today, status: 'PENDING_CANCEL', customerName: 'Lê Văn C' },
+  { id: 'b5', pitchId: 'p1', timeSlotId: 't05', date: today, status: 'COMPLETED', customerName: 'Phạm Thị D' },
+  { id: 'b6', pitchId: 'p2', timeSlotId: 't04', date: today, status: 'CANCELLED', customerName: 'Hoàng Văn E' },
+  { id: 'b7', pitchId: 'p4', timeSlotId: 't10', date: today, status: 'PENDING', customerName: 'Vũ Thị F' },
+  { id: 'b8', pitchId: 'p1', timeSlotId: 't02', date: today, status: 'COMPLETED', customerName: 'Đặng Văn G' },
 ];
