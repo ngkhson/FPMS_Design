@@ -111,16 +111,16 @@ const AdminTimeSlots: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold mb-2">Giờ bắt đầu</label>
-                <input type="time" className="w-full" defaultValue={editSlot.startTime} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', cursor: 'pointer' }} onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }} />
+                <input type="time" className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', cursor: 'pointer' }} onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }} />
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-2">Giờ kết thúc</label>
-                <input type="time" className="w-full" defaultValue={editSlot.endTime} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', cursor: 'pointer' }} onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }} />
+                <input type="time" className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', cursor: 'pointer' }} onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }} />
               </div>
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Phân loại</label>
-              <select className="w-full" defaultValue={editSlot.isPeak ? "PEAK" : "NORMAL"} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
                 <option value="NORMAL">Giờ thường</option>
                 <option value="PEAK">Giờ vàng</option>
               </select>
@@ -137,7 +137,7 @@ const AdminTimeSlots: React.FC = () => {
       {deleteSlot && (
         <ModalOverlay onClose={() => setDeleteSlot(null)}>
           <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
-            <h2 className="text-xl font-bold text-danger">Xóa Khung Giờ</h2>
+            <h2 className="text-xl font-bold">Xóa Khung Giờ</h2>
             <button onClick={() => setDeleteSlot(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
           </div>
           <div className="mb-6">
@@ -146,7 +146,7 @@ const AdminTimeSlots: React.FC = () => {
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary w-1/2" onClick={() => setDeleteSlot(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setDeleteSlot(null)}>Xác nhận Xóa</button>
+            <button className="btn btn-primary w-1/2" onClick={() => setDeleteSlot(null)}>Xác nhận Xóa</button>
           </div>
         </ModalOverlay>
       )}

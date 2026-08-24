@@ -211,14 +211,7 @@ const AdminBookings: React.FC = () => {
               <input
                 type="text"
                 className="w-full"
-                placeholder="Nhập tên khách..."
-                defaultValue="Khách vãng lai"
-                onFocus={(e) => {
-                  if (e.target.value === 'Khách vãng lai') e.target.value = '';
-                }}
-                onBlur={(e) => {
-                  if (e.target.value.trim() === '') e.target.value = 'Khách vãng lai';
-                }}
+                placeholder="[ Tên khách ]"
                 style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}
               />
             </div>
@@ -241,13 +234,13 @@ const AdminBookings: React.FC = () => {
             <div>
               <label className="block text-sm font-semibold mb-2">Khung giờ trống</label>
               <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option>17:45 - 19:15 (400,000 đ)</option>
-                <option>19:30 - 21:00 (450,000 đ)</option>
+                <option>[ Khung giờ ] ([ Số tiền ])</option>
+                <option>[ Khung giờ ] ([ Số tiền ])</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Tiền thanh toán / Đặt cọc</label>
-              <input type="text" className="w-full" placeholder="Nhập số tiền khách đưa" defaultValue="0" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" placeholder="[ Số tiền ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
           </div>
 
@@ -292,18 +285,18 @@ const AdminBookings: React.FC = () => {
                 <span>Tổng tiền sân:</span>
                 <span className="font-semibold">[ Số tiền ]</span>
               </div>
-              <div className="flex justify-between mb-4 text-success">
+              <div className="flex justify-between mb-4 text-muted">
                 <span>Đã thanh toán (Cọc):</span>
                 <span>- [ Số tiền ]</span>
               </div>
               <div style={{ height: 1, backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
-              <div className="flex justify-between text-xl font-bold text-danger">
+              <div className="flex justify-between text-xl font-bold">
                 <span>Khách cần thanh toán:</span>
                 <span>[ Số tiền ]</span>
               </div>
             </div>
 
-            <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-secondary)', fontSize: '1.1rem', padding: '0.75rem' }} onClick={() => setCheckoutBookingId(null)}>Xác nhận Thu Tiền</button>
+            <button className="btn btn-primary w-full" style={{ fontSize: '1.1rem', padding: '0.75rem' }} onClick={() => setCheckoutBookingId(null)}>Xác nhận Thu Tiền</button>
           </ModalOverlay>
         );
       })()}
@@ -316,22 +309,22 @@ const AdminBookings: React.FC = () => {
         return (
           <ModalOverlay onClose={() => setCancelBookingId(null)}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-danger">Xử lý Yêu Cầu Hủy Đơn</h2>
+              <h2 className="text-xl font-bold">Xử lý Yêu Cầu Hủy Đơn</h2>
               <button onClick={() => setCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
             </div>
 
             <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
               <p className="mb-4 text-base">[ Thông báo về việc khách hàng yêu cầu hủy đơn ]</p>
 
-              <div className="flex justify-between items-center p-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-2xl font-bold text-danger">[ Số tiền ]</span>
+              <div className="flex justify-between items-center p-4" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)' }}>
+                <span className="font-semibold">Số tiền cọc cần hoàn trả:</span>
+                <span className="text-2xl font-bold">[ Số tiền ]</span>
               </div>
             </div>
 
             <div className="flex gap-4">
               <button className="btn btn-secondary w-full" onClick={() => setCancelBookingId(null)}>Từ chối Hủy</button>
-              <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(null)}>Duyệt Hủy & Hoàn Tiền</button>
+              <button className="btn btn-primary w-full" onClick={() => setCancelBookingId(null)}>Duyệt Hủy & Hoàn Tiền</button>
             </div>
           </ModalOverlay>
         );

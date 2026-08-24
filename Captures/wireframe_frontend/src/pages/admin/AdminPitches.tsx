@@ -114,7 +114,7 @@ const AdminPitches: React.FC = () => {
           <div className="grid gap-4 mb-6" style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
             <div>
               <label className="block text-sm font-semibold mb-2">Tên sân</label>
-              <input type="text" className="w-full" placeholder="Ví dụ: Sân 5, Sân VIP..." style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" placeholder="[ Tên sân ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Loại sân</label>
@@ -144,7 +144,7 @@ const AdminPitches: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Loại sân</label>
-              <select className="w-full" defaultValue={editPitch.type} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
                 <option value="5">Sân 5 người</option>
                 <option value="7">Sân 7 người</option>
               </select>
@@ -161,25 +161,17 @@ const AdminPitches: React.FC = () => {
       {maintenancePitch && (
         <ModalOverlay onClose={() => setMaintenancePitch(null)}>
           <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
-            <h2 className={`text-xl font-bold ${maintenancePitch.status === 'AVAILABLE' ? 'text-warning' : 'text-success'}`}>
-              {maintenancePitch.status === 'AVAILABLE' ? 'Cài Đặt Bảo Trì' : 'Mở Khóa Sân'}
-            </h2>
+            <h2 className="text-xl font-bold">Xác Nhận Thay Đổi Trạng Thái</h2>
             <button onClick={() => setMaintenancePitch(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
           </div>
           <div className="mb-6">
-            <p>
-              Bạn có chắc chắn muốn {maintenancePitch.status === 'AVAILABLE' ? 'chuyển' : 'kết thúc bảo trì và mở khóa'} sân <strong>{maintenancePitch.name}</strong> 
-              {maintenancePitch.status === 'AVAILABLE' ? ' sang trạng thái bảo trì' : ''} không?
-            </p>
-            {maintenancePitch.status === 'AVAILABLE' && (
-              <p className="text-muted text-sm mt-2">Khách hàng sẽ không thể đặt sân này trong thời gian bảo trì.</p>
-            )}
+            <p>Bạn có chắc chắn muốn thay đổi trạng thái của sân <strong>[ Tên sân ]</strong> không?</p>
+            <p className="text-muted text-sm mt-2">Thao tác này sẽ ảnh hưởng đến việc khách hàng có thể đặt sân hay không.</p>
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary w-1/2" onClick={() => setMaintenancePitch(null)}>Hủy bỏ</button>
             <button 
-              className="btn w-1/2" 
-              style={{ backgroundColor: maintenancePitch.status === 'AVAILABLE' ? 'var(--color-warning)' : 'var(--color-success)', color: 'white' }} 
+              className="btn btn-primary w-1/2" 
               onClick={() => setMaintenancePitch(null)}
             >
               Xác nhận

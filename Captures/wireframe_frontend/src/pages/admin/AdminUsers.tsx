@@ -166,26 +166,26 @@ const AdminUsers: React.FC = () => {
           </div>
           <div className="grid gap-4 mb-6" style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
             <div>
-              <label className="block text-sm font-semibold mb-2">ID: {viewUser.id}</label>
+              <label className="block text-sm font-semibold mb-2">ID: [ Mã ID ]</label>
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Họ và Tên</label>
-              <input type="text" className="w-full" defaultValue={viewUser.name} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" placeholder="[ Họ và tên ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Số điện thoại</label>
-              <input type="text" className="w-full" defaultValue={viewUser.phone} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" placeholder="[ Số điện thoại ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Email</label>
-              <input type="email" className="w-full" defaultValue={viewUser.email} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="email" className="w-full" placeholder="[ Email ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option value="CUSTOMER">Khách hàng (CUSTOMER)</option>
-                <option value="STAFF">Nhân viên (STAFF)</option>
-                <option value="ADMIN">Quản trị viên (ADMIN)</option>
+              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                <option value="CUSTOMER">Khách hàng</option>
+                <option value="STAFF">Nhân viên</option>
+                <option value="ADMIN">Quản trị viên</option>
               </select>
             </div>
           </div>
@@ -200,16 +200,16 @@ const AdminUsers: React.FC = () => {
       {lockUser && (
         <ModalOverlay onClose={() => setLockUser(null)}>
           <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
-            <h2 className="text-xl font-bold text-danger">Xác Nhận Khóa Tài Khoản</h2>
+            <h2 className="text-xl font-bold">Xác Nhận Thay Đổi Trạng Thái</h2>
             <button onClick={() => setLockUser(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
           </div>
           <div className="mb-6">
-            <p>Bạn có chắc chắn muốn khóa tài khoản của <strong>{lockUser.name}</strong> không?</p>
-            <p className="text-muted text-sm mt-2">Người dùng này sẽ không thể đăng nhập hoặc đặt sân mới cho đến khi được mở khóa lại.</p>
+            <p>Bạn có chắc chắn muốn thay đổi trạng thái của <strong>[ Tên người dùng ]</strong> không?</p>
+            <p className="text-muted text-sm mt-2">Hành động này sẽ thay đổi quyền truy cập của người dùng này vào hệ thống.</p>
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary w-1/2" onClick={() => setLockUser(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setLockUser(null)}>Khóa Tài Khoản</button>
+            <button className="btn btn-primary w-1/2" onClick={() => setLockUser(null)}>Xác nhận</button>
           </div>
         </ModalOverlay>
       )}
