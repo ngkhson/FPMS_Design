@@ -1,0 +1,344 @@
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { mockBookings, mockPitches, mockTimeSlots } from '../../mocks/mockData';
+import { Search, Calendar, X } from 'lucide-react';
+
+const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
+  return createPortal(
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
+      <div className="card" style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+};
+
+const AdminBookings: React.FC = () => {
+  const dateInputRef = React.useRef<HTMLInputElement>(null);
+  const [activeTab, setActiveTab] = useState('ALL');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [pitchFilter, setPitchFilter] = useState('ALL');
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [checkoutBookingId, setCheckoutBookingId] = useState<string | null>(null);
+  const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
+      case 'CONFIRMED': return <span className="badge badge-success">Đã cọc (Sắp đá)</span>;
+      case 'IN_PROGRESS': return <span className="badge badge-warning">Đang đá</span>;
+      case 'COMPLETED': return <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Đã hoàn thành</span>;
+      case 'PENDING_CANCEL': return <span className="badge badge-danger">Yêu cầu hủy</span>;
+      case 'CANCELLED': return <span className="badge badge-danger" style={{ opacity: 0.7 }}>Đã hủy</span>;
+      default: return <span className="badge">{status}</span>;
+    }
+  };
+
+  const filteredBookings = mockBookings.filter(b => {
+    if (activeTab === 'PENDING_CANCEL' && b.status !== 'PENDING_CANCEL') return false;
+    if (activeTab === 'IN_PROGRESS' && b.status !== 'IN_PROGRESS') return false;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      if (!b.id.toLowerCase().includes(term) && !b.customerName.toLowerCase().includes(term)) {
+        return false;
+      }
+    }
+
+    if (pitchFilter !== 'ALL') {
+      const pitch = mockPitches.find(p => p.id === b.pitchId);
+      if (pitch?.type !== pitchFilter) return false;
+    }
+
+    return true;
+  });
+
+  const checkoutBooking = mockBookings.find(b => b.id === checkoutBookingId);
+  const cancelBooking = mockBookings.find(b => b.id === cancelBookingId);
+
+  return (
+    <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
+      <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className="flex items-center justify-between mb-6" style={{ flexShrink: 0 }}>
+          <div className="flex gap-2">
+            <button
+              className={`btn ${activeTab === 'ALL' ? 'btn-primary' : 'btn-secondary'}`}
+              onClick={() => setActiveTab('ALL')}
+            >
+              Tất cả
+            </button>
+            <button
+              className={`btn ${activeTab === 'IN_PROGRESS' ? 'btn-primary' : 'btn-secondary'}`}
+              onClick={() => setActiveTab('IN_PROGRESS')}
+            >
+              Đang đá (Nợ phí)
+            </button>
+            <button
+              className={`btn ${activeTab === 'PENDING_CANCEL' ? 'btn-primary' : 'btn-secondary'}`}
+              onClick={() => setActiveTab('PENDING_CANCEL')}
+              style={activeTab === 'PENDING_CANCEL' ? { backgroundColor: 'var(--color-danger)' } : {}}
+            >
+              Cần xử lý hủy (1)
+            </button>
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-2" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 1rem' }}>
+              <Search size={16} className="text-muted" />
+              <input
+                type="text"
+                placeholder="Tìm mã đơn, tên khách..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '180px' }}
+              />
+            </div>
+
+            <select
+              className="btn btn-secondary"
+              style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              value={pitchFilter}
+              onChange={(e) => setPitchFilter(e.target.value)}
+            >
+              <option value="ALL">Loại sân: Tất cả</option>
+              <option value="5">Sân 5 người</option>
+              <option value="7">Sân 7 người</option>
+            </select>
+
+            <div 
+              className="flex items-center gap-2" 
+              style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 1rem', cursor: 'pointer' }}
+              onClick={() => {
+                if (dateInputRef.current) {
+                  try {
+                    dateInputRef.current.showPicker();
+                  } catch (e) {
+                    dateInputRef.current.focus();
+                  }
+                }
+              }}
+            >
+              <span className="text-muted text-sm font-medium">Ngày:</span>
+              <input 
+                ref={dateInputRef}
+                type="date" 
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+            <button className="btn btn-primary" style={{ height: '42px' }} onClick={() => setIsCreateModalOpen(true)}>Tạo đơn tại quầy</button>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', borderTop: '1px solid var(--color-border)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead style={{ position: 'sticky', top: 0, backgroundColor: 'var(--color-bg-surface)', zIndex: 10 }}>
+              <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
+                <th className="p-4 font-semibold text-muted text-sm">MÃ ĐƠN</th>
+                <th className="p-4 font-semibold text-muted text-sm">KHÁCH HÀNG</th>
+                <th className="p-4 font-semibold text-muted text-sm">SÂN / GIỜ</th>
+                <th className="p-4 font-semibold text-muted text-sm">TRẠNG THÁI</th>
+                <th className="p-4 font-semibold text-muted text-sm">TÀI CHÍNH</th>
+                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredBookings.map((booking) => {
+                const pitch = mockPitches.find(p => p.id === booking.pitchId);
+                const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
+                const price = slot?.basePrice || 0;
+                const deposit = price * 0.3;
+
+                return (
+                  <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                    <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
+                    <td className="p-4">
+                      <div className="font-semibold">{booking.customerName}</div>
+                      <div className="text-sm text-muted">0987xxx</div>
+                    </td>
+                    <td className="p-4">
+                      <div className="font-semibold">{pitch?.name}</div>
+                      <div className="text-sm text-muted">{booking.date} | {slot?.startTime} - {slot?.endTime}</div>
+                    </td>
+                    <td className="p-4">{getStatusBadge(booking.status)}</td>
+                    <td className="p-4">
+                      <div className="text-sm">Tổng: {formatPrice(price)}</div>
+                      <div className="text-sm text-success">Đã cọc: {formatPrice(deposit)}</div>
+                      {booking.status === 'IN_PROGRESS' && (
+                        <div className="text-sm font-semibold text-danger">Còn nợ: {formatPrice(price - deposit)}</div>
+                      )}
+                    </td>
+                    <td className="p-4 text-right flex gap-2 justify-end">
+                      {booking.status === 'PENDING' && (
+                        <button className="btn btn-primary">Duyệt đơn</button>
+                      )}
+                      {booking.status === 'IN_PROGRESS' && (
+                        <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => setCheckoutBookingId(booking.id)}>Thu tiền & Đóng ca</button>
+                      )}
+                      {booking.status === 'CONFIRMED' && (
+                        <button className="btn btn-secondary">Nhận sân</button>
+                      )}
+                      {booking.status === 'PENDING_CANCEL' && (
+                        <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 1. Modal Tạo đơn tại quầy */}
+      {isCreateModalOpen && (
+        <ModalOverlay onClose={() => setIsCreateModalOpen(false)}>
+          <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
+            <h2 className="text-xl font-bold">Tạo Đơn Tại Quầy</h2>
+            <button onClick={() => setIsCreateModalOpen(false)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+          </div>
+
+          <div className="grid gap-4 mb-6" style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
+            <div>
+              <label className="block text-sm font-semibold mb-2">Tên khách hàng</label>
+              <input
+                type="text"
+                className="w-full"
+                placeholder="Nhập tên khách..."
+                defaultValue="Khách vãng lai"
+                onFocus={(e) => {
+                  if (e.target.value === 'Khách vãng lai') e.target.value = '';
+                }}
+                onBlur={(e) => {
+                  if (e.target.value.trim() === '') e.target.value = 'Khách vãng lai';
+                }}
+                style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-2">Số điện thoại</label>
+              <input type="text" className="w-full" placeholder="Nhập SĐT..." style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2">Chọn Sân</label>
+                <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                  {mockPitches.map(p => <option key={p.id} value={p.id}>{p.name} ({p.type} người)</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-2">Ngày đá</label>
+                <input type="date" className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} defaultValue={new Date().toISOString().split('T')[0]} />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-2">Khung giờ trống</label>
+              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                <option>17:45 - 19:15 (400,000 đ)</option>
+                <option>19:30 - 21:00 (450,000 đ)</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-2">Tiền thanh toán / Đặt cọc</label>
+              <input type="text" className="w-full" placeholder="Nhập số tiền khách đưa" defaultValue="0" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+            </div>
+          </div>
+
+          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)' }}>
+            <button className="btn btn-primary w-full" onClick={() => setIsCreateModalOpen(false)}>Xác nhận Tạo Đơn</button>
+          </div>
+        </ModalOverlay>
+      )}
+
+      {/* 2. Modal Thu tiền & Đóng ca */}
+      {checkoutBookingId && checkoutBooking && (() => {
+        const pitch = mockPitches.find(p => p.id === checkoutBooking.pitchId);
+        const slot = mockTimeSlots.find(t => t.id === checkoutBooking.timeSlotId);
+        const price = slot?.basePrice || 0;
+        const deposit = price * 0.3;
+        const remaining = price - deposit;
+
+        return (
+          <ModalOverlay onClose={() => setCheckoutBookingId(null)}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Thanh Toán & Đóng Ca</h2>
+              <button onClick={() => setCheckoutBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+            </div>
+
+            <div style={{ background: 'var(--color-bg-base)', padding: '1rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
+              <div className="flex justify-between mb-2">
+                <span className="text-muted">Đơn hàng:</span>
+                <span className="font-semibold">#{checkoutBooking.id.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-muted">Khách hàng:</span>
+                <span className="font-semibold">{checkoutBooking.customerName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted">Sân / Khung giờ:</span>
+                <span className="font-semibold">{pitch?.name} ({slot?.startTime} - {slot?.endTime})</span>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex justify-between mb-2 text-lg">
+                <span>Tổng tiền sân:</span>
+                <span className="font-semibold">{formatPrice(price)}</span>
+              </div>
+              <div className="flex justify-between mb-4 text-success">
+                <span>Đã thanh toán (Cọc):</span>
+                <span>- {formatPrice(deposit)}</span>
+              </div>
+              <div style={{ height: 1, backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
+              <div className="flex justify-between text-xl font-bold text-danger">
+                <span>Khách cần thanh toán:</span>
+                <span>{formatPrice(remaining)}</span>
+              </div>
+            </div>
+
+            <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-secondary)', fontSize: '1.1rem', padding: '0.75rem' }} onClick={() => setCheckoutBookingId(null)}>Xác nhận Thu Tiền</button>
+          </ModalOverlay>
+        );
+      })()}
+
+      {/* 3. Modal Xử lý Hủy đơn */}
+      {cancelBookingId && cancelBooking && (() => {
+        const slot = mockTimeSlots.find(t => t.id === cancelBooking.timeSlotId);
+        const deposit = (slot?.basePrice || 0) * 0.3;
+
+        return (
+          <ModalOverlay onClose={() => setCancelBookingId(null)}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-danger">Xử lý Yêu Cầu Hủy Đơn</h2>
+              <button onClick={() => setCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+            </div>
+
+            <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
+              <p className="mb-4 text-base">Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>{cancelBooking.customerName}</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>#{cancelBooking.id.toUpperCase()}</strong>.</p>
+
+              <div className="flex justify-between items-center p-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+                <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
+                <span className="text-2xl font-bold text-danger">{formatPrice(deposit)}</span>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <button className="btn btn-secondary w-full" onClick={() => setCancelBookingId(null)}>Từ chối Hủy</button>
+              <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(null)}>Duyệt Hủy & Hoàn Tiền</button>
+            </div>
+          </ModalOverlay>
+        );
+      })()}
+
+    </div>
+  );
+};
+
+export default AdminBookings;
