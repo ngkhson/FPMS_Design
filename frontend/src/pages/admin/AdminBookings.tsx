@@ -42,8 +42,7 @@ const AdminBookings: React.FC = () => {
   };
 
   const filteredBookings = mockBookings.filter(b => {
-    if (activeTab === 'PENDING_CANCEL' && b.status !== 'PENDING_CANCEL') return false;
-    if (activeTab === 'IN_PROGRESS' && b.status !== 'IN_PROGRESS') return false;
+    if (activeTab !== 'ALL' && b.status !== activeTab) return false;
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
@@ -67,26 +66,22 @@ const AdminBookings: React.FC = () => {
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
       <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div className="flex items-center justify-between mb-6" style={{ flexShrink: 0 }}>
-          <div className="flex gap-2">
-            <button
-              className={`btn ${activeTab === 'ALL' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setActiveTab('ALL')}
+          <div className="flex gap-4 items-center">
+            <h2 className="text-xl font-semibold mr-2">Danh sách Đơn</h2>
+            <select
+              className="btn btn-secondary"
+              style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
             >
-              Tất cả
-            </button>
-            <button
-              className={`btn ${activeTab === 'IN_PROGRESS' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setActiveTab('IN_PROGRESS')}
-            >
-              Đang đá (Nợ phí)
-            </button>
-            <button
-              className={`btn ${activeTab === 'PENDING_CANCEL' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setActiveTab('PENDING_CANCEL')}
-              style={activeTab === 'PENDING_CANCEL' ? { backgroundColor: 'var(--color-danger)' } : {}}
-            >
-              Cần xử lý hủy (1)
-            </button>
+              <option value="ALL">Trạng thái: Tất cả</option>
+              <option value="PENDING">Chờ xác nhận</option>
+              <option value="CONFIRMED">Đã cọc (Sắp đá)</option>
+              <option value="IN_PROGRESS">Đang đá (Nợ phí)</option>
+              <option value="COMPLETED">Đã hoàn thành</option>
+              <option value="PENDING_CANCEL">Yêu cầu hủy</option>
+              <option value="CANCELLED">Đã hủy</option>
+            </select>
           </div>
 
           <div className="flex gap-4 items-center">
@@ -177,7 +172,10 @@ const AdminBookings: React.FC = () => {
                     </td>
                     <td className="p-4 text-right flex gap-2 justify-end">
                       {booking.status === 'PENDING' && (
-                        <button className="btn btn-primary">Duyệt đơn</button>
+                        <>
+                          <button className="btn btn-primary">Duyệt đơn</button>
+                          <button className="btn btn-secondary text-danger">Hủy & Hoàn tiền</button>
+                        </>
                       )}
                       {booking.status === 'IN_PROGRESS' && (
                         <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => setCheckoutBookingId(booking.id)}>Thu tiền & Đóng ca</button>
