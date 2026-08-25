@@ -5,7 +5,7 @@ const Login: React.FC = () => {
   return (
     <div className="flex justify-center items-start pt-4">
       <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 className="text-2xl font-bold text-center mb-6">Đăng nhập Soccer88</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Đăng nhập Soccer365</h2>
         
         <form className="flex flex-col gap-4">
           <div>

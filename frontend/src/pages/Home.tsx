@@ -109,7 +109,7 @@ const Home: React.FC = () => {
       {/* 2. Features Section */}
       <section className="container mb-24">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Tại sao chọn Soccer88?</h2>
+          <h2 className="text-3xl font-bold mb-4">Tại sao chọn Soccer365?</h2>
           <p className="text-muted">Giải pháp đặt sân bóng số 1, được hàng nghìn team tin dùng</p>
         </div>
 

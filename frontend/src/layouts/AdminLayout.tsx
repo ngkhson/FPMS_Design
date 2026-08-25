@@ -44,7 +44,7 @@ const AdminLayout: React.FC = () => {
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ width: '250px', flexShrink: 0, backgroundColor: 'var(--color-bg-surface)', borderRight: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>Soccer88 Admin</h2>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>Soccer365</h2>
             <p className="text-muted text-sm mt-1">Phần mềm quản lý sân bóng</p>
           </div>
           <button className="menu-toggle-btn text-muted" onClick={() => setSidebarOpen(false)}>
@@ -97,7 +97,7 @@ const AdminLayout: React.FC = () => {
             <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }} title="Đổi giao diện">
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            
+
             <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)' }}></div>
 
             <Link to="/admin/profile" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>

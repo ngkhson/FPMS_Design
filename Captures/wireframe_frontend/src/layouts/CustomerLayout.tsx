@@ -37,7 +37,7 @@ const CustomerLayout: React.FC = () => {
       <header className="navbar">
         <div className="container flex items-center justify-between">
           <Link to="/" className="font-bold text-2xl" style={{ color: 'var(--color-primary)' }}>
-            Soccer88
+            Soccer365
           </Link>
           
           {/* Desktop Navigation */}

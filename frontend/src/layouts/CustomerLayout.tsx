@@ -37,7 +37,7 @@ const CustomerLayout: React.FC = () => {
       <header className="navbar">
         <div className="container flex items-center justify-between">
           <Link to="/" className="font-bold text-2xl" style={{ color: 'var(--color-primary)' }}>
-            Soccer88
+            Soccer365
           </Link>
           
           {/* Desktop Navigation */}
@@ -106,7 +106,7 @@ const CustomerLayout: React.FC = () => {
       <footer className="modern-footer">
         <div className="container text-sm text-muted">
           <div className="flex items-center gap-2 font-bold" style={{ color: 'var(--color-primary)' }}>
-            Soccer88 © {new Date().getFullYear()}
+            Soccer365 © {new Date().getFullYear()}
           </div>
           <div className="text-center md:text-left font-medium">
             Hệ thống Quản lý và Đặt sân bóng đá trực tuyến
