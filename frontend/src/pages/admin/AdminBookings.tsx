@@ -24,7 +24,6 @@ const AdminBookings: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [checkoutBookingId, setCheckoutBookingId] = useState<string | null>(null);
   const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
-  const [rejectCancelBookingId, setRejectCancelBookingId] = useState<string | null>(null);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -62,7 +61,6 @@ const AdminBookings: React.FC = () => {
 
   const checkoutBooking = mockBookings.find(b => b.id === checkoutBookingId);
   const cancelBooking = mockBookings.find(b => b.id === cancelBookingId);
-  const rejectCancelBooking = mockBookings.find(b => b.id === rejectCancelBookingId);
 
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
@@ -186,10 +184,7 @@ const AdminBookings: React.FC = () => {
                         <button className="btn btn-secondary">Nhận sân</button>
                       )}
                       {booking.status === 'PENDING_CANCEL' && (
-                        <>
-                          <button className="btn btn-secondary text-danger" onClick={() => setRejectCancelBookingId(booking.id)}>Từ chối hủy</button>
-                          <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
-                        </>
+                        <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
                       )}
                     </td>
                   </tr>
@@ -340,36 +335,7 @@ const AdminBookings: React.FC = () => {
         );
       })()}
 
-      {/* 4. Modal Từ chối Hủy */}
-      {rejectCancelBookingId && rejectCancelBooking && (() => {
-        return (
-          <ModalOverlay onClose={() => setRejectCancelBookingId(null)}>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Từ chối Yêu Cầu Hủy</h2>
-              <button onClick={() => setRejectCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
-            </div>
 
-            <div className="mb-6">
-              <p className="mb-4">Bạn có chắc chắn muốn từ chối yêu cầu hủy của đơn <strong style={{ color: 'var(--color-text-base)' }}>#{rejectCancelBooking.id.toUpperCase()}</strong> không?</p>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2">Lý do từ chối (Gửi cho khách hàng)</label>
-                <textarea 
-                  className="w-full" 
-                  rows={3} 
-                  placeholder="VD: Yêu cầu hủy quá sát giờ đá..." 
-                  style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', outline: 'none', resize: 'none' }} 
-                ></textarea>
-              </div>
-              <p className="text-muted text-sm">Khi từ chối, đơn sẽ được đưa trở lại trạng thái <strong>Đã xác nhận</strong> hoặc <strong>Đang đá</strong> tùy theo khung giờ hiện tại.</p>
-            </div>
-
-            <div className="flex gap-4">
-              <button className="btn btn-secondary w-full" onClick={() => setRejectCancelBookingId(null)}>Quay lại</button>
-              <button className="btn btn-primary w-full" onClick={() => setRejectCancelBookingId(null)}>Xác nhận Từ chối</button>
-            </div>
-          </ModalOverlay>
-        );
-      })()}
 
     </div>
   );
