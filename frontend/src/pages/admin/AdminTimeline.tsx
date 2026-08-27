@@ -28,7 +28,7 @@ const AdminTimeline: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--color-success)' }}></div>
-              <span>Đã cọc</span>
+              <span>Đã xác nhận</span>
             </div>
             <div className="flex items-center gap-2">
               <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid var(--color-warning)' }}></div>
@@ -152,7 +152,7 @@ const AdminTimeline: React.FC = () => {
                       <div className="font-bold text-sm mb-1">{booking.customerName}</div>
                       <div className="text-xs text-muted mb-1">Mã đơn: #{booking.id.toUpperCase()}</div>
                       <div className="text-xs font-semibold" style={{ color: borderColor }}>
-                         {booking.status === 'CONFIRMED' ? 'Đã cọc' : 
+                         {booking.status === 'CONFIRMED' ? 'Đã xác nhận' : 
                           booking.status === 'IN_PROGRESS' ? 'Đang đá' : 
                           booking.status === 'COMPLETED' ? 'Đã xong' :
                           booking.status === 'PENDING' ? 'Chờ duyệt' : 'Yêu cầu hủy'}
