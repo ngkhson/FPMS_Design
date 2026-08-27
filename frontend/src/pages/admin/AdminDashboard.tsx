@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+import {
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { Download, Calendar, X } from 'lucide-react';
 import { mockBookings, mockPitches, mockTimeSlots } from '../../mocks/mockData';
@@ -17,7 +17,7 @@ const AdminDashboard: React.FC = () => {
     return createPortal(
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
-        <div 
+        <div
           className="card"
           style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
         >
@@ -92,7 +92,7 @@ const AdminDashboard: React.FC = () => {
       const remaining = price - deposit;
       let cashCollected = 0;
       let refund = 0;
-      
+
       if (b.status === 'COMPLETED') cashCollected = remaining;
       if (b.status === 'CANCELLED') refund = deposit;
 
@@ -116,7 +116,7 @@ const AdminDashboard: React.FC = () => {
       row.getCell('deposit').numFmt = '#,##0" đ"';
       row.getCell('cash').numFmt = '#,##0" đ"';
       row.getCell('refund').numFmt = '#,##0" đ"';
-      
+
       row.alignment = { vertical: 'middle' };
     });
 
@@ -143,7 +143,7 @@ const AdminDashboard: React.FC = () => {
           <p className="font-bold mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color, fontSize: '0.875rem', fontWeight: 600 }}>
-              {entry.name}: {entry.name === 'Doanh thu' 
+              {entry.name}: {entry.name === 'Doanh thu'
                 ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(entry.value)
                 : (entry.name === 'Sân 5 người' || entry.name === 'Sân 7 người' ? `${entry.value}%` : `${entry.value} đơn`)
               }
@@ -157,37 +157,37 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      
+
       {/* Filters & Export */}
       <div className="card mb-6 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2 flex-wrap" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.8rem' }}>
             <span className="text-sm font-semibold whitespace-nowrap text-muted">Ngày:</span>
-            <input 
-              type="date" 
-              value={startDate} 
+            <input
+              type="date"
+              value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }}
             />
             <span className="text-muted">-</span>
-            <input 
-              type="date" 
-              value={endDate} 
+            <input
+              type="date"
+              value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) {} }}
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+              onClick={(e) => { try { (e.target as HTMLInputElement).showPicker(); } catch (err) { } }}
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }}
             />
           </div>
-          
+
           <button className="btn btn-secondary font-semibold" style={{ height: '42px', padding: '0 1.2rem' }}>
             Lọc
           </button>
         </div>
-        
+
         <button className="btn btn-primary" style={{ height: '42px', padding: '0 1.2rem', gap: '0.5rem' }} onClick={handleExportExcelClick}>
           <Download size={18} />
-          Xuất Excel
+          Xuất báo cáo
         </button>
       </div>
 
@@ -217,7 +217,7 @@ const AdminDashboard: React.FC = () => {
 
       {/* Charts Section */}
       <div className="flex flex-col gap-6 mb-6">
-        
+
         {/* Doanh thu Chart */}
         <div className="card w-full">
           <h2 className="text-lg font-bold mb-6">Biểu đồ Doanh thu</h2>
@@ -229,11 +229,11 @@ const AdminDashboard: React.FC = () => {
                 <YAxis stroke="var(--color-text-muted)" fontSize={12} tickFormatter={formatYAxis} width={60} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                <Line 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  name="Doanh thu" 
-                  stroke="var(--color-primary)" 
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  name="Doanh thu"
+                  stroke="var(--color-primary)"
                   strokeWidth={3}
                   activeDot={{ r: 8, strokeWidth: 0 }}
                   dot={{ r: 4, strokeWidth: 2, fill: 'var(--color-bg-surface)' }}
@@ -255,11 +255,11 @@ const AdminDashboard: React.FC = () => {
                   <YAxis stroke="var(--color-text-muted)" fontSize={12} />
                   <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.05)' }} />
                   <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                  <Bar 
-                    dataKey="bookings" 
-                    name="Số đơn đặt" 
-                    fill="var(--color-secondary)" 
-                    radius={[4, 4, 0, 0]} 
+                  <Bar
+                    dataKey="bookings"
+                    name="Số đơn đặt"
+                    fill="var(--color-secondary)"
+                    radius={[4, 4, 0, 0]}
                     barSize={40}
                   />
                 </BarChart>
@@ -310,7 +310,7 @@ const AdminDashboard: React.FC = () => {
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary w-1/2" onClick={() => setShowConfirmExport(false)}>Hủy Bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={executeExportExcel}>Xuất Excel</button>
+            <button className="btn btn-primary w-1/2" onClick={executeExportExcel}>Xác nhận</button>
           </div>
         </ModalOverlay>
       )}

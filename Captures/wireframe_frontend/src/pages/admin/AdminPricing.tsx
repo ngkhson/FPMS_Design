@@ -1,8 +1,22 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, CalendarDays, SunDim, Gift, Clock, Zap, MapPin } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Plus, Trash2, Save, CalendarDays, SunDim, Gift, Clock, Zap, MapPin, X } from 'lucide-react';
+
+const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
+  return createPortal(
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
+      <div className="card" style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '450px', maxHeight: '90vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+};
 
 const AdminPricing: React.FC = () => {
   const [pitchType, setPitchType] = useState('5');
+  const [deleteHoliday, setDeleteHoliday] = useState<any>(null);
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -131,7 +145,10 @@ const AdminPricing: React.FC = () => {
             </table>
           </div>
 
-          <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+            <button className="btn btn-secondary" style={{ padding: '0.75rem 2rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }}>
+              Hủy
+            </button>
             <button className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }}>
               <Save size={18} /> Lưu Bảng giá
             </button>
@@ -171,7 +188,10 @@ const AdminPricing: React.FC = () => {
                     <div className="font-bold text-lg">[ Ngày ]</div>
                     <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
-                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                  <button 
+                    style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}
+                    onClick={() => setDeleteHoliday({ date: '02/09/2026', name: 'Quốc khánh' })}
+                  >
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -181,7 +201,10 @@ const AdminPricing: React.FC = () => {
                     <div className="font-bold text-lg">[ Ngày ]</div>
                     <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
-                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                  <button 
+                    style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}
+                    onClick={() => setDeleteHoliday({ date: '30/04/2026', name: 'Giải phóng Miền Nam' })}
+                  >
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -192,7 +215,10 @@ const AdminPricing: React.FC = () => {
                     <div className="font-bold text-lg">[ Ngày ]</div>
                     <div className="text-sm font-semibold mt-1">[ Tên sự kiện ]</div>
                   </div>
-                  <button style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}>
+                  <button 
+                    style={{ padding: '0.5rem', color: 'var(--color-text-muted)' }}
+                    onClick={() => setDeleteHoliday({ date: '01/05/2026', name: 'Quốc tế Lao động' })}
+                  >
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -201,6 +227,23 @@ const AdminPricing: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Modal Xóa Ngày Lễ */}
+      {deleteHoliday && (
+        <ModalOverlay onClose={() => setDeleteHoliday(null)}>
+          <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
+            <h2 className="text-xl font-bold">Xóa Ngày Lễ</h2>
+            <button onClick={() => setDeleteHoliday(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+          </div>
+          <div className="mb-6">
+            <p>Bạn có chắc chắn muốn xóa ngày <strong>[ Tên sự kiện ]</strong> ([ Ngày ]) khỏi danh sách ngày lễ không?</p>
+            <p className="text-muted text-sm mt-2">Hành động này sẽ hủy áp dụng phụ thu lễ cho các đơn đặt sân trong ngày này.</p>
+          </div>
+          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
+            <button className="btn btn-secondary w-1/2" onClick={() => setDeleteHoliday(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary w-1/2" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setDeleteHoliday(null)}>Xác nhận Xóa</button>
+          </div>
+        </ModalOverlay>
+      )}
     </div>
   );
 };

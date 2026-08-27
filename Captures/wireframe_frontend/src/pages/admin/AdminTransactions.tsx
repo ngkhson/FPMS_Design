@@ -122,7 +122,7 @@ const AdminTransactions: React.FC = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Lịch sử giao dịch</h2>
             <button className="btn btn-primary flex items-center" style={{ gap: '0.5rem', padding: '0.6rem 1.2rem' }} onClick={handleExportExcelClick}>
-              <Download size={16} /> Xuất Excel
+              <Download size={16} /> Xuất báo cáo
             </button>
           </div>
 
@@ -242,7 +242,7 @@ const AdminTransactions: React.FC = () => {
           </div>
           <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
             <button className="btn btn-secondary w-1/2" onClick={() => setShowConfirmExport(false)}>Hủy Bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={executeExportExcel}>Xuất Excel</button>
+            <button className="btn btn-primary w-1/2" onClick={executeExportExcel}>Xác nhận</button>
           </div>
         </ModalOverlay>
       )}
