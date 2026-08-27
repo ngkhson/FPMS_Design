@@ -19,17 +19,18 @@ const MyBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
+      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận</span>;
       case 'IN_PROGRESS': return <span className="badge badge-warning">Đang sử dụng sân</span>;
       case 'COMPLETED': return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
       case 'PENDING_CANCEL': return <span className="badge badge-warning">Chờ duyệt hủy</span>;
       case 'CANCELLED': return <span className="badge badge-danger">Đã hủy</span>;
+      case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
       default: return <span className="badge">Chưa rõ</span>;
     }
   };
 
   const filteredBookings = mockBookings.filter(b => {
-    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL') return false;
+    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL' && b.status !== 'PENDING') return false;
     if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
 
     if (searchTerm) {
@@ -142,7 +143,7 @@ const MyBookings: React.FC = () => {
                     <td className="p-4">{getStatusBadge(booking.status)}</td>
                     <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
                     <td className="p-4 text-right">
-                      {booking.status === 'CONFIRMED' && (
+                      {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                         <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
                       )}
                       {booking.status === 'COMPLETED' && (
@@ -195,7 +196,7 @@ const MyBookings: React.FC = () => {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  {booking.status === 'CONFIRMED' && (
+                  {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                     <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
                   )}
                   {booking.status === 'COMPLETED' && (

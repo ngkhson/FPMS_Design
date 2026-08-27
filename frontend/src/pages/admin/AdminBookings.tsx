@@ -32,7 +32,7 @@ const AdminBookings: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
-      case 'CONFIRMED': return <span className="badge badge-success">Đã cọc (Sắp đá)</span>;
+      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận</span>;
       case 'IN_PROGRESS': return <span className="badge badge-warning">Đang đá</span>;
       case 'COMPLETED': return <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Đã hoàn thành</span>;
       case 'PENDING_CANCEL': return <span className="badge badge-danger">Yêu cầu hủy</span>;
@@ -107,8 +107,8 @@ const AdminBookings: React.FC = () => {
               <option value="7">Sân 7 người</option>
             </select>
 
-            <div 
-              className="flex items-center gap-2" 
+            <div
+              className="flex items-center gap-2"
               style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 1rem', cursor: 'pointer' }}
               onClick={() => {
                 if (dateInputRef.current) {
@@ -121,10 +121,10 @@ const AdminBookings: React.FC = () => {
               }}
             >
               <span className="text-muted text-sm font-medium">Ngày:</span>
-              <input 
+              <input
                 ref={dateInputRef}
-                type="date" 
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }} 
+                type="date"
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', cursor: 'pointer' }}
                 onClick={(e) => e.stopPropagation()}
               />
             </div>

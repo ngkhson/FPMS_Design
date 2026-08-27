@@ -24,12 +24,13 @@ const MyBookings: React.FC = () => {
       case 'COMPLETED': return <span className="badge">[ Trạng thái ]</span>;
       case 'PENDING_CANCEL': return <span className="badge">[ Trạng thái ]</span>;
       case 'CANCELLED': return <span className="badge">[ Trạng thái ]</span>;
+      case 'PENDING': return <span className="badge">[ Trạng thái ]</span>;
       default: return <span className="badge">[ Trạng thái ]</span>;
     }
   };
 
   const filteredBookings = mockBookings.filter(b => {
-    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL') return false;
+    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL' && b.status !== 'PENDING') return false;
     if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
 
     if (searchTerm) {
@@ -143,7 +144,7 @@ const MyBookings: React.FC = () => {
                     <td className="p-4">{getStatusBadge(booking.status)}</td>
                     <td className="p-4 font-semibold">[ Số tiền ]</td>
                     <td className="p-4 text-right">
-                      {booking.status === 'CONFIRMED' && (
+                      {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                         <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
                       )}
                       {booking.status === 'COMPLETED' && (
@@ -196,7 +197,7 @@ const MyBookings: React.FC = () => {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  {booking.status === 'CONFIRMED' && (
+                  {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                     <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
                   )}
                   {booking.status === 'COMPLETED' && (
