@@ -34,8 +34,10 @@ const MyBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
+      case 'PENDING':
+        return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
       case 'CONFIRMED':
-        return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
+        return <span className="badge badge-success">Đã xác nhận</span>;
       case 'IN_PROGRESS':
         return <span className="badge badge-warning">Đang sử dụng sân</span>;
       case 'COMPLETED':
@@ -436,12 +438,12 @@ const MyBookings: React.FC = () => {
             </button>
 
             {/* Header Modal */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-2 mb-4">
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--color-danger)' }}
+                className="rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ width: '3rem', height: '3rem', backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--color-danger)' }}
               >
-                <AlertTriangle size={22} />
+                <AlertTriangle size={24} />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-base">Yêu cầu hủy đơn đặt sân</h2>
@@ -457,10 +459,11 @@ const MyBookings: React.FC = () => {
 
               return (
                 <div
-                  className="mb-4 p-3.5 rounded-lg text-sm"
+                  className="mb-4 rounded-lg text-sm"
                   style={{
                     backgroundColor: 'var(--color-bg-base)',
-                    border: '1px solid var(--color-border)'
+                    border: '1px solid var(--color-border)',
+                    padding: '0.875rem'
                   }}
                 >
                   <div className="flex justify-between py-1">
@@ -481,18 +484,19 @@ const MyBookings: React.FC = () => {
 
             {/* Quy tắc nghiệp vụ cảnh báo (BR1 & BR4) */}
             <div
-              className="mb-4 p-3.5 rounded-lg text-xs leading-relaxed"
+              className="mb-4 rounded-lg text-xs leading-relaxed"
               style={{
                 backgroundColor: 'rgba(245, 158, 11, 0.08)',
                 border: '1px solid rgba(245, 158, 11, 0.3)',
-                color: 'var(--color-text-base)'
+                color: 'var(--color-text-base)',
+                padding: '0.875rem'
               }}
             >
               <div className="flex items-center gap-1.5 font-bold mb-1" style={{ color: 'var(--color-warning)' }}>
                 <ShieldAlert size={14} />
                 <span>Quy định hủy sân (Chính sách hoàn cọc)</span>
               </div>
-              <ul className="list-disc pl-4 space-y-1 text-muted">
+              <ul className="list-disc space-y-1 text-muted" style={{ paddingLeft: '1.25rem' }}>
                 <li><strong>Thời hạn:</strong> Chỉ hỗ trợ hoàn cọc khi hủy trước ít nhất <strong>24 giờ</strong> so với giờ đá.</li>
                 <li><strong>Xét duyệt:</strong> Đơn sẽ chuyển sang <em>"Chờ xác nhận hủy"</em> và được nhân viên kiểm tra, xét duyệt hoàn tiền cọc.</li>
               </ul>
@@ -505,7 +509,7 @@ const MyBookings: React.FC = () => {
               </label>
 
               {/* Quick Chips */}
-              <div className="flex flex-wrap gap-1.5 mb-2.5">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.625rem' }}>
                 {quickReasons.map((chip, idx) => (
                   <button
                     key={idx}
@@ -514,12 +518,14 @@ const MyBookings: React.FC = () => {
                       setCancelReason(chip);
                       setCancelError(null);
                     }}
-                    className="text-xs px-2.5 py-1 rounded-full transition"
+                    className="text-xs rounded-full transition"
                     style={{
+                      padding: '0.375rem 0.875rem',
                       backgroundColor: cancelReason === chip ? 'var(--color-primary)' : 'var(--color-bg-base)',
                       color: cancelReason === chip ? '#ffffff' : 'var(--color-text-base)',
                       border: '1px solid var(--color-border)',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     {chip}
@@ -529,7 +535,7 @@ const MyBookings: React.FC = () => {
 
               <textarea
                 rows={3}
-                className="w-full p-3 rounded-lg text-sm"
+                className="w-full rounded-lg text-sm"
                 placeholder="Nhập chi tiết lý do bạn muốn hủy đơn đặt sân này (bắt buộc)..."
                 value={cancelReason}
                 onChange={(e) => {
@@ -537,6 +543,7 @@ const MyBookings: React.FC = () => {
                   if (cancelError) setCancelError(null);
                 }}
                 style={{
+                  padding: '0.75rem',
                   backgroundColor: 'var(--color-bg-base)',
                   border: cancelError ? '1.5px solid var(--color-danger)' : '1px solid var(--color-border)',
                   color: 'var(--color-text-base)',
@@ -556,18 +563,19 @@ const MyBookings: React.FC = () => {
             </div>
 
             {/* Nút hành động: 3a (Hủy bỏ) & 3 (Xác nhận) */}
-            <div className="flex gap-3">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
               <button
                 type="button"
-                className="btn btn-secondary flex-1"
+                className="btn btn-secondary"
+                style={{ padding: '0.625rem 1.5rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }}
                 onClick={closeCancelModal}
               >
-                Hủy bỏ (Quay lại)
+                Hủy bỏ
               </button>
               <button
                 type="button"
-                className="btn btn-primary flex-1"
-                style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                className="btn btn-primary"
+                style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)', padding: '0.625rem 1.5rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }}
                 onClick={handleConfirmCancel}
               >
                 Xác nhận hủy đơn
@@ -639,7 +647,7 @@ const MyBookings: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div style={{ marginTop: '1.5rem' }}>
               <button
                 className="btn btn-primary w-full flex justify-center items-center gap-2"
                 style={{ padding: '0.85rem 1.5rem', fontSize: '1rem' }}
@@ -659,8 +667,8 @@ const MyBookings: React.FC = () => {
       {isDetailsModalOpen && selectedBooking && createPortal(
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="card animate-fade-in relative p-6" style={{ width: '100%', maxWidth: '500px' }}>
-            <button className="text-muted hover:text-danger" onClick={() => setIsDetailsModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-              <X size={20} />
+            <button className="text-muted hover:text-danger" onClick={() => setIsDetailsModalOpen(false)} style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', padding: '0.5rem' }}>
+              <X size={24} />
             </button>
             <h2 className="text-xl font-bold mb-6 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Chi tiết đơn đặt sân</h2>
 
@@ -691,13 +699,14 @@ const MyBookings: React.FC = () => {
               {/* Thông tin hủy đơn nếu có (UC010.3) */}
               {selectedBooking.status === 'PENDING_CANCEL' && (
                 <div
-                  className="p-3.5 rounded-lg text-sm animate-fade-in"
+                  className="rounded-lg text-sm animate-fade-in"
                   style={{
                     backgroundColor: 'rgba(245, 158, 11, 0.08)',
-                    border: '1px solid rgba(245, 158, 11, 0.3)'
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    padding: '0.875rem'
                   }}
                 >
-                  <div className="flex items-center gap-1.5 font-bold mb-1.5" style={{ color: 'var(--color-warning)' }}>
+                  <div className="flex items-center font-bold mb-1.5" style={{ color: 'var(--color-warning)', gap: '0.375rem' }}>
                     <Clock size={16} />
                     <span>Yêu cầu hủy đang chờ nhân viên xét duyệt</span>
                   </div>
@@ -712,13 +721,14 @@ const MyBookings: React.FC = () => {
 
               {selectedBooking.status === 'CANCELLED' && selectedBooking.cancelReason && (
                 <div
-                  className="p-3.5 rounded-lg text-sm animate-fade-in"
+                  className="rounded-lg text-sm animate-fade-in"
                   style={{
                     backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                    border: '1px solid rgba(239, 68, 68, 0.25)'
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    padding: '0.875rem'
                   }}
                 >
-                  <div className="flex items-center gap-1.5 font-bold mb-1.5" style={{ color: 'var(--color-danger)' }}>
+                  <div className="flex items-center font-bold mb-1.5" style={{ color: 'var(--color-danger)', gap: '0.375rem' }}>
                     <Info size={16} />
                     <span>Đơn đã được hủy thành công</span>
                   </div>

@@ -33,7 +33,7 @@ const AdminBookings: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
-      case 'CONFIRMED': return <span className="badge badge-success">Đã cọc (Sắp đá)</span>;
+      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận</span>;
       case 'IN_PROGRESS': return <span className="badge badge-warning">Đang đá</span>;
       case 'COMPLETED': return <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Đã hoàn thành</span>;
       case 'PENDING_CANCEL': return <span className="badge badge-danger">Yêu cầu hủy</span>;
@@ -77,7 +77,7 @@ const AdminBookings: React.FC = () => {
             >
               <option value="ALL">Trạng thái: Tất cả</option>
               <option value="PENDING">Chờ xác nhận</option>
-              <option value="CONFIRMED">Đã cọc (Sắp đá)</option>
+              <option value="CONFIRMED">Đã xác nhận</option>
               <option value="IN_PROGRESS">Đang đá (Nợ phí)</option>
               <option value="COMPLETED">Đã hoàn thành</option>
               <option value="PENDING_CANCEL">Yêu cầu hủy</option>
@@ -330,20 +330,29 @@ const AdminBookings: React.FC = () => {
               </div>
 
               {/* Box hiển thị lý do hủy từ khách (BR3, BR4) */}
-              <div className="p-3 mb-3 rounded-md text-xs" style={{ backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+              <div className="mb-3 rounded-md text-xs" style={{ padding: '0.75rem', backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
                 <span className="font-bold text-warning block mb-1">Lý do khách xin hủy (BR3):</span>
                 <span className="italic" style={{ color: 'var(--color-text-base)' }}>"{cancelBooking.cancelReason || 'Bận việc đột xuất cùng công ty'}"</span>
               </div>
 
-              <div className="flex justify-between items-center p-3" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <span className="font-semibold text-danger text-sm">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-xl font-bold text-danger">{formatPrice(deposit)}</span>
+              <div className="flex justify-between items-center mb-4" style={{ padding: '0.75rem', border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+                <span className="font-semibold text-sm" style={{ color: 'var(--color-text-base)' }}>Số tiền cọc cần hoàn trả:</span>
+                <span className="text-xl font-bold" style={{ color: 'var(--color-text-base)' }}>{formatPrice(deposit)}</span>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Phương thức hoàn tiền</label>
+                <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                  <option value="BANK_TRANSFER">Chuyển khoản</option>
+                  <option value="CASH">Tiền mặt</option>
+                </select>
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
               <button
-                className="btn btn-secondary w-full"
+                className="btn"
+                style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
                 onClick={() => {
                   setBookings(prev => prev.map(b => b.id === cancelBooking.id ? { ...b, status: 'CONFIRMED' } : b));
                   setCancelBookingId(null);
@@ -352,14 +361,14 @@ const AdminBookings: React.FC = () => {
                 Từ chối Hủy
               </button>
               <button
-                className="btn btn-primary w-full"
-                style={{ backgroundColor: 'var(--color-danger)' }}
+                className="btn btn-primary"
+                style={{ backgroundColor: 'var(--color-danger)', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
                 onClick={() => {
                   setBookings(prev => prev.map(b => b.id === cancelBooking.id ? { ...b, status: 'CANCELLED' } : b));
                   setCancelBookingId(null);
                 }}
               >
-                Duyệt Hủy & Hoàn Tiền
+                Xác nhận Hoàn Tiền
               </button>
             </div>
           </ModalOverlay>

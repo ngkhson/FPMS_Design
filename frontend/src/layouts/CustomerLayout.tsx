@@ -79,7 +79,7 @@ const CustomerLayout: React.FC = () => {
                   <Link 
                     to="/profile" 
                     className={`btn ${isProfilePage ? 'btn-primary' : 'btn-secondary'} flex items-center gap-2 font-semibold`} 
-                    style={{ padding: '0.5rem 1rem' }}
+                    style={{ padding: '0 1rem', height: '40px', justifyContent: 'center' }}
                   >
                     <User size={18} />
                     <span>Hồ Sơ</span>
@@ -87,7 +87,7 @@ const CustomerLayout: React.FC = () => {
                   <button 
                     onClick={handleLogout} 
                     className="btn btn-secondary flex items-center gap-1.5 font-semibold" 
-                    style={{ padding: '0.5rem 1rem', color: 'var(--color-danger)' }}
+                    style={{ padding: '0 1rem', height: '40px', justifyContent: 'center', color: 'var(--color-danger)' }}
                     title="Đăng xuất"
                   >
                     <LogOut size={18} />
