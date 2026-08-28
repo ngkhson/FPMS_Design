@@ -76,7 +76,7 @@ const AdminLayout: React.FC = () => {
         </nav>
 
         <div style={{ padding: '1rem', borderTop: '1px solid var(--color-border)' }}>
-          <Link to="/" className="btn w-full" style={{ justifyContent: 'flex-start', color: 'var(--color-danger)' }}>
+          <Link to="/" className="btn w-full" style={{ justifyContent: 'flex-start', color: 'var(--color-danger)', padding: '0.875rem 1rem', fontSize: '1rem' }}>
             <LogOut size={20} /> Đăng xuất
           </Link>
         </div>

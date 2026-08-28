@@ -338,14 +338,14 @@ const AdminBookings: React.FC = () => {
               </div>
 
               {/* Box hiển thị lý do hủy từ khách (BR3, BR4) */}
-              <div className="p-3 mb-3 rounded-md text-xs" style={{ backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+              <div className="mb-3 rounded-md text-xs" style={{ padding: '0.75rem', backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
                 <span className="font-bold text-warning block mb-1">Lý do khách xin hủy (BR3):</span>
                 <span className="italic" style={{ color: 'var(--color-text-base)' }}>"{cancelBooking.cancelReason || 'Bận việc đột xuất cùng công ty'}"</span>
               </div>
 
-              <div className="flex justify-between items-center p-3 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <span className="font-semibold text-danger text-sm">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-xl font-bold text-danger">{formatPrice(deposit)}</span>
+              <div className="flex justify-between items-center mb-4" style={{ padding: '0.75rem', border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+                <span className="font-semibold text-sm" style={{ color: 'var(--color-text-base)' }}>Số tiền cọc cần hoàn trả:</span>
+                <span className="text-xl font-bold" style={{ color: 'var(--color-text-base)' }}>{formatPrice(deposit)}</span>
               </div>
 
               <div>
@@ -357,11 +357,20 @@ const AdminBookings: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <button className="btn btn-secondary w-full" onClick={() => setCancelBookingId(null)}>Quay lại</button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
               <button
-                className="btn btn-primary w-full"
-                style={{ backgroundColor: 'var(--color-danger)' }}
+                className="btn"
+                style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
+                onClick={() => {
+                  setBookings(prev => prev.map(b => b.id === cancelBooking.id ? { ...b, status: 'CONFIRMED' } : b));
+                  setCancelBookingId(null);
+                }}
+              >
+                Từ chối Hủy
+              </button>
+              <button
+                className="btn btn-primary"
+                style={{ backgroundColor: 'var(--color-danger)', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
                 onClick={() => {
                   setCancelBookingId(null);
                 }}

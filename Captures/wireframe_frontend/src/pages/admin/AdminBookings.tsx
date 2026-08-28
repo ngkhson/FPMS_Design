@@ -32,13 +32,13 @@ const AdminBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'PENDING': return <span className="badge">[ Trạng thái ]</span>;
-      case 'CONFIRMED': return <span className="badge">[ Trạng thái ]</span>;
-      case 'IN_PROGRESS': return <span className="badge">[ Trạng thái ]</span>;
-      case 'COMPLETED': return <span className="badge">[ Trạng thái ]</span>;
-      case 'PENDING_CANCEL': return <span className="badge">[ Trạng thái ]</span>;
-      case 'CANCELLED': return <span className="badge">[ Trạng thái ]</span>;
-      default: return <span className="badge">[ Trạng thái ]</span>;
+      case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
+      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận</span>;
+      case 'IN_PROGRESS': return <span className="badge badge-warning">Đang đá</span>;
+      case 'COMPLETED': return <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Đã hoàn thành</span>;
+      case 'PENDING_CANCEL': return <span className="badge badge-danger">Yêu cầu hủy</span>;
+      case 'CANCELLED': return <span className="badge badge-danger" style={{ opacity: 0.7 }}>Đã hủy</span>;
+      default: return <span className="badge">{status}</span>;
     }
   };
 
@@ -289,7 +289,7 @@ const AdminBookings: React.FC = () => {
                 <span>- [ Số tiền ]</span>
               </div>
               <div style={{ height: 1, backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
-              <div className="flex justify-between text-xl font-bold text-danger mb-4">
+              <div className="flex justify-between text-xl font-bold mb-4">
                 <span>Khách cần thanh toán:</span>
                 <span>[ Số tiền ]</span>
               </div>
@@ -313,23 +313,26 @@ const AdminBookings: React.FC = () => {
         return (
           <ModalOverlay onClose={() => setCancelBookingId(null)}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-danger">Duyệt Hủy Đơn & Hoàn Tiền</h2>
+              <h2 className="text-xl font-bold">Xét Duyệt Yêu Cầu Hủy Đơn</h2>
               <button onClick={() => setCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
             </div>
 
             <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
-              <p className="mb-3 text-base">[ Thông báo về việc khách hàng yêu cầu hủy đơn ]</p>
-
-              <div className="mb-4">
-                <span className="text-sm font-semibold text-muted block mb-1">Lý do hủy từ khách:</span>
-                <p className="text-sm italic p-2 rounded" style={{ border: '1px solid var(--color-border)', background: 'var(--color-bg-surface)' }}>
-                  [ Lý do hủy ]
-                </p>
+              <p className="mb-3 text-base">Khách hàng <strong>[ Tên khách hàng ]</strong> đã gửi yêu cầu hủy đơn <strong>[ Mã đơn ]</strong>.</p>
+              
+              <div className="text-sm text-muted mb-4">
+                <span>[ Tên sân ] • [ Ngày ] ([ Giờ ])</span>
+                <div className="mt-1">Thời gian gửi: [ Thời gian ]</div>
               </div>
 
-              <div className="flex justify-between items-center p-4 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-2xl font-bold text-danger">[ Số tiền ]</span>
+              <div className="mb-4 rounded-md" style={{ padding: '0.75rem', backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+                <span className="text-sm font-bold block mb-1">Lý do khách xin hủy (BR3):</span>
+                <span className="text-sm italic text-muted">"[ Lý do hủy ]"</span>
+              </div>
+
+              <div className="flex justify-between items-center mb-4" style={{ padding: '0.75rem', border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.02)' }}>
+                <span className="font-semibold text-base">Số tiền cọc cần hoàn trả:</span>
+                <span className="text-2xl font-bold">[ Số tiền ]</span>
               </div>
 
               <div>
@@ -341,9 +344,21 @@ const AdminBookings: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <button className="btn btn-secondary w-full" onClick={() => setCancelBookingId(null)}>Quay lại</button>
-              <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(null)}>Xác nhận Hoàn Tiền</button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
+              <button
+                className="btn"
+                style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
+                onClick={() => setCancelBookingId(null)}
+              >
+                Từ chối Hủy
+              </button>
+              <button
+                className="btn btn-primary"
+                style={{ backgroundColor: 'var(--color-danger)', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
+                onClick={() => setCancelBookingId(null)}
+              >
+                Xác nhận Hoàn Tiền
+              </button>
             </div>
           </ModalOverlay>
         );
