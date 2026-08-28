@@ -22,6 +22,7 @@ export interface Booking {
   customerName: string;
   cancelReason?: string;
   cancelRequestedAt?: string;
+  cancelRejectReason?: string;
 }
 
 export const mockPitches: Pitch[] = [
@@ -54,7 +55,7 @@ const today = new Date().toISOString().split('T')[0];
 
 export const mockBookings: Booking[] = [
   { id: 'b1', pitchId: 'p1', timeSlotId: 't08', date: today, status: 'CONFIRMED', customerName: 'Nguyễn Văn A' },
-  { id: 'b2', pitchId: 'p4', timeSlotId: 't09', date: today, status: 'CONFIRMED', customerName: 'Trần Thị B' },
+  { id: 'b2', pitchId: 'p4', timeSlotId: 't09', date: today, status: 'CONFIRMED', customerName: 'Trần Thị B', cancelRejectReason: 'Sát giờ thi đấu, không hỗ trợ hủy do không sắp xếp được người chơi thay thế' },
   { id: 'b3', pitchId: 'p2', timeSlotId: 't07', date: today, status: 'IN_PROGRESS', customerName: 'Khách vãng lai' },
   { id: 'b4', pitchId: 'p5', timeSlotId: 't08', date: today, status: 'PENDING_CANCEL', customerName: 'Lê Văn C', cancelReason: 'Bận việc đột xuất cùng công ty, không đủ người đá', cancelRequestedAt: '14:20 Hôm nay' },
   { id: 'b5', pitchId: 'p1', timeSlotId: 't05', date: today, status: 'COMPLETED', customerName: 'Phạm Thị D' },

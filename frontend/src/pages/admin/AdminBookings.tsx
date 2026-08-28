@@ -25,6 +25,10 @@ const AdminBookings: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [checkoutBookingId, setCheckoutBookingId] = useState<string | null>(null);
   const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
+  
+  // States for rejecting cancellation
+  const [isRejecting, setIsRejecting] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -322,10 +326,10 @@ const AdminBookings: React.FC = () => {
         const deposit = (slot?.basePrice || 0) * 0.3;
 
         return (
-          <ModalOverlay onClose={() => setCancelBookingId(null)}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-danger">Xét Duyệt Yêu Cầu Hủy Đơn</h2>
-              <button onClick={() => setCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+          <ModalOverlay onClose={() => { setCancelBookingId(null); setIsRejecting(false); setRejectReason(''); }}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Xét Duyệt Yêu Cầu Hủy Đơn</h2>
+              <button onClick={() => { setCancelBookingId(null); setIsRejecting(false); setRejectReason(''); }} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
             </div>
 
             <div style={{ background: 'var(--color-bg-base)', padding: '1.25rem', borderRadius: 'var(--radius-md)', marginBottom: '1.25rem' }}>
@@ -357,26 +361,61 @@ const AdminBookings: React.FC = () => {
               </div>
             </div>
 
+            {isRejecting && (
+              <div className="mb-4 animate-fade-in">
+                <label className="block text-sm font-semibold mb-2 text-danger">Lý do từ chối hủy (Bắt buộc)</label>
+                <textarea
+                  className="w-full"
+                  rows={3}
+                  placeholder="Nhập lý do khách hàng không được phép hủy đơn..."
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  style={{ padding: '0.75rem', border: '1px solid var(--color-danger)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', outline: 'none', resize: 'none' }}
+                />
+              </div>
+            )}
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
-              <button
-                className="btn"
-                style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
-                onClick={() => {
-                  setBookings(prev => prev.map(b => b.id === cancelBooking.id ? { ...b, status: 'CONFIRMED' } : b));
-                  setCancelBookingId(null);
-                }}
-              >
-                Từ chối Hủy
-              </button>
-              <button
-                className="btn btn-primary"
-                style={{ backgroundColor: 'var(--color-danger)', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
-                onClick={() => {
-                  setCancelBookingId(null);
-                }}
-              >
-                Xác nhận Hoàn Tiền
-              </button>
+              {isRejecting ? (
+                <>
+                  <button className="btn btn-secondary" onClick={() => { setIsRejecting(false); setRejectReason(''); }}>
+                    Hủy bỏ
+                  </button>
+                  <button
+                    className="btn"
+                    style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)', opacity: rejectReason.trim() ? 1 : 0.5, cursor: rejectReason.trim() ? 'pointer' : 'not-allowed' }}
+                    disabled={!rejectReason.trim()}
+                    onClick={() => {
+                      if (!rejectReason.trim()) return;
+                      setBookings(prev => prev.map(b => b.id === cancelBooking.id ? { ...b, status: 'CONFIRMED', cancelRejectReason: rejectReason } : b));
+                      setCancelBookingId(null);
+                      setIsRejecting(false);
+                      setRejectReason('');
+                    }}
+                  >
+                    Xác nhận Từ chối
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="btn"
+                    style={{ backgroundColor: 'var(--color-warning)', color: '#fff', border: 'none', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
+                    onClick={() => setIsRejecting(true)}
+                  >
+                    Từ chối Hủy
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    style={{ backgroundColor: 'var(--color-danger)', fontSize: '1rem', padding: '0.625rem 1.5rem', borderRadius: 'var(--radius-md)' }}
+                    onClick={() => {
+                      setCancelBookingId(null);
+                    }}
+                  >
+                    Xác nhận Hoàn Tiền
+                  </button>
+                </>
+              )}
             </div>
           </ModalOverlay>
         );

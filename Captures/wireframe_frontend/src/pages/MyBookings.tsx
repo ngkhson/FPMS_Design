@@ -382,6 +382,21 @@ const MyBookings: React.FC = () => {
                 {getStatusBadge(selectedBooking.status)}
               </div>
 
+              {selectedBooking.status === 'CONFIRMED' && selectedBooking.cancelRejectReason && (
+                <div className="rounded-lg text-sm animate-fade-in" style={{ backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '0.875rem' }}>
+                  <div className="flex items-center font-bold mb-1.5" style={{ color: 'var(--color-danger)', gap: '0.375rem' }}>
+                    <X size={16} />
+                    <span>Yêu cầu hủy đơn đã bị từ chối</span>
+                  </div>
+                  <div className="text-xs text-muted mb-1">
+                    <strong>Lý do từ chối:</strong> <span className="italic">"{selectedBooking.cancelRejectReason}"</span>
+                  </div>
+                  <div className="text-xs text-muted">
+                    Lịch đá của bạn vẫn được giữ nguyên.
+                  </div>
+                </div>
+              )}
+
               {selectedBooking.status === 'PENDING_CANCEL' && (
                 <div className="rounded-lg text-sm animate-fade-in" style={{ backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.3)', padding: '0.875rem' }}>
                   <div className="flex items-center font-bold mb-1.5" style={{ color: 'var(--color-warning)', gap: '0.375rem' }}>
