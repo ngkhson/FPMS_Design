@@ -76,10 +76,7 @@ const AdminPitches: React.FC = () => {
                     <span className="badge" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>[ Loại sân ]</span>
                   </td>
                   <td className="p-4">
-                    {pitch.status === 'AVAILABLE' 
-                      ? <span className="badge">[ Trạng thái ]</span>
-                      : <span className="badge">[ Trạng thái ]</span>
-                    }
+                    <span className="font-semibold">[ Trạng thái ]</span>
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">

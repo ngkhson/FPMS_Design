@@ -25,6 +25,9 @@ const AdminBookings: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [checkoutBookingId, setCheckoutBookingId] = useState<string | null>(null);
   const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
+  const [approveBookingId, setApproveBookingId] = useState<string | null>(null);
+  const [adminCancelBookingId, setAdminCancelBookingId] = useState<string | null>(null);
+  const [adminCancelReason, setAdminCancelReason] = useState('');
   
   // States for rejecting cancellation
   const [isRejecting, setIsRejecting] = useState(false);
@@ -178,8 +181,8 @@ const AdminBookings: React.FC = () => {
                     <td className="p-4 text-right flex gap-2 justify-end">
                       {booking.status === 'PENDING' && (
                         <>
-                          <button className="btn btn-primary">Duyệt đơn</button>
-                          <button className="btn btn-secondary text-danger">Hủy & Hoàn tiền</button>
+                          <button className="btn btn-primary" onClick={() => setApproveBookingId(booking.id)}>Duyệt đơn</button>
+                          <button className="btn btn-secondary text-danger" onClick={() => setAdminCancelBookingId(booking.id)}>Hủy & Hoàn tiền</button>
                         </>
                       )}
                       {booking.status === 'IN_PROGRESS' && (
@@ -421,7 +424,93 @@ const AdminBookings: React.FC = () => {
         );
       })()}
 
+      {/* 4. Modal Duyệt đơn (Approve PENDING booking) */}
+      {approveBookingId && (() => {
+        const booking = bookings.find(b => b.id === approveBookingId);
+        if (!booking) return null;
+        return (
+          <ModalOverlay onClose={() => setApproveBookingId(null)}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Xác Nhận Duyệt Đơn</h2>
+              <button onClick={() => setApproveBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+            </div>
+            <div className="mb-6 text-base">
+              Bạn có chắc chắn muốn duyệt đơn đặt sân của khách hàng <strong>{booking.customerName}</strong> không?
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+              <button className="btn btn-secondary" onClick={() => setApproveBookingId(null)}>Hủy bỏ</button>
+              <button className="btn btn-primary" onClick={() => {
+                setBookings(prev => prev.map(b => b.id === approveBookingId ? { ...b, status: 'CONFIRMED' } : b));
+                setApproveBookingId(null);
+              }}>Xác nhận Duyệt</button>
+            </div>
+          </ModalOverlay>
+        );
+      })()}
 
+      {/* 5. Modal Admin tự hủy đơn (Cancel PENDING booking) */}
+      {adminCancelBookingId && (() => {
+        const booking = bookings.find(b => b.id === adminCancelBookingId);
+        if (!booking) return null;
+        
+        const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
+        const deposit = (slot?.basePrice || 0) * 0.3;
+
+        return (
+          <ModalOverlay onClose={() => { setAdminCancelBookingId(null); setAdminCancelReason(''); }}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-danger">Hủy Đơn & Hoàn Tiền</h2>
+              <button onClick={() => { setAdminCancelBookingId(null); setAdminCancelReason(''); }} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+            </div>
+            
+            <div style={{ background: 'var(--color-bg-base)', padding: '1.25rem', borderRadius: 'var(--radius-md)', marginBottom: '1.25rem' }}>
+              <p className="mb-4 text-base">Hủy đơn đặt sân của khách hàng <strong>{booking.customerName}</strong>.</p>
+              
+              <div className="flex justify-between items-center mb-4" style={{ padding: '0.75rem', border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+                <span className="font-semibold text-sm" style={{ color: 'var(--color-text-base)' }}>Số tiền cọc cần hoàn trả:</span>
+                <span className="text-xl font-bold" style={{ color: 'var(--color-text-base)' }}>{formatPrice(deposit)}</span>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Phương thức hoàn tiền</label>
+                <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                  <option value="BANK_TRANSFER">Chuyển khoản</option>
+                  <option value="CASH">Tiền mặt</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2 text-danger">Lý do hủy đơn (Bắt buộc)</label>
+              <textarea
+                className="w-full"
+                rows={3}
+                placeholder="Nhập lý do (VD: Khách gọi điện báo hủy, sân gặp sự cố...)"
+                value={adminCancelReason}
+                onChange={(e) => setAdminCancelReason(e.target.value)}
+                style={{ padding: '0.75rem', border: '1px solid var(--color-danger)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)', outline: 'none', resize: 'none' }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+              <button className="btn btn-secondary" onClick={() => { setAdminCancelBookingId(null); setAdminCancelReason(''); }}>Quay lại</button>
+              <button 
+                className="btn btn-primary" 
+                style={{ backgroundColor: 'var(--color-danger)', opacity: adminCancelReason.trim() ? 1 : 0.5, cursor: adminCancelReason.trim() ? 'pointer' : 'not-allowed' }} 
+                disabled={!adminCancelReason.trim()}
+                onClick={() => {
+                  if (!adminCancelReason.trim()) return;
+                  setBookings(prev => prev.map(b => b.id === adminCancelBookingId ? { ...b, status: 'CANCELLED', cancelReason: adminCancelReason } : b));
+                  setAdminCancelBookingId(null);
+                  setAdminCancelReason('');
+                }}
+              >
+                Xác nhận Hủy Đơn
+              </button>
+            </div>
+          </ModalOverlay>
+        );
+      })()}
 
     </div>
   );

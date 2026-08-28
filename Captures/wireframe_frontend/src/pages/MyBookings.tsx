@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { mockBookings, mockPitches, mockTimeSlots } from '../mocks/mockData';
-import { Search, X, AlertTriangle, CheckCircle, CreditCard } from 'lucide-react';
+import { Search, X, AlertTriangle, CheckCircle, CreditCard, Clock } from 'lucide-react';
 
 const MyBookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('ALL'); // ALL, UPCOMING, HISTORY
@@ -19,16 +19,7 @@ const MyBookings: React.FC = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'PENDING': return <span className="badge">[ Trạng thái ]</span>;
-      case 'CONFIRMED': return <span className="badge">[ Trạng thái ]</span>;
-      case 'IN_PROGRESS': return <span className="badge">[ Trạng thái ]</span>;
-      case 'COMPLETED': return <span className="badge">[ Trạng thái ]</span>;
-      case 'PENDING_CANCEL': return <span className="badge">[ Trạng thái ]</span>;
-      case 'CANCELLED': return <span className="badge">[ Trạng thái ]</span>;
-      case 'PENDING': return <span className="badge">[ Trạng thái ]</span>;
-      default: return <span className="badge">[ Trạng thái ]</span>;
-    }
+    return <span className="font-semibold">[ Trạng thái ]</span>;
   };
 
   const filteredBookings = mockBookings.filter(b => {
@@ -389,7 +380,7 @@ const MyBookings: React.FC = () => {
                     <span>Yêu cầu hủy đơn đã bị từ chối</span>
                   </div>
                   <div className="text-xs text-muted mb-1">
-                    <strong>Lý do từ chối:</strong> <span className="italic">"{selectedBooking.cancelRejectReason}"</span>
+                    <strong>Lý do từ chối:</strong> <span className="italic">"[ Lý do từ chối ]"</span>
                   </div>
                   <div className="text-xs text-muted">
                     Lịch đá của bạn vẫn được giữ nguyên.

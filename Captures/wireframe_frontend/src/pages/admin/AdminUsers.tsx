@@ -96,10 +96,7 @@ const AdminUsers: React.FC = () => {
                     <span className="badge">[ Vai trò ]</span>
                   </td>
                   <td className="p-4">
-                    {user.status === 'ACTIVE' 
-                      ? <span className="badge badge-success">Đang hoạt động</span>
-                      : <span className="badge badge-danger">Đã khóa</span>
-                    }
+                    <span className="font-semibold">[ Trạng thái ]</span>
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">

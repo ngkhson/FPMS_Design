@@ -99,19 +99,19 @@ const AdminTransactions: React.FC = () => {
       <div className="grid gap-6 mb-6" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-primary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (TIỀN MẶT)</div>
-          <div className="text-2xl font-bold text-primary">{formatPrice(1250000)}</div>
+          <div className="text-2xl font-bold text-primary">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Dùng để giao ca / nộp két</div>
         </div>
 
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (CHUYỂN KHOẢN)</div>
-          <div className="text-2xl font-bold">{formatPrice(2500000)}</div>
+          <div className="text-2xl font-bold">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Đã cộng vào tài khoản ngân hàng</div>
         </div>
 
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-danger)' }}>
           <div className="text-muted text-sm font-semibold mb-1">TỔNG HOÀN TRẢ (REFUND)</div>
-          <div className="text-2xl font-bold text-danger">{formatPrice(105000)}</div>
+          <div className="text-2xl font-bold text-danger">[ Số tiền ]</div>
           <div className="text-xs text-muted mt-2">Các đơn khách hủy hợp lệ</div>
         </div>
       </div>
@@ -205,20 +205,20 @@ const AdminTransactions: React.FC = () => {
             <tbody>
               {filteredTransactions.slice(0, 3).map(tx => (
                 <tr key={tx.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                  <td className="p-4 font-semibold">{tx.id}</td>
+                  <td className="p-4 font-semibold">[ Mã giao dịch ]</td>
                   <td className="p-4">
-                    {tx.time} - {tx.date}
-                    {tx.status === 'FAILED' && <span className="badge badge-danger ml-2" style={{ marginLeft: '8px' }}>Thất bại</span>}
+                    [ Giờ ] - [ Ngày ]
+                    {tx.status === 'FAILED' && <span className="font-semibold ml-2" style={{ marginLeft: '8px' }}>[ Trạng thái ]</span>}
                   </td>
-                  <td className="p-4">{tx.desc}</td>
+                  <td className="p-4">[ Nội dung giao dịch ]</td>
                   <td className="p-4">
-                    <span className={`badge ${tx.method === 'VNPAY' ? 'badge-secondary' : ''}`} style={tx.method === 'VNPAY' ? { backgroundColor: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-secondary)' } : { backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)' }}>
-                      {tx.method}
+                    <span className="font-semibold">
+                      [ Phương thức ]
                     </span>
                   </td>
                   <td className={`p-4 font-bold text-right flex items-center justify-end gap-1 ${tx.type === 'IN' ? 'text-success' : 'text-danger'} ${tx.status === 'FAILED' ? 'opacity-50' : ''}`} style={tx.status === 'FAILED' ? { opacity: 0.5 } : {}}>
                     {tx.type === 'IN' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
-                    {tx.type === 'IN' ? '+' : '-'}{formatPrice(tx.amount)}
+                    [ Số tiền ]
                   </td>
                 </tr>
               ))}
