@@ -295,9 +295,17 @@ const AdminBookings: React.FC = () => {
                 <span>- {formatPrice(deposit)}</span>
               </div>
               <div style={{ height: 1, backgroundColor: 'var(--color-border)', margin: '1rem 0' }}></div>
-              <div className="flex justify-between text-xl font-bold text-danger">
+              <div className="flex justify-between text-xl font-bold text-danger mb-4">
                 <span>Khách cần thanh toán:</span>
                 <span>{formatPrice(remaining)}</span>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Phương thức thanh toán</label>
+                <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                  <option value="CASH">Tiền mặt</option>
+                  <option value="BANK_TRANSFER">Chuyển khoản</option>
+                </select>
               </div>
             </div>
 
@@ -321,9 +329,17 @@ const AdminBookings: React.FC = () => {
             <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
               <p className="mb-4 text-base">Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>{cancelBooking.customerName}</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>#{cancelBooking.id.toUpperCase()}</strong>.</p>
 
-              <div className="flex justify-between items-center p-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+              <div className="flex justify-between items-center p-4 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
                 <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
                 <span className="text-2xl font-bold text-danger">{formatPrice(deposit)}</span>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2">Phương thức hoàn tiền</label>
+                <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                  <option value="BANK_TRANSFER">Chuyển khoản</option>
+                  <option value="CASH">Tiền mặt</option>
+                </select>
               </div>
             </div>
 
