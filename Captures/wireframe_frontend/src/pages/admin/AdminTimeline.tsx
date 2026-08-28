@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
-import { Calendar, Search, Play, CheckCircle } from 'lucide-react';
+import { Calendar, Search, Play, CheckCircle, X } from 'lucide-react';
 import { mockPitches, mockTimeSlots, mockBookings } from '../../mocks/mockData';
+import { createPortal } from 'react-dom';
 
 const AdminTimeline: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split('T')[0]
   );
   const [selectedPitchType, setSelectedPitchType] = useState<string>('all');
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+
+  const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
+    return createPortal(
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} onClick={onClose} />
+        <div className="card animate-fade-in" style={{ position: 'relative', zIndex: 10000, width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto' }}>
+          {children}
+        </div>
+      </div>,
+      document.body
+    );
+  };
 
   const getSlotBooking = (pitchId: string, timeSlotId: string) => {
     return mockBookings.find(
@@ -130,7 +144,7 @@ const AdminTimeline: React.FC = () => {
                   >
                     <div className="flex flex-col items-center justify-center h-full w-full">
                       {booking.status === 'CONFIRMED' && (
-                        <button className="btn btn-primary" style={{ width: '80%', padding: '0.2rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
+                        <button className="btn btn-primary" style={{ width: '80%', padding: '0.2rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }} onClick={() => setSelectedBooking(booking)}>
                           [ Nút ]
                         </button>
                       )}
@@ -165,6 +179,56 @@ const AdminTimeline: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {selectedBooking && (() => {
+        return (
+          <ModalOverlay onClose={() => setSelectedBooking(null)}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Chi Tiết Nhận Sân</h2>
+              <button onClick={() => setSelectedBooking(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+            </div>
+            
+            <div className="grid gap-4 mb-6">
+              <div style={{ backgroundColor: 'var(--color-bg-base)', padding: '1rem', borderRadius: 'var(--radius-md)' }}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-muted">Mã đơn:</span>
+                  <span className="font-semibold text-lg">[ Mã đơn ]</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-muted">Khách hàng:</span>
+                  <span className="font-semibold">[ Tên khách hàng ]</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-muted">Sân bóng:</span>
+                  <span className="font-semibold">[ Tên sân ]</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-muted">Thời gian:</span>
+                  <span className="font-semibold">[ Ngày ] | [ Giờ ]</span>
+                </div>
+                <div className="flex justify-between items-center mt-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+                  <span className="text-sm text-muted">Đã thanh toán (Cọc):</span>
+                  <span className="font-bold text-success">[ Số tiền ]</span>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-sm text-muted">Còn lại cần thu:</span>
+                  <span className="font-bold text-danger">[ Số tiền ]</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-4 mt-4" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="btn btn-secondary font-semibold" style={{ padding: '0.75rem 1.5rem', fontSize: '1.05rem' }} onClick={() => setSelectedBooking(null)}>Đóng</button>
+              <button className="btn btn-primary font-semibold flex items-center" style={{ padding: '0.75rem 1.5rem', fontSize: '1.05rem' }} onClick={() => {
+                setSelectedBooking(null);
+              }}>
+                [ Nút ]
+              </button>
+            </div>
+          </ModalOverlay>
+        );
+      })()}
+
     </div>
   );
 };

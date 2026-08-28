@@ -180,9 +180,7 @@ const AdminBookings: React.FC = () => {
                       {booking.status === 'IN_PROGRESS' && (
                         <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => setCheckoutBookingId(booking.id)}>Thu tiền & Đóng ca</button>
                       )}
-                      {booking.status === 'CONFIRMED' && (
-                        <button className="btn btn-secondary">Nhận sân</button>
-                      )}
+
                       {booking.status === 'PENDING_CANCEL' && (
                         <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
                       )}
