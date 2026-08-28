@@ -34,48 +34,28 @@ const MyBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-<<<<<<< HEAD
       case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận</span>;
       case 'IN_PROGRESS': return <span className="badge badge-warning">Đang sử dụng sân</span>;
       case 'COMPLETED': return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
-      case 'PENDING_CANCEL': return <span className="badge badge-warning">Chờ duyệt hủy</span>;
+      case 'PENDING_CANCEL': return <span className="badge badge-warning" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: 'var(--color-warning)' }}>Chờ xác nhận hủy</span>;
       case 'CANCELLED': return <span className="badge badge-danger">Đã hủy</span>;
       case 'PENDING': return <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(100, 116, 139, 0.1)', color: 'var(--color-text-base)' }}>Chờ xác nhận</span>;
       default: return <span className="badge">Chưa rõ</span>;
     }
   };
 
-  const filteredBookings = mockBookings.filter(b => {
-    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL' && b.status !== 'PENDING') return false;
-=======
-      case 'CONFIRMED':
-        return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
-      case 'IN_PROGRESS':
-        return <span className="badge badge-warning">Đang sử dụng sân</span>;
-      case 'COMPLETED':
-        return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
-      case 'PENDING_CANCEL':
-        return <span className="badge badge-warning" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: 'var(--color-warning)' }}>Chờ xác nhận hủy</span>;
-      case 'CANCELLED':
-        return <span className="badge badge-danger">Đã hủy</span>;
-      default:
-        return <span className="badge">Chưa rõ</span>;
-    }
-  };
-
   // Helper: Check if booking is within cancellation deadline (BR1: Cancellation must be before 24h)
   const checkCancellationEligibility = (booking: Booking): { eligible: boolean; reason?: string } => {
-    // BR2: Only CONFIRMED bookings can be cancelled
-    if (booking.status !== 'CONFIRMED') {
-      return { eligible: false, reason: 'Đơn không ở trạng thái hợp lệ (Chỉ áp dụng cho đơn Đã xác nhận).' };
+    // BR2: Only CONFIRMED and PENDING bookings can be cancelled
+    if (booking.status !== 'CONFIRMED' && booking.status !== 'PENDING') {
+      return { eligible: false, reason: 'Đơn không ở trạng thái hợp lệ (Chỉ áp dụng cho đơn Đã xác nhận hoặc Chờ xác nhận).' };
     }
 
     return { eligible: true };
   };
 
   const filteredBookings = bookings.filter(b => {
-    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL') return false;
->>>>>>> fix/ui
+    if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL' && b.status !== 'PENDING') return false;
     if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
 
     if (searchTerm) {
@@ -286,32 +266,6 @@ const MyBookings: React.FC = () => {
                   const pitch = mockPitches.find(p => p.id === booking.pitchId);
                   const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
 
-<<<<<<< HEAD
-                return (
-                  <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
-                    <td className="p-4">{booking.date}</td>
-                    <td className="p-4">
-                      <div className="font-semibold">{pitch?.name}</div>
-                      <div className="text-sm text-muted">{slot?.startTime} - {slot?.endTime}</div>
-                    </td>
-                    <td className="p-4">{getStatusBadge(booking.status)}</td>
-                    <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
-                    <td className="p-4 text-right">
-                      {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
-                      )}
-                      {booking.status === 'COMPLETED' && (
-                        <button className="btn btn-primary text-sm" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
-                      )}
-                      {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-=======
                   return (
                     <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                       <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
@@ -324,7 +278,7 @@ const MyBookings: React.FC = () => {
                       <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {booking.status === 'CONFIRMED' && (
+                          {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                             <button
                               className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition"
                               style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}
@@ -354,7 +308,6 @@ const MyBookings: React.FC = () => {
                   );
                 })
               )}
->>>>>>> fix/ui
             </tbody>
           </table>
         </div>
