@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { mockBookings, mockPitches, mockTimeSlots } from '../mocks/mockData';
-import { Search, X, AlertTriangle, CheckCircle, CreditCard } from 'lucide-react';
+import { mockBookings as initialBookings, mockPitches, mockTimeSlots, type Booking } from '../mocks/mockData';
+import { Search, X, AlertTriangle, CheckCircle, CreditCard, Clock, AlertCircle, Info, ShieldAlert, Check } from 'lucide-react';
 
 const MyBookings: React.FC = () => {
+  const [bookings, setBookings] = useState<Booking[]>(initialBookings);
   const [activeTab, setActiveTab] = useState('ALL'); // ALL, UPCOMING, HISTORY
   const [searchTerm, setSearchTerm] = useState('');
 
   // Modal states
-  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  // Cancellation form states (UC010.3)
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const [successToast, setSuccessToast] = useState<{ id: string; message: string } | null>(null);
+
+  // Quick reason chips for fast selection
+  const quickReasons = [
+    'Bận việc đột xuất',
+    'Thời tiết xấu / Mưa bão',
+    'Đổi lịch thi đấu với đối thủ',
+    'Không đủ thành viên tham gia',
+    'Đặt nhầm sân / khung giờ'
+  ];
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -19,16 +34,32 @@ const MyBookings: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'CONFIRMED': return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
-      case 'IN_PROGRESS': return <span className="badge badge-warning">Đang sử dụng sân</span>;
-      case 'COMPLETED': return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
-      case 'PENDING_CANCEL': return <span className="badge badge-warning">Chờ duyệt hủy</span>;
-      case 'CANCELLED': return <span className="badge badge-danger">Đã hủy</span>;
-      default: return <span className="badge">Chưa rõ</span>;
+      case 'CONFIRMED':
+        return <span className="badge badge-success">Đã xác nhận (Sắp đá)</span>;
+      case 'IN_PROGRESS':
+        return <span className="badge badge-warning">Đang sử dụng sân</span>;
+      case 'COMPLETED':
+        return <span className="badge badge-success" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: 'var(--color-secondary)' }}>Hoàn thành</span>;
+      case 'PENDING_CANCEL':
+        return <span className="badge badge-warning" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: 'var(--color-warning)' }}>Chờ xác nhận hủy</span>;
+      case 'CANCELLED':
+        return <span className="badge badge-danger">Đã hủy</span>;
+      default:
+        return <span className="badge">Chưa rõ</span>;
     }
   };
 
-  const filteredBookings = mockBookings.filter(b => {
+  // Helper: Check if booking is within cancellation deadline (BR1: Cancellation must be before 24h)
+  const checkCancellationEligibility = (booking: Booking): { eligible: boolean; reason?: string } => {
+    // BR2: Only CONFIRMED bookings can be cancelled
+    if (booking.status !== 'CONFIRMED') {
+      return { eligible: false, reason: 'Đơn không ở trạng thái hợp lệ (Chỉ áp dụng cho đơn Đã xác nhận).' };
+    }
+
+    return { eligible: true };
+  };
+
+  const filteredBookings = bookings.filter(b => {
     if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL') return false;
     if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
 
@@ -38,23 +69,88 @@ const MyBookings: React.FC = () => {
     return true;
   });
 
-  const openCancelModal = (booking: any) => {
+  // 1. Khách hàng nhấn "Hủy đơn"
+  const openCancelModal = (booking: Booking) => {
+    const eligibility = checkCancellationEligibility(booking);
+    if (!eligibility.eligible) {
+      alert(eligibility.reason);
+      return;
+    }
     setSelectedBooking(booking);
+    setCancelReason('');
+    setCancelError(null);
     setIsCancelModalOpen(true);
   };
 
-  const openPaymentModal = (booking: any) => {
+  // 3a. Khách hàng nhấn "Hủy bỏ" / đóng form -> Dừng quy trình, giữ nguyên trạng thái
+  const closeCancelModal = () => {
+    setIsCancelModalOpen(false);
+    setSelectedBooking(null);
+    setCancelReason('');
+    setCancelError(null);
+  };
+
+  // 3 & 4 & 5 & 6 & 7: Xử lý Xác nhận hủy đơn
+  const handleConfirmCancel = () => {
+    if (!selectedBooking) return;
+
+    // 4a. Kiểm tra trạng thái đơn
+    if (selectedBooking.status !== 'CONFIRMED') {
+      setCancelError('Đơn không ở trạng thái hợp lệ để yêu cầu hủy.');
+      return;
+    }
+
+    // 3b. Kiểm tra lý do bị để trống (BR3: Bắt buộc nhập lý do hủy)
+    if (!cancelReason.trim()) {
+      setCancelError('Vui lòng nhập lý do hủy đơn đặt sân.');
+      return;
+    }
+
+    // 5. Cập nhật trạng thái đơn thành "Chờ xác nhận hủy" (PENDING_CANCEL) và lưu lý do
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} Hôm nay`;
+
+    setBookings(prev =>
+      prev.map(b =>
+        b.id === selectedBooking.id
+          ? {
+              ...b,
+              status: 'PENDING_CANCEL',
+              cancelReason: cancelReason.trim(),
+              cancelRequestedAt: timeStr
+            }
+          : b
+      )
+    );
+
+    // 6 & 7. Gửi thông báo đến nhân viên & Hiển thị thông báo gửi yêu cầu thành công
+    const cancelledId = selectedBooking.id.toUpperCase();
+    closeCancelModal();
+
+    setSuccessToast({
+      id: cancelledId,
+      message: `Yêu cầu hủy đơn #${cancelledId} đã được gửi thành công đến ban quản lý và đang chờ nhân viên xét duyệt hoàn tiền!`
+    });
+
+    // Auto dismiss toast after 6 seconds
+    setTimeout(() => {
+      setSuccessToast(null);
+    }, 6000);
+  };
+
+  const openPaymentModal = (booking: Booking) => {
     setSelectedBooking(booking);
     setIsPaymentModalOpen(true);
   };
 
-  const openDetailsModal = (booking: any) => {
+  const openDetailsModal = (booking: Booking) => {
     setSelectedBooking(booking);
     setIsDetailsModalOpen(true);
   };
 
   return (
     <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
+      {/* Banner */}
       <div
         className="mb-8 shadow-lg"
         style={{
@@ -72,9 +168,46 @@ const MyBookings: React.FC = () => {
         <h1 className="text-2xl md:text-4xl font-bold mb-3 text-white">
           Quản lý đơn đặt sân
         </h1>
-        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Theo dõi, thanh toán và hủy các lịch đá bóng của bạn.</p>
+        <p className="text-base md:text-lg" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
+          Theo dõi, thanh toán và gửi yêu cầu hủy các lịch đá bóng của bạn.
+        </p>
       </div>
 
+      {/* Success Notification Toast (Step 7) */}
+      {successToast && (
+        <div
+          className="mb-6 p-4 rounded-lg flex items-start justify-between animate-fade-in shadow-md"
+          style={{
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            border: '1.5px solid var(--color-success)',
+            color: 'var(--color-text-base)'
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className="p-1 rounded-full text-white mt-0.5 flex-shrink-0"
+              style={{ backgroundColor: 'var(--color-success)' }}
+            >
+              <Check size={16} />
+            </div>
+            <div>
+              <h4 className="font-bold text-sm" style={{ color: 'var(--color-success)' }}>
+                Gửi yêu cầu hủy đơn thành công!
+              </h4>
+              <p className="text-sm mt-0.5 text-muted">{successToast.message}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setSuccessToast(null)}
+            className="text-muted hover:text-base p-1 transition"
+            title="Đóng thông báo"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
+
+      {/* Main Card */}
       <div className="card mb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
           <div className="flex gap-4">
@@ -127,34 +260,59 @@ const MyBookings: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredBookings.map((booking) => {
-                const pitch = mockPitches.find(p => p.id === booking.pitchId);
-                const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
+              {filteredBookings.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-muted">
+                    Không tìm thấy đơn đặt sân nào phù hợp.
+                  </td>
+                </tr>
+              ) : (
+                filteredBookings.map((booking) => {
+                  const pitch = mockPitches.find(p => p.id === booking.pitchId);
+                  const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
 
-                return (
-                  <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
-                    <td className="p-4">{booking.date}</td>
-                    <td className="p-4">
-                      <div className="font-semibold">{pitch?.name}</div>
-                      <div className="text-sm text-muted">{slot?.startTime} - {slot?.endTime}</div>
-                    </td>
-                    <td className="p-4">{getStatusBadge(booking.status)}</td>
-                    <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
-                    <td className="p-4 text-right">
-                      {booking.status === 'CONFIRMED' && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
-                      )}
-                      {booking.status === 'COMPLETED' && (
-                        <button className="btn btn-primary text-sm" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
-                      )}
-                      {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                      <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
+                      <td className="p-4">{booking.date}</td>
+                      <td className="p-4">
+                        <div className="font-semibold">{pitch?.name}</div>
+                        <div className="text-sm text-muted">{slot?.startTime} - {slot?.endTime}</div>
+                      </td>
+                      <td className="p-4">{getStatusBadge(booking.status)}</td>
+                      <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
+                      <td className="p-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {booking.status === 'CONFIRMED' && (
+                            <button
+                              className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition"
+                              style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}
+                              onClick={() => openCancelModal(booking)}
+                            >
+                              Hủy đơn
+                            </button>
+                          )}
+                          {booking.status === 'COMPLETED' && (
+                            <button
+                              className="btn btn-primary text-sm"
+                              style={{ backgroundColor: 'var(--color-secondary)' }}
+                              onClick={() => openPaymentModal(booking)}
+                            >
+                              Thanh toán nốt
+                            </button>
+                          )}
+                          <button
+                            className="btn btn-secondary text-sm"
+                            onClick={() => openDetailsModal(booking)}
+                          >
+                            Xem chi tiết
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -169,7 +327,16 @@ const MyBookings: React.FC = () => {
             const slot = mockTimeSlots.find(t => t.id === booking.timeSlotId);
 
             return (
-              <div key={`mobile-${booking.id}`} className="flex flex-col gap-3 p-4" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-surface)', boxShadow: 'var(--shadow-sm)' }}>
+              <div
+                key={`mobile-${booking.id}`}
+                className="flex flex-col gap-3 p-4"
+                style={{
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius-md)',
+                  backgroundColor: 'var(--color-bg-surface)',
+                  boxShadow: 'var(--shadow-sm)'
+                }}
+              >
                 <div className="flex justify-between items-center border-b pb-3" style={{ borderBottomColor: 'var(--color-border)' }}>
                   <span className="font-bold text-lg">#{booking.id.toUpperCase()}</span>
                   {getStatusBadge(booking.status)}
@@ -190,20 +357,37 @@ const MyBookings: React.FC = () => {
                   </div>
                   <div className="flex justify-between mt-2 pt-3 border-t" style={{ borderTopColor: 'var(--color-border)' }}>
                     <span className="font-semibold text-muted">Tổng tiền:</span>
-                    <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>{formatPrice(slot?.basePrice || 0)}</span>
+                    <span className="font-bold text-lg" style={{ color: 'var(--color-primary)' }}>
+                      {formatPrice(slot?.basePrice || 0)}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex gap-2 mt-4">
                   {booking.status === 'CONFIRMED' && (
-                    <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
+                    <button
+                      className="btn btn-secondary text-sm flex-1 justify-center py-2 hover:border-danger hover:text-danger"
+                      style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}
+                      onClick={() => openCancelModal(booking)}
+                    >
+                      Hủy đơn
+                    </button>
                   )}
                   {booking.status === 'COMPLETED' && (
-                    <button className="btn btn-primary text-sm flex-1 justify-center py-2" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
+                    <button
+                      className="btn btn-primary text-sm flex-1 justify-center py-2"
+                      style={{ backgroundColor: 'var(--color-secondary)' }}
+                      onClick={() => openPaymentModal(booking)}
+                    >
+                      Thanh toán nốt
+                    </button>
                   )}
-                  {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
-                    <button className="btn btn-secondary text-sm flex-1 justify-center py-2" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
-                  )}
+                  <button
+                    className="btn btn-secondary text-sm flex-1 justify-center py-2"
+                    onClick={() => openDetailsModal(booking)}
+                  >
+                    Xem chi tiết
+                  </button>
                 </div>
               </div>
             );
@@ -211,53 +395,182 @@ const MyBookings: React.FC = () => {
         </div>
       </div>
 
-      {/* Cancel Modal */}
+      {/* ========================================================================= */}
+      {/* 2. MODAL YÊU CẦU HỦY ĐƠN ĐẶT SÂN (UC010.3) */}
+      {/* ========================================================================= */}
       {isCancelModalOpen && selectedBooking && createPortal(
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 50, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="card animate-fade-in relative" style={{ width: '100%', maxWidth: '450px' }}>
-            <button className="absolute top-4 right-4 text-muted hover:text-danger" onClick={() => setIsCancelModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-              <X size={20} />
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
+          }}
+        >
+          <div
+            className="card animate-fade-in relative shadow-2xl"
+            style={{
+              width: '100%',
+              maxWidth: '520px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              border: '1.5px solid var(--color-border)'
+            }}
+          >
+            {/* Nút đóng (3a) */}
+            <button
+              className="text-muted hover:text-danger transition"
+              onClick={closeCancelModal}
+              style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}
+              title="Đóng"
+            >
+              <X size={22} />
             </button>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-danger)' }}>
-                <AlertTriangle size={24} />
-              </div>
-              <h2 className="text-xl font-bold mb-2">Yêu cầu hủy đơn</h2>
-              <p className="text-muted mb-6">Bạn có chắc chắn muốn hủy đơn <strong>#{selectedBooking.id}</strong> không? Nếu hủy trước 24h, bạn sẽ được hoàn lại 100% tiền cọc.</p>
 
-              <div className="flex gap-4 w-full">
-                <button className="btn btn-secondary flex-1" style={{ flex: 1 }} onClick={() => setIsCancelModalOpen(false)}>Không, Quay lại</button>
-                <button className="btn btn-primary flex-1" style={{ flex: 1, backgroundColor: 'var(--color-danger)' }} onClick={() => setIsCancelModalOpen(false)}>Huỷ đơn</button>
+            {/* Header Modal */}
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--color-danger)' }}
+              >
+                <AlertTriangle size={22} />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-base">Yêu cầu hủy đơn đặt sân</h2>
+                <p className="text-xs text-muted">Mã đơn: #{selectedBooking.id.toUpperCase()}</p>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
 
-      {/* Payment Modal */}
-      {isPaymentModalOpen && selectedBooking && createPortal(
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 50, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="card animate-fade-in relative" style={{ width: '100%', maxWidth: '450px' }}>
-            <button className="absolute top-4 right-4 text-muted hover:text-danger" onClick={() => setIsPaymentModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-              <X size={20} />
-            </button>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: 'var(--color-success)' }}>
-                <CheckCircle size={24} />
+            {/* Tóm tắt thông tin đơn cần hủy */}
+            {(() => {
+              const pitch = mockPitches.find(p => p.id === selectedBooking.pitchId);
+              const slot = mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId);
+              const deposit = (slot?.basePrice || 0) * 0.3;
+
+              return (
+                <div
+                  className="mb-4 p-3.5 rounded-lg text-sm"
+                  style={{
+                    backgroundColor: 'var(--color-bg-base)',
+                    border: '1px solid var(--color-border)'
+                  }}
+                >
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted">Sân bóng:</span>
+                    <span className="font-semibold">{pitch?.name}</span>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted">Khung giờ:</span>
+                    <span className="font-medium">{selectedBooking.date} ({slot?.startTime} - {slot?.endTime})</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-t mt-1 pt-1.5" style={{ borderColor: 'var(--color-border)' }}>
+                    <span className="text-muted">Tiền cọc đã thanh toán:</span>
+                    <span className="font-bold text-danger">{formatPrice(deposit)}</span>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Quy tắc nghiệp vụ cảnh báo (BR1 & BR4) */}
+            <div
+              className="mb-4 p-3.5 rounded-lg text-xs leading-relaxed"
+              style={{
+                backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                color: 'var(--color-text-base)'
+              }}
+            >
+              <div className="flex items-center gap-1.5 font-bold mb-1" style={{ color: 'var(--color-warning)' }}>
+                <ShieldAlert size={14} />
+                <span>Quy định hủy sân (Chính sách hoàn cọc)</span>
               </div>
-              <h2 className="text-xl font-bold mb-2">Thanh toán hóa đơn</h2>
-              <p className="text-muted mb-6">Đơn hàng <strong>#{selectedBooking.id}</strong> đang chờ thanh toán phần còn lại.</p>
+              <ul className="list-disc pl-4 space-y-1 text-muted">
+                <li><strong>Thời hạn:</strong> Chỉ hỗ trợ hoàn cọc khi hủy trước ít nhất <strong>24 giờ</strong> so với giờ đá.</li>
+                <li><strong>Xét duyệt:</strong> Đơn sẽ chuyển sang <em>"Chờ xác nhận hủy"</em> và được nhân viên kiểm tra, xét duyệt hoàn tiền cọc.</li>
+              </ul>
+            </div>
 
-              <div className="w-full bg-base p-4 rounded-lg mb-6 flex justify-between items-center" style={{ backgroundColor: 'var(--color-bg-base)' }}>
-                <span className="font-semibold text-muted">Số tiền cần thanh toán:</span>
-                <span className="font-bold text-lg text-primary">
-                  {formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.7)}
-                </span>
+            {/* Form nhập lý do hủy (Step 3 & BR3) */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-base)' }}>
+                Lý do hủy đơn <span className="text-danger">(*)</span>
+              </label>
+
+              {/* Quick Chips */}
+              <div className="flex flex-wrap gap-1.5 mb-2.5">
+                {quickReasons.map((chip, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setCancelReason(chip);
+                      setCancelError(null);
+                    }}
+                    className="text-xs px-2.5 py-1 rounded-full transition"
+                    style={{
+                      backgroundColor: cancelReason === chip ? 'var(--color-primary)' : 'var(--color-bg-base)',
+                      color: cancelReason === chip ? '#ffffff' : 'var(--color-text-base)',
+                      border: '1px solid var(--color-border)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {chip}
+                  </button>
+                ))}
               </div>
 
-              <button className="btn btn-primary w-full flex justify-center items-center gap-2" onClick={() => setIsPaymentModalOpen(false)}>
-                <CreditCard size={18} /> Thanh toán qua VNPAY
+              <textarea
+                rows={3}
+                className="w-full p-3 rounded-lg text-sm"
+                placeholder="Nhập chi tiết lý do bạn muốn hủy đơn đặt sân này (bắt buộc)..."
+                value={cancelReason}
+                onChange={(e) => {
+                  setCancelReason(e.target.value);
+                  if (cancelError) setCancelError(null);
+                }}
+                style={{
+                  backgroundColor: 'var(--color-bg-base)',
+                  border: cancelError ? '1.5px solid var(--color-danger)' : '1px solid var(--color-border)',
+                  color: 'var(--color-text-base)',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  resize: 'none'
+                }}
+              />
+
+              {/* Thông báo lỗi Luồng 3b & 4a */}
+              {cancelError && (
+                <div className="flex items-center gap-1.5 text-xs text-danger mt-1.5 font-medium animate-fade-in">
+                  <AlertCircle size={14} />
+                  <span>{cancelError}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Nút hành động: 3a (Hủy bỏ) & 3 (Xác nhận) */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="btn btn-secondary flex-1"
+                onClick={closeCancelModal}
+              >
+                Hủy bỏ (Quay lại)
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary flex-1"
+                style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                onClick={handleConfirmCancel}
+              >
+                Xác nhận hủy đơn
               </button>
             </div>
           </div>
@@ -265,11 +578,88 @@ const MyBookings: React.FC = () => {
         document.body
       )}
 
-      {/* Details Modal */}
+      {/* ========================================================================= */}
+      {/* MODAL THANH TOÁN TIỀN NỐT */}
+      {/* ========================================================================= */}
+      {isPaymentModalOpen && selectedBooking && createPortal(
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div className="card animate-fade-in relative" style={{ width: '100%', maxWidth: '520px', padding: '2rem' }}>
+            <button className="text-muted hover:text-danger" onClick={() => setIsPaymentModalOpen(false)} style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>
+              <X size={22} />
+            </button>
+            
+            <h2 className="text-2xl font-bold mb-2">Thanh toán hóa đơn</h2>
+            <p className="text-sm text-muted mb-6 pb-3" style={{ borderBottom: '1px solid var(--color-border)', lineHeight: '1.6' }}>
+              Đơn hàng <strong>#{selectedBooking.id.toUpperCase()}</strong> - Thanh toán phần còn lại sau trận đấu
+            </p>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Mã đơn:</span>
+                <span className="font-bold text-base">#{selectedBooking.id.toUpperCase()}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Sân bóng:</span>
+                <span className="font-semibold text-base">{mockPitches.find(p => p.id === selectedBooking.pitchId)?.name}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Ngày đá:</span>
+                <span className="font-medium text-base">{selectedBooking.date}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Khung giờ:</span>
+                <span className="font-medium text-base">
+                  {mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.startTime} - {mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.endTime}
+                </span>
+              </div>
+
+              <hr style={{ borderColor: 'var(--color-border)', width: '100%', margin: '0.5rem 0' }} />
+
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Tổng tiền thuê sân:</span>
+                <span className="font-semibold text-base">{formatPrice(mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0)}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted text-base">Đã đặt cọc trước (30%):</span>
+                <span className="font-semibold text-base text-primary">{formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.3)}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted text-base">Dịch vụ phát sinh:</span>
+                <span className="font-semibold text-base">{formatPrice(0)}</span>
+              </div>
+
+              <div className="flex justify-between items-center p-4 mt-2 rounded-lg" style={{ backgroundColor: 'var(--color-bg-base)', border: '1.5px solid var(--color-border)' }}>
+                <div>
+                  <span className="font-bold block text-base">Số tiền cần thanh toán nốt:</span>
+                  <span className="text-xs text-muted mt-0.5 block">70% còn lại sau khi hoàn thành</span>
+                </div>
+                <span className="font-bold text-2xl text-primary">
+                  {formatPrice((mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0) * 0.7)}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                className="btn btn-primary w-full flex justify-center items-center gap-2"
+                style={{ padding: '0.85rem 1.5rem', fontSize: '1rem' }}
+                onClick={() => setIsPaymentModalOpen(false)}
+              >
+                <CreditCard size={20} /> Thanh toán qua VNPAY
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL XEM CHI TIẾT ĐƠN ĐẶT SÂN */}
+      {/* ========================================================================= */}
       {isDetailsModalOpen && selectedBooking && createPortal(
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 50, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div className="card animate-fade-in relative p-6" style={{ width: '100%', maxWidth: '500px' }}>
-            <button className="absolute top-4 right-4 text-muted hover:text-danger" onClick={() => setIsDetailsModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+            <button className="text-muted hover:text-danger" onClick={() => setIsDetailsModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
               <X size={20} />
             </button>
             <h2 className="text-xl font-bold mb-6 pb-2" style={{ borderBottom: '1px solid var(--color-border)' }}>Chi tiết đơn đặt sân</h2>
@@ -277,7 +667,7 @@ const MyBookings: React.FC = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <span className="text-muted">Mã đơn:</span>
-                <span className="font-bold">#{selectedBooking.id}</span>
+                <span className="font-bold">#{selectedBooking.id.toUpperCase()}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted">Sân bóng:</span>
@@ -288,14 +678,60 @@ const MyBookings: React.FC = () => {
                 <span className="font-semibold">{selectedBooking.date}</span>
               </div>
               <div className="flex justify-between items-center">
+                <span className="text-muted">Khung giờ:</span>
+                <span className="font-semibold">
+                  {mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.startTime} - {mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.endTime}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
                 <span className="text-muted">Trạng thái:</span>
                 {getStatusBadge(selectedBooking.status)}
               </div>
 
-              <hr className="my-2" style={{ borderColor: 'var(--color-border)', width: '100%', margin: '0.5rem 0' }} />
+              {/* Thông tin hủy đơn nếu có (UC010.3) */}
+              {selectedBooking.status === 'PENDING_CANCEL' && (
+                <div
+                  className="p-3.5 rounded-lg text-sm animate-fade-in"
+                  style={{
+                    backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)'
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 font-bold mb-1.5" style={{ color: 'var(--color-warning)' }}>
+                    <Clock size={16} />
+                    <span>Yêu cầu hủy đang chờ nhân viên xét duyệt</span>
+                  </div>
+                  <div className="text-xs text-muted mb-1">
+                    <strong>Thời gian gửi yêu cầu:</strong> {selectedBooking.cancelRequestedAt || 'Vừa xong'}
+                  </div>
+                  <div className="text-xs text-muted">
+                    <strong>Lý do hủy:</strong> <span className="italic">"{selectedBooking.cancelReason || 'Không có'}"</span>
+                  </div>
+                </div>
+              )}
+
+              {selectedBooking.status === 'CANCELLED' && selectedBooking.cancelReason && (
+                <div
+                  className="p-3.5 rounded-lg text-sm animate-fade-in"
+                  style={{
+                    backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                    border: '1px solid rgba(239, 68, 68, 0.25)'
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 font-bold mb-1.5" style={{ color: 'var(--color-danger)' }}>
+                    <Info size={16} />
+                    <span>Đơn đã được hủy thành công</span>
+                  </div>
+                  <div className="text-xs text-muted">
+                    <strong>Lý do hủy:</strong> <span className="italic">"{selectedBooking.cancelReason}"</span>
+                  </div>
+                </div>
+              )}
+
+              <hr className="my-1" style={{ borderColor: 'var(--color-border)', width: '100%' }} />
 
               <div className="flex justify-between items-center">
-                <span className="text-muted">Tổng tiền:</span>
+                <span className="text-muted">Tổng tiền sân:</span>
                 <span className="font-semibold">{formatPrice(mockTimeSlots.find(t => t.id === selectedBooking.timeSlotId)?.basePrice || 0)}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
@@ -308,7 +744,7 @@ const MyBookings: React.FC = () => {
               </div>
             </div>
 
-            <button className="btn btn-secondary w-full mt-8" onClick={() => setIsDetailsModalOpen(false)}>
+            <button className="btn btn-secondary w-full mt-6" onClick={() => setIsDetailsModalOpen(false)}>
               Đóng
             </button>
           </div>

@@ -1,13 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('isLoggedIn', 'true');
+    navigate('/profile');
+  };
+
   return (
     <div className="flex justify-center items-start pt-4">
       <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
         <h2 className="text-2xl font-bold text-center mb-6">Đăng nhập Soccer365</h2>
         
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
             <label className="font-semibold text-sm">Email hoặc Số điện thoại</label>
             <input 
@@ -15,6 +25,8 @@ const Login: React.FC = () => {
               className="mt-2 w-full" 
               style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
               placeholder="Nhập email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           
@@ -25,6 +37,8 @@ const Login: React.FC = () => {
               className="mt-2 w-full" 
               style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           
@@ -35,7 +49,7 @@ const Login: React.FC = () => {
             <Link to="/forgot-password" style={{ color: 'var(--color-primary)' }}>Quên mật khẩu?</Link>
           </div>
           
-          <button type="button" className="btn btn-primary mt-2" style={{ padding: '0.75rem', width: '100%' }}>
+          <button type="submit" className="btn btn-primary mt-2" style={{ padding: '0.75rem', width: '100%' }}>
             Đăng nhập
           </button>
           
@@ -47,6 +61,7 @@ const Login: React.FC = () => {
           
           <button 
             type="button" 
+            onClick={handleLogin}
             className="btn btn-secondary flex items-center justify-center gap-2" 
             style={{ padding: '0.75rem', width: '100%', backgroundColor: 'var(--color-bg-surface)' }}
           >
