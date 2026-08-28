@@ -64,6 +64,9 @@ const AdminUsers: React.FC = () => {
               <option value="ACTIVE">Đang hoạt động</option>
               <option value="LOCKED">Đã khóa</option>
             </select>
+            <button className="btn btn-primary" style={{ height: '42px', padding: '0 1rem' }} onClick={() => setIsAddModalOpen(true)}>
+              + Tạo nhân viên
+            </button>
           </div>
         </div>
 
@@ -94,15 +97,21 @@ const AdminUsers: React.FC = () => {
                   </td>
                   <td className="p-4">
                     {user.status === 'ACTIVE' 
-                      ? <span className="badge">[ Trạng thái ]</span>
-                      : <span className="badge">[ Trạng thái ]</span>
+                      ? <span className="badge badge-success">Đang hoạt động</span>
+                      : <span className="badge badge-danger">Đã khóa</span>
                     }
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">
-                      <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Thay đổi trạng thái" onClick={() => setLockUser(user)}>
-                        {user.status === 'LOCKED' ? <UserCheck size={16} /> : <UserX size={16} />}
-                      </button>
+                      {user.status === 'ACTIVE' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
+                        <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Khóa tài khoản" onClick={() => setLockUser(user)}>
+                          <UserX size={16} />
+                        </button>
+                      ) : user.status === 'LOCKED' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
+                        <button className="btn btn-secondary text-success" style={{ padding: '0.5rem' }} title="Mở khóa tài khoản">
+                          <UserCheck size={16} />
+                        </button>
+                      ) : null}
                       <button className="btn btn-secondary" style={{ padding: '0.5rem' }} onClick={() => setViewUser(user)}>
                         <MoreVertical size={16} />
                       </button>
@@ -137,10 +146,7 @@ const AdminUsers: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option value="STAFF">Nhân viên (STAFF)</option>
-                <option value="ADMIN">Quản trị viên (ADMIN)</option>
-              </select>
+              <input type="text" className="w-full" value="Nhân viên (STAFF)" readOnly style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-surface)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Mật khẩu</label>
@@ -166,26 +172,25 @@ const AdminUsers: React.FC = () => {
           </div>
           <div className="grid gap-4 mb-6" style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
             <div>
-              <label className="block text-sm font-semibold mb-2">ID: [ Mã ID ]</label>
+              <label className="block text-sm font-semibold mb-2">ID: {viewUser.id}</label>
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Họ và Tên</label>
-              <input type="text" className="w-full" placeholder="[ Họ và tên ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" defaultValue={viewUser.name} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Số điện thoại</label>
-              <input type="text" className="w-full" placeholder="[ Số điện thoại ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="text" className="w-full" defaultValue={viewUser.phone} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Email</label>
-              <input type="email" className="w-full" placeholder="[ Email ]" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
+              <input type="email" className="w-full" defaultValue={viewUser.email} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option value="CUSTOMER">Khách hàng</option>
-                <option value="STAFF">Nhân viên</option>
-                <option value="ADMIN">Quản trị viên</option>
+              <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
+                <option value="CUSTOMER">Khách hàng (CUSTOMER)</option>
+                <option value="STAFF">Nhân viên (STAFF)</option>
               </select>
             </div>
           </div>

@@ -66,6 +66,9 @@ const AdminUsers: React.FC = () => {
               <option value="ACTIVE">Đang hoạt động</option>
               <option value="LOCKED">Đã khóa</option>
             </select>
+            <button className="btn btn-primary" style={{ height: '42px', padding: '0 1rem' }} onClick={() => setIsAddModalOpen(true)}>
+              + Tạo nhân viên
+            </button>
           </div>
         </div>
 
@@ -104,11 +107,11 @@ const AdminUsers: React.FC = () => {
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end">
-                      {user.status === 'ACTIVE' && user.role === 'CUSTOMER' ? (
+                      {user.status === 'ACTIVE' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
                         <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Khóa tài khoản" onClick={() => setLockUser(user)}>
                           <UserX size={16} />
                         </button>
-                      ) : user.status === 'LOCKED' ? (
+                      ) : user.status === 'LOCKED' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
                         <button className="btn btn-secondary text-success" style={{ padding: '0.5rem' }} title="Mở khóa tài khoản">
                           <UserCheck size={16} />
                         </button>
@@ -147,10 +150,7 @@ const AdminUsers: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option value="STAFF">Nhân viên (STAFF)</option>
-                <option value="ADMIN">Quản trị viên (ADMIN)</option>
-              </select>
+              <input type="text" className="w-full" value="Nhân viên (STAFF)" readOnly style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-surface)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Mật khẩu</label>
@@ -195,7 +195,6 @@ const AdminUsers: React.FC = () => {
               <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
                 <option value="CUSTOMER">Khách hàng (CUSTOMER)</option>
                 <option value="STAFF">Nhân viên (STAFF)</option>
-                <option value="ADMIN">Quản trị viên (ADMIN)</option>
               </select>
             </div>
           </div>
