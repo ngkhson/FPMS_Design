@@ -20,6 +20,8 @@ export interface Booking {
   date: string;
   status: 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'PENDING_CANCEL' | 'CANCELLED';
   customerName: string;
+  cancelReason?: string;
+  cancelRequestedAt?: string;
 }
 
 export const mockPitches: Pitch[] = [
@@ -54,16 +56,16 @@ export const mockBookings: Booking[] = [
   { id: 'b1', pitchId: 'p1', timeSlotId: 't08', date: today, status: 'CONFIRMED', customerName: 'Nguyễn Văn A' },
   { id: 'b2', pitchId: 'p4', timeSlotId: 't09', date: today, status: 'CONFIRMED', customerName: 'Trần Thị B' },
   { id: 'b3', pitchId: 'p2', timeSlotId: 't07', date: today, status: 'IN_PROGRESS', customerName: 'Khách vãng lai' },
-  { id: 'b4', pitchId: 'p5', timeSlotId: 't08', date: today, status: 'PENDING_CANCEL', customerName: 'Lê Văn C' },
+  { id: 'b4', pitchId: 'p5', timeSlotId: 't08', date: today, status: 'PENDING_CANCEL', customerName: 'Lê Văn C', cancelReason: 'Bận việc đột xuất cùng công ty, không đủ người đá', cancelRequestedAt: '14:20 Hôm nay' },
   { id: 'b5', pitchId: 'p1', timeSlotId: 't05', date: today, status: 'COMPLETED', customerName: 'Phạm Thị D' },
-  { id: 'b6', pitchId: 'p2', timeSlotId: 't04', date: today, status: 'CANCELLED', customerName: 'Hoàng Văn E' },
+  { id: 'b6', pitchId: 'p2', timeSlotId: 't04', date: today, status: 'CANCELLED', customerName: 'Hoàng Văn E', cancelReason: 'Thời tiết mưa bão lớn', cancelRequestedAt: '2026-08-25 09:30' },
   { id: 'b7', pitchId: 'p4', timeSlotId: 't10', date: today, status: 'PENDING', customerName: 'Vũ Thị F' },
   { id: 'b8', pitchId: 'p1', timeSlotId: 't02', date: today, status: 'COMPLETED', customerName: 'Đặng Văn G' },
   // Past dates for Excel Export testing
   { id: 'b9', pitchId: 'p2', timeSlotId: 't08', date: '2026-08-18', status: 'COMPLETED', customerName: 'Bùi Văn H' },
   { id: 'b10', pitchId: 'p5', timeSlotId: 't09', date: '2026-08-18', status: 'COMPLETED', customerName: 'Đinh Thị I' },
   { id: 'b11', pitchId: 'p1', timeSlotId: 't05', date: '2026-08-20', status: 'COMPLETED', customerName: 'Ngô Văn K' },
-  { id: 'b12', pitchId: 'p4', timeSlotId: 't10', date: '2026-08-21', status: 'CANCELLED', customerName: 'Phan Thị L' },
+  { id: 'b12', pitchId: 'p4', timeSlotId: 't10', date: '2026-08-21', status: 'CANCELLED', customerName: 'Phan Thị L', cancelReason: 'Đổi lịch thi đấu giải công đoàn', cancelRequestedAt: '2026-08-20 10:15' },
   { id: 'b13', pitchId: 'p2', timeSlotId: 't07', date: '2026-08-22', status: 'COMPLETED', customerName: 'Đỗ Văn M' },
 ];
 

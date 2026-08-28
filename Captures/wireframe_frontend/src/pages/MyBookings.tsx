@@ -12,6 +12,7 @@ const MyBookings: React.FC = () => {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
@@ -41,6 +42,7 @@ const MyBookings: React.FC = () => {
 
   const openCancelModal = (booking: any) => {
     setSelectedBooking(booking);
+    setCancelReason('');
     setIsCancelModalOpen(true);
   };
 
@@ -144,15 +146,17 @@ const MyBookings: React.FC = () => {
                     <td className="p-4">{getStatusBadge(booking.status)}</td>
                     <td className="p-4 font-semibold">[ Số tiền ]</td>
                     <td className="p-4 text-right">
-                      {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
-                      )}
-                      {booking.status === 'COMPLETED' && (
-                        <button className="btn btn-primary text-sm" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
-                      )}
-                      {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
-                        <button className="btn btn-secondary text-sm" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
-                      )}
+                      <div className="flex items-center justify-end gap-2">
+                        {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
+                          <button className="btn btn-secondary text-sm" onClick={() => openCancelModal(booking)}>Huỷ đơn</button>
+                        )}
+                        {booking.status === 'COMPLETED' && (
+                          <button className="btn btn-primary text-sm" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => openPaymentModal(booking)}>Thanh toán nốt</button>
+                        )}
+                        {(booking.status === 'IN_PROGRESS' || booking.status === 'PENDING_CANCEL' || booking.status === 'CANCELLED') && (
+                          <button className="btn btn-secondary text-sm" onClick={() => openDetailsModal(booking)}>Xem chi tiết</button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -164,7 +168,7 @@ const MyBookings: React.FC = () => {
         {/* Mobile Cards */}
         <div className="md:hidden flex flex-col gap-4 mt-4">
           {filteredBookings.length === 0 && (
-            <div className="text-center p-8 text-muted">Không có đơn đặt sân nào.</div>
+            <div className="text-center p-8 text-muted">[ Đoạn mô tả phụ ]</div>
           )}
           {filteredBookings.map((booking) => {
             const pitch = mockPitches.find(p => p.id === booking.pitchId);
@@ -225,7 +229,19 @@ const MyBookings: React.FC = () => {
                 <AlertTriangle size={24} />
               </div>
               <h2 className="text-xl font-bold mb-2">Yêu cầu hủy đơn</h2>
-              <p className="text-muted mb-6">[ Ghi chú cảnh báo/Xác nhận về việc hủy đơn ]</p>
+              <p className="text-muted mb-4">[ Ghi chú cảnh báo/Xác nhận về việc hủy đơn ]</p>
+
+              <div className="w-full text-left mb-6">
+                <label className="font-semibold text-sm block mb-1">Lý do hủy đơn (*)</label>
+                <textarea
+                  rows={3}
+                  className="w-full"
+                  style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)', resize: 'none', width: '100%', outline: 'none', fontFamily: 'inherit' }}
+                  placeholder="[ Nhập lý do hủy... ]"
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                />
+              </div>
 
               <div className="flex gap-4 w-full">
                 <button className="btn btn-secondary flex-1" style={{ flex: 1 }} onClick={() => setIsCancelModalOpen(false)}>Không, Quay lại</button>
@@ -240,26 +256,67 @@ const MyBookings: React.FC = () => {
       {/* Payment Modal */}
       {isPaymentModalOpen && selectedBooking && createPortal(
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 50, backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="card animate-fade-in relative" style={{ width: '100%', maxWidth: '450px' }}>
-            <button className="absolute top-4 right-4 text-muted hover:text-danger" onClick={() => setIsPaymentModalOpen(false)} style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-              <X size={20} />
+          <div className="card animate-fade-in relative" style={{ width: '100%', maxWidth: '520px', padding: '2rem' }}>
+            <button className="absolute top-4 right-4 text-muted hover:text-danger" onClick={() => setIsPaymentModalOpen(false)} style={{ position: 'absolute', top: '1.25rem', right: '1.25rem' }}>
+              <X size={22} />
             </button>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mb-4" style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: 'var(--color-success)' }}>
-                <CheckCircle size={24} />
-              </div>
-              <h2 className="text-xl font-bold mb-2">Thanh toán hóa đơn</h2>
-              <p className="text-muted mb-6">[ Ghi chú/Lưu ý phụ về việc thanh toán ]</p>
+            
+            <h2 className="text-2xl font-bold mb-2">Thanh toán hóa đơn</h2>
+            <p className="text-sm text-muted mb-6 pb-3" style={{ borderBottom: '1px solid var(--color-border)', lineHeight: '1.6' }}>
+              [ Ghi chú/Lưu ý phụ về việc thanh toán nốt tiền sân ]
+            </p>
 
-              <div className="w-full bg-base p-4 rounded-lg mb-6 flex justify-between items-center" style={{ backgroundColor: 'var(--color-bg-base)' }}>
-                <span className="font-semibold text-muted">Số tiền cần thanh toán:</span>
-                <span className="font-bold text-lg text-primary">
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Mã đơn:</span>
+                <span className="font-bold text-base">[ Mã đơn ]</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Sân bóng:</span>
+                <span className="font-semibold text-base">[ Tên sân ]</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Ngày đá:</span>
+                <span className="font-medium text-base">[ Ngày ]</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Khung giờ:</span>
+                <span className="font-medium text-base">[ Khung giờ ]</span>
+              </div>
+
+              <hr style={{ borderColor: 'var(--color-border)', width: '100%', margin: '0.5rem 0' }} />
+
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Tổng tiền thuê sân:</span>
+                <span className="font-semibold text-base">[ Số tiền ]</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Đã đặt cọc (30%):</span>
+                <span className="font-semibold text-base">[ Số tiền ]</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-muted text-base">Dịch vụ phát sinh / Phụ phí:</span>
+                <span className="font-semibold text-base">[ Số tiền ]</span>
+              </div>
+
+              <div className="flex justify-between items-center p-4 mt-2" style={{ backgroundColor: 'var(--color-bg-base)', border: '1.5px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
+                <div>
+                  <span className="font-bold block text-base">Số tiền cần thanh toán nốt:</span>
+                  <span className="text-xs text-muted mt-0.5 block">[ 70% còn lại + phụ phí nếu có ]</span>
+                </div>
+                <span className="font-bold text-2xl" style={{ color: 'var(--color-primary)' }}>
                   [ Số tiền ]
                 </span>
               </div>
+            </div>
 
-              <button className="btn btn-primary w-full flex justify-center items-center gap-2" onClick={() => setIsPaymentModalOpen(false)}>
-                <CreditCard size={18} /> Thanh toán qua VNPAY
+            <div className="mt-6">
+              <button
+                className="btn btn-primary w-full flex justify-center items-center gap-2"
+                style={{ padding: '0.85rem 1.5rem', fontSize: '1rem' }}
+                onClick={() => setIsPaymentModalOpen(false)}
+              >
+                <CreditCard size={20} /> Thanh toán qua VNPAY
               </button>
             </div>
           </div>

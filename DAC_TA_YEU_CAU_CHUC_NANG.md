@@ -265,7 +265,32 @@ flowchart TD
 | Thuộc tính | Chi tiết |
 | :--- | :--- |
 | **Mã Use case** | `UC008` |
-| **Luồng chính** | 1. Chọn phương thức thanh toán. <br> 2. Quét QR thanh toán cọc. <br> 3. Hệ thống nhận webhook, đổi trạng thái đơn thành `CONFIRMED`. |
+| **Luồng chính** | 1. Chọn phương thức thanh toán. <br> 2. Quét QR thanh toán cọc 30%. <br> 3. Hệ thống nhận webhook, đổi trạng thái đơn thành `CONFIRMED`. |
+| **Luồng thay thế** | **Thanh toán thất bại / Hủy:** Giao dịch bị từ chối hoặc khách hàng hủy thanh toán. Hệ thống hiển thị thông báo lỗi và cho phép thử thanh toán lại hoặc chọn khung giờ khác. |
+
+```text
+[ XÁC NHẬN ĐẶT SÂN & THANH TOÁN TIỀN CỌC ]
+- Sân: [ Tên sân ] | Khung giờ: [ Khung giờ ]
+- Tiền thuê sân:       350.000 đ
+- CẦN ĐẶT CỌC (30%):   105.000 đ
+- Còn lại trả tại sân: 245.000 đ
+------------------------------------------
+Họ và tên:     [ Nguyễn Văn A           ]
+Số điện thoại: [ 0987654321             ]
+[ TIẾN HÀNH THANH TOÁN CỌC (VNPAY) ]
+
+[ MÀN HÌNH KẾT QUẢ: THANH TOÁN THÀNH CÔNG ]
+(✓) Thanh toán thành công!
+- Đơn đặt sân đã được xác nhận (CONFIRMED)
+- Đã cọc: 105.000 đ
+[ XEM ĐƠN ĐẶT SÂN CỦA TÔI ]
+
+[ MÀN HÌNH KẾT QUẢ: THANH TOÁN THẤT BẠI / LỖI ]
+(✗) Thanh toán thất bại!
+- Giao dịch thanh toán tiền cọc không thành công hoặc đã bị hủy.
+- Lý do: Giao dịch bị từ chối / Không đủ số dư / Quá hạn.
+[ THỬ THANH TOÁN LẠI ]    [ QUAY LẠI CHỌN KHUNG GIỜ KHÁC ]
+```
 
 ---
 
@@ -295,23 +320,88 @@ flowchart TD
 
 ---
 
-### 3.4.10. Quản lý đơn đặt sân cá nhân
+### 3.4.10. Quản lý đơn đặt sân cá nhân & Hủy đơn đặt sân (UC010 & UC010.3)
+
+#### A. Biểu đồ phân làn luồng Hủy đơn đặt sân (Swimlane Mermaid)
 
 ```mermaid
 flowchart TD
-    Start([Bắt đầu]) --> ViewMyBooking[Xem danh sách đơn đặt cá nhân]
-    ViewMyBooking --> SelectBooking[Lọc trạng thái & Xem chi tiết]
-    SelectBooking --> Action{Thao tác}
-    Action -- Xem --> End([Kết thúc])
-    Action -- Hủy sân --> RequestCancel[Nhấn 'Yêu cầu hủy']
-    RequestCancel --> PendingCancel[(Cập nhật đơn: PENDING CANCEL)] --> End
+    subgraph Customer["👤 Khách hàng"]
+        Start([Bắt đầu]) --> Act1["1. Nhấn nút 'Hủy đơn'"]
+        Choice{"Xác nhận hủy?"}
+        Act3["3. Nhập lý do & nhấn 'Xác nhận'"]
+        Act3a["3a. Nhấn 'Hủy bỏ' / Đóng form"]
+    end
+
+    subgraph System["⚙️ Hệ thống"]
+        Act2["2. Hiển thị form xác nhận & yêu cầu nhập lý do"]
+        CheckReason{"Đã nhập lý do?"}
+        ErrReason["3b. Hiển thị lỗi:<br>'Vui lòng nhập lý do hủy'"]
+        CheckValid["4. Kiểm tra tính hợp lệ của yêu cầu"]
+        CheckStatus{"Trạng thái đơn<br>'Đã xác nhận'?"}
+        CheckDeadline{"Còn trong thời hạn<br>cho phép hủy (BR1)?"}
+        ErrStatus["4a. Báo lỗi:<br>'Đơn không ở trạng thái hợp lệ'"]
+        ErrDeadline["4b. Báo lỗi:<br>'Đã quá thời hạn cho phép hủy'"]
+        Act5["5. Cập nhật 'Chờ xác nhận hủy' & lưu lý do"]
+        Act6["6. Gửi thông báo yêu cầu hủy đến nhân viên (BR4)"]
+        Act7["7. Hiển thị thông báo gửi yêu cầu thành công"]
+        KeepOrder["Giữ nguyên trạng thái đơn"]
+        EndSuccess([Kết thúc thành công])
+        EndCancel([Kết thúc])
+    end
+
+    Act1 --> Act2
+    Act2 --> Choice
+    Choice -- Đồng ý --> Act3
+    Choice -- Hủy bỏ --> Act3a
+    
+    Act3a --> KeepOrder --> EndCancel
+
+    Act3 --> CheckReason
+    CheckReason -- Để trống --> ErrReason
+    ErrReason --> Act3
+    CheckReason -- Hợp lệ (BR3) --> CheckValid
+
+    CheckValid --> CheckStatus
+    CheckStatus -- Sai trạng thái --> ErrStatus --> EndCancel
+    CheckStatus -- Hợp lệ (BR2) --> CheckDeadline
+
+    CheckDeadline -- Quá hạn --> ErrDeadline --> EndCancel
+    CheckDeadline -- Hợp lệ (BR1) --> Act5
+
+    Act5 --> Act6
+    Act6 --> Act7
+    Act7 --> EndSuccess
 ```
 
-| Thuộc tính | Chi tiết |
+#### B. Bảng đặc tả Use Case chi tiết (UC010.3)
+
+| Thuộc tính | Nội dung chi tiết |
 | :--- | :--- |
-| **Mã Use case** | `UC010` |
-| **Luồng chính** | 1. Khách hàng vào mục lịch sử. <br> 2. Hệ thống hiển thị lịch sử các đơn đặt theo trạng thái (Đã cọc, Hoàn thành, Chờ hủy, Đã hủy). |
-| **Luồng thay thế** | **Khách hàng yêu cầu hủy đơn:** Khách nhấn nút "Yêu cầu hủy" trong chi tiết đơn. Hệ thống chuyển trạng thái đơn sang "Chờ xác nhận hủy" (`PENDING CANCEL`). Khách hàng đợi nhân viên liên hệ và hoàn tiền thủ công. |
+| **Mã Use case** | `UC010.3` |
+| **Tên Use case** | **Hủy đơn đặt sân** |
+| **Tác nhân** | Khách hàng (Customer) |
+| **Sự kiện kích hoạt** | Khách hàng nhấn nút "Hủy đơn" tại một đơn đặt sân |
+| **Tiền điều kiện** | Khách hàng đã đăng nhập và đang ở trang quản lý đơn đặt sân (`/my-bookings`) |
+| **Luồng sự kiện chính (Thành công)** | **1.** Khách hàng: Nhấn nút "Hủy đơn" tại đơn đặt sân. <br> **2.** Hệ thống: Hiển thị biểu mẫu xác nhận và yêu cầu nhập lý do hủy. <br> **3.** Khách hàng: Nhập lý do hủy và nhấn "Xác nhận". <br> **4.** Hệ thống: Kiểm tra tính hợp lệ của yêu cầu. <br> **5.** Hệ thống: Cập nhật trạng thái đơn thành **Chờ xác nhận hủy** (`PENDING_CANCEL`) và lưu lý do hủy. <br> **6.** Hệ thống: Gửi thông báo yêu cầu hủy đến nhân viên. <br> **7.** Hệ thống: Hiển thị thông báo gửi yêu cầu thành công. |
+| **Luồng sự kiện thay thế** | **3a.** Khách hàng nhấn "Hủy bỏ" / đóng form $\rightarrow$ Hệ thống dừng quy trình, giữ nguyên trạng thái đơn. <br> **3b.** Lý do bị để trống $\rightarrow$ Báo lỗi *"Vui lòng nhập lý do hủy"* và quay lại bước 3. <br> **4a.** Trạng thái đơn khác "Đã xác nhận" $\rightarrow$ Báo lỗi *"Đơn không ở trạng thái hợp lệ"* và kết thúc. <br> **4b.** Quá thời hạn cho phép hủy $\rightarrow$ Báo lỗi *"Đã quá thời hạn cho phép hủy"* và kết thúc. |
+| **Quy tắc nghiệp vụ liên quan** | • **BR1:** Chỉ cho phép hủy trước $X$ giờ so với giờ đá (mặc định 24 giờ). <br> • **BR2:** Chỉ áp dụng cho đơn ở trạng thái **Đã xác nhận** (`CONFIRMED`). <br> • **BR3:** Bắt buộc nhập lý do hủy. <br> • **BR4:** Yêu cầu hủy phải được nhân viên xét duyệt. |
+| **Hậu điều kiện** | • **Thành công:** Đơn chuyển sang *Chờ xác nhận hủy*, lưu lý do và gửi thông báo đến nhân viên. <br> • **Thất bại:** Giữ nguyên trạng thái đơn, hiển thị thông báo lỗi tương ứng. |
+
+```text
+[ QUẢN LÝ ĐƠN ĐẶT SÂN ]
+Mã đơn | Ngày đá    | Sân / Khung giờ        | Trạng thái          | Thao tác
+#B1    | 2026-08-27 | Sân 1 (17:45 - 19:15)  | Đã xác nhận         | [ Hủy đơn ] [ Chi tiết ]
+#B4    | 2026-08-27 | Sân VIP (17:45 - 19:15)| Chờ xác nhận hủy    | [ Chi tiết ]
+
+[ MODAL: YÊU CẦU HỦY ĐƠN ĐẶT SÂN - UC010.3 ]
+- Mã đơn: #B1 (Sân 1 • 17:45 - 19:15)
+- Tiền cọc đã trả (30%): 105.000 đ
+- Lưu ý: Hủy trước ít nhất 24h để được xét duyệt hoàn cọc.
+- Gợi ý: [ Bận việc đột xuất ] [ Thời tiết xấu ] [ Đổi lịch ] [ Thiếu người ]
+- Lý do hủy (*): [ Bận việc đột xuất cùng công ty                     ]
+[ KHÔNG, QUAY LẠI ]                       [ XÁC NHẬN GỬI YÊU CẦU ]
+```
 
 ---
 

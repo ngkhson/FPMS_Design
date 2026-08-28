@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { mockBookings, mockPitches, mockTimeSlots } from '../../mocks/mockData';
-import { Search, Calendar, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
   return createPortal(
@@ -17,6 +17,7 @@ const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClos
 
 const AdminBookings: React.FC = () => {
   const dateInputRef = React.useRef<HTMLInputElement>(null);
+  const [bookings, setBookings] = useState(mockBookings);
   const [activeTab, setActiveTab] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [pitchFilter, setPitchFilter] = useState('ALL');
@@ -41,7 +42,7 @@ const AdminBookings: React.FC = () => {
     }
   };
 
-  const filteredBookings = mockBookings.filter(b => {
+  const filteredBookings = bookings.filter(b => {
     if (activeTab !== 'ALL' && b.status !== activeTab) return false;
 
     if (searchTerm) {
@@ -59,8 +60,8 @@ const AdminBookings: React.FC = () => {
     return true;
   });
 
-  const checkoutBooking = mockBookings.find(b => b.id === checkoutBookingId);
-  const cancelBooking = mockBookings.find(b => b.id === cancelBookingId);
+  const checkoutBooking = bookings.find(b => b.id === checkoutBookingId);
+  const cancelBooking = bookings.find(b => b.id === cancelBookingId);
 
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
@@ -317,7 +318,14 @@ const AdminBookings: React.FC = () => {
             </div>
 
             <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
-              <p className="mb-4 text-base">Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>[ Tên khách hàng ]</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>[ Mã đơn ]</strong>.</p>
+              <p className="mb-3 text-base">[ Thông báo về việc khách hàng yêu cầu hủy đơn ]</p>
+
+              <div className="mb-4">
+                <span className="text-sm font-semibold text-muted block mb-1">Lý do hủy từ khách:</span>
+                <p className="text-sm italic p-2 rounded" style={{ border: '1px solid var(--color-border)', background: 'var(--color-bg-surface)' }}>
+                  [ Lý do hủy ]
+                </p>
+              </div>
 
               <div className="flex justify-between items-center p-4 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
                 <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>

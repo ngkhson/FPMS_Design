@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { mockPitches, mockTimeSlots } from '../mocks/mockData';
-import { CreditCard, CheckCircle, ArrowLeft } from 'lucide-react';
+import { CreditCard, CheckCircle, ArrowLeft, AlertTriangle } from 'lucide-react';
 
 const Checkout: React.FC = () => {
   const { pitchId, timeSlotId } = useParams<{ pitchId: string, timeSlotId: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const [paymentStatus, setPaymentStatus] = useState<'IDLE' | 'SUCCESS' | 'FAILED'>(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam === 'failed' || statusParam === 'error') return 'FAILED';
+    if (statusParam === 'success') return 'SUCCESS';
+    return 'IDLE';
+  });
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const pitch = mockPitches.find(p => p.id === pitchId);
   const slot = mockTimeSlots.find(t => t.id === timeSlotId);
@@ -17,52 +23,105 @@ const Checkout: React.FC = () => {
     return <div className="text-center mt-8 text-danger">Không tìm thấy thông tin sân hoặc khung giờ!</div>;
   }
 
-  const depositRatio = 0.3; // 30% cọc
-  const depositAmount = slot.basePrice * depositRatio;
-  const remainingAmount = slot.basePrice - depositAmount;
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-  };
-
-  const handlePayment = () => {
+  const handlePaymentSuccess = () => {
     setIsProcessing(true);
-    // Giả lập gọi API thanh toán
     setTimeout(() => {
       setIsProcessing(false);
-      setIsSuccess(true);
-    }, 1500);
+      setPaymentStatus('SUCCESS');
+    }, 800);
   };
 
-  if (isSuccess) {
+  const handlePaymentFailed = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setPaymentStatus('FAILED');
+    }, 800);
+  };
+
+  // Màn hình 1: Thanh toán thành công (CONFIRMED)
+  if (paymentStatus === 'SUCCESS') {
     return (
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-8 px-4">
         <div className="card text-center" style={{ maxWidth: 500, width: '100%' }}>
-          <CheckCircle size={64} className="text-success mx-auto mb-4" />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ width: '4rem', height: '4rem', borderRadius: '50%', border: '1.5px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)' }}>
+            <CheckCircle size={36} className="text-success" />
+          </div>
           <h2 className="text-2xl font-bold mb-2">Thanh toán thành công!</h2>
-          <p className="text-muted mb-6">Đơn đặt sân của bạn đã được xác nhận (CONFIRMED).</p>
-          <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)' }}>
+          <p className="text-muted mb-6">[ Đơn đặt sân của bạn đã được xác nhận (CONFIRMED) ]</p>
+          
+          <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Sân:</span>
-              <span className="font-semibold">{pitch.name}</span>
+              <span className="font-semibold">[ Tên sân ]</span>
             </div>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Khung giờ:</span>
-              <span className="font-semibold">{slot.startTime} - {slot.endTime}</span>
+              <span className="font-semibold">[ Khung giờ ]</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted">Đã cọc:</span>
-              <span className="font-semibold text-primary">{formatPrice(depositAmount)}</span>
+              <span className="text-muted">Đã cọc (30%):</span>
+              <span className="font-semibold text-primary">[ Số tiền ]</span>
             </div>
           </div>
-          <button className="btn btn-primary w-full" onClick={() => navigate('/my-bookings')}>
-            Xem Đơn Đặt Sân Của Tôi
-          </button>
+          
+          <div className="flex flex-col gap-3">
+            <button className="btn btn-primary w-full" onClick={() => navigate('/my-bookings')}>
+              Xem Đơn Đặt Sân Của Tôi
+            </button>
+            <button className="btn btn-secondary w-full" onClick={() => setPaymentStatus('IDLE')}>
+              [ Quay lại thông tin đặt sân ]
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Màn hình 2: Thanh toán thất bại / Lỗi thanh toán
+  if (paymentStatus === 'FAILED') {
+    return (
+      <div className="flex justify-center mt-8 px-4">
+        <div className="card text-center" style={{ maxWidth: 500, width: '100%' }}>
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ width: '4rem', height: '4rem', borderRadius: '50%', border: '1.5px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)' }}>
+            <AlertTriangle size={36} className="text-danger" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Thanh toán thất bại!</h2>
+          <p className="text-muted mb-6">[ Giao dịch thanh toán tiền cọc 30% không thành công hoặc đã bị hủy ]</p>
+          
+          <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+            <div className="flex justify-between mb-2">
+              <span className="text-muted">Sân:</span>
+              <span className="font-semibold">[ Tên sân ]</span>
+            </div>
+            <div className="flex justify-between mb-2">
+              <span className="text-muted">Khung giờ:</span>
+              <span className="font-semibold">[ Khung giờ ]</span>
+            </div>
+            <div className="flex justify-between mb-2">
+              <span className="text-muted">Tiền cọc cần thanh toán:</span>
+              <span className="font-semibold">[ Số tiền ]</span>
+            </div>
+            <div className="flex justify-between pt-2 border-t text-sm" style={{ borderTopColor: 'var(--color-border)' }}>
+              <span className="text-muted">Lý do lỗi:</span>
+              <span className="font-medium text-danger">[ Tài khoản không đủ số dư / Quá hạn giao dịch / Hủy bởi người dùng ]</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <button className="btn btn-primary w-full" onClick={() => setPaymentStatus('IDLE')}>
+              [ Thử thanh toán lại ]
+            </button>
+            <button className="btn btn-secondary w-full" onClick={() => navigate('/book-pitch')}>
+              [ Quay lại chọn khung giờ khác ]
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Màn hình chính: Xác nhận đặt sân & Form thanh toán
   return (
     <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
       <button 
@@ -164,17 +223,29 @@ const Checkout: React.FC = () => {
               <strong style={{ color: 'var(--color-primary)' }}>Lưu ý:</strong> [ Ghi chú/Lưu ý phụ ]
             </div>
 
-            <button
-              type="button"
-              className="btn btn-primary w-full flex items-center justify-center gap-2 mt-auto"
-              style={{ padding: '1rem', fontSize: '1rem' }}
-              onClick={handlePayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán [ Số tiền ]</>}
-            </button>
+            <div className="flex flex-col gap-2 mt-auto">
+              <button
+                type="button"
+                className="btn btn-primary w-full flex items-center justify-center gap-2"
+                style={{ padding: '1rem', fontSize: '1rem' }}
+                onClick={handlePaymentSuccess}
+                disabled={isProcessing}
+              >
+                {isProcessing ? 'Đang xử lý...' : <><CreditCard size={20} /> Thanh toán [ Số tiền ]</>}
+              </button>
 
-            <p className="text-xs text-center text-muted">
+              <button
+                type="button"
+                className="btn btn-secondary w-full text-xs py-2"
+                onClick={handlePaymentFailed}
+                disabled={isProcessing}
+                title="Mô phỏng trường hợp giao dịch thanh toán bị lỗi"
+              >
+                [ Mô phỏng: Thanh toán thất bại / Lỗi ]
+              </button>
+            </div>
+
+            <p className="text-xs text-center text-muted mt-1">
               [ Văn bản thông báo nhỏ ]
             </p>
           </form>

@@ -1,13 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('isLoggedIn', 'true');
+    navigate('/profile');
+  };
+
   return (
     <div className="flex justify-center items-start pt-4">
       <div className="card" style={{ width: '100%', maxWidth: '500px' }}>
         <h2 className="text-2xl font-bold text-center mb-6">Đăng ký tài khoản</h2>
         
-        <form className="flex flex-col gap-4">
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div>
               <label className="font-semibold text-sm">Họ và tên</label>
@@ -16,6 +29,9 @@ const Register: React.FC = () => {
                 className="mt-2 w-full" 
                 style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
                 placeholder="VD: Nguyễn Văn A"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -25,6 +41,9 @@ const Register: React.FC = () => {
                 className="mt-2 w-full" 
                 style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
                 placeholder="VD: 0912345678"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -36,6 +55,9 @@ const Register: React.FC = () => {
               className="mt-2 w-full" 
               style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
               placeholder="Nhập email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           
@@ -46,6 +68,9 @@ const Register: React.FC = () => {
               className="mt-2 w-full" 
               style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
@@ -56,16 +81,19 @@ const Register: React.FC = () => {
               className="mt-2 w-full" 
               style={{ padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-base)', color: 'var(--color-text-base)' }}
               placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
             />
           </div>
           
           <div className="flex items-center text-sm mt-2">
             <label className="flex items-center gap-2 text-muted">
-              <input type="checkbox" /> Tôi đồng ý với các Điều khoản & Chính sách bảo mật của hệ thống.
+              <input type="checkbox" required /> Tôi đồng ý với các Điều khoản & Chính sách bảo mật của hệ thống.
             </label>
           </div>
           
-          <button type="button" className="btn btn-primary mt-4" style={{ padding: '0.75rem' }}>
+          <button type="submit" className="btn btn-primary mt-4" style={{ padding: '0.75rem' }}>
             Đăng ký ngay
           </button>
           

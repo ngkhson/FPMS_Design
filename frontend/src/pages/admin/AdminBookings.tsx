@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { mockBookings, mockPitches, mockTimeSlots } from '../../mocks/mockData';
-import { Search, Calendar, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClose: () => void }) => {
   return createPortal(
@@ -17,6 +17,7 @@ const ModalOverlay = ({ children, onClose }: { children: React.ReactNode, onClos
 
 const AdminBookings: React.FC = () => {
   const dateInputRef = React.useRef<HTMLInputElement>(null);
+  const [bookings, setBookings] = useState(mockBookings);
   const [activeTab, setActiveTab] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [pitchFilter, setPitchFilter] = useState('ALL');
@@ -41,7 +42,7 @@ const AdminBookings: React.FC = () => {
     }
   };
 
-  const filteredBookings = mockBookings.filter(b => {
+  const filteredBookings = bookings.filter(b => {
     if (activeTab !== 'ALL' && b.status !== activeTab) return false;
 
     if (searchTerm) {
@@ -59,8 +60,8 @@ const AdminBookings: React.FC = () => {
     return true;
   });
 
-  const checkoutBooking = mockBookings.find(b => b.id === checkoutBookingId);
-  const cancelBooking = mockBookings.find(b => b.id === cancelBookingId);
+  const checkoutBooking = bookings.find(b => b.id === checkoutBookingId);
+  const cancelBooking = bookings.find(b => b.id === cancelBookingId);
 
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
@@ -314,24 +315,37 @@ const AdminBookings: React.FC = () => {
         );
       })()}
 
-      {/* 3. Modal Xử lý Hủy đơn (Duyệt) */}
+      {/* 3. Modal Xử lý Hủy đơn (UC010.3 & BR4) */}
       {cancelBookingId && cancelBooking && (() => {
         const slot = mockTimeSlots.find(t => t.id === cancelBooking.timeSlotId);
+        const pitch = mockPitches.find(p => p.id === cancelBooking.pitchId);
         const deposit = (slot?.basePrice || 0) * 0.3;
 
         return (
           <ModalOverlay onClose={() => setCancelBookingId(null)}>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-danger">Duyệt Hủy Đơn & Hoàn Tiền</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-danger">Xét Duyệt Yêu Cầu Hủy Đơn</h2>
               <button onClick={() => setCancelBookingId(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
             </div>
 
-            <div style={{ background: 'var(--color-bg-base)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '1.5rem' }}>
-              <p className="mb-4 text-base">Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>{cancelBooking.customerName}</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>#{cancelBooking.id.toUpperCase()}</strong>.</p>
+            <div style={{ background: 'var(--color-bg-base)', padding: '1.25rem', borderRadius: 'var(--radius-md)', marginBottom: '1.25rem' }}>
+              <p className="mb-2 text-sm">
+                Khách hàng <strong style={{ color: 'var(--color-text-base)' }}>{cancelBooking.customerName}</strong> đã gửi yêu cầu hủy đơn <strong style={{ color: 'var(--color-text-base)' }}>#{cancelBooking.id.toUpperCase()}</strong>.
+              </p>
+              <div className="text-xs text-muted mb-3">
+                <span>{pitch?.name} • {cancelBooking.date} ({slot?.startTime} - {slot?.endTime})</span>
+                {cancelBooking.cancelRequestedAt && <div className="mt-0.5">Thời gian gửi: {cancelBooking.cancelRequestedAt}</div>}
+              </div>
 
-              <div className="flex justify-between items-center p-4 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
-                <span className="font-semibold text-danger">Số tiền cọc cần hoàn trả:</span>
-                <span className="text-2xl font-bold text-danger">{formatPrice(deposit)}</span>
+              {/* Box hiển thị lý do hủy từ khách (BR3, BR4) */}
+              <div className="p-3 mb-3 rounded-md text-xs" style={{ backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+                <span className="font-bold text-warning block mb-1">Lý do khách xin hủy (BR3):</span>
+                <span className="italic" style={{ color: 'var(--color-text-base)' }}>"{cancelBooking.cancelReason || 'Bận việc đột xuất cùng công ty'}"</span>
+              </div>
+
+              <div className="flex justify-between items-center p-3 mb-4" style={{ border: '1px dashed var(--color-danger)', borderRadius: 'var(--radius-md)', backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+                <span className="font-semibold text-danger text-sm">Số tiền cọc cần hoàn trả:</span>
+                <span className="text-xl font-bold text-danger">{formatPrice(deposit)}</span>
               </div>
 
               <div>
@@ -345,7 +359,15 @@ const AdminBookings: React.FC = () => {
 
             <div className="flex gap-4">
               <button className="btn btn-secondary w-full" onClick={() => setCancelBookingId(null)}>Quay lại</button>
-              <button className="btn btn-primary w-full" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(null)}>Xác nhận Hoàn Tiền</button>
+              <button
+                className="btn btn-primary w-full"
+                style={{ backgroundColor: 'var(--color-danger)' }}
+                onClick={() => {
+                  setCancelBookingId(null);
+                }}
+              >
+                Xác nhận Hoàn Tiền
+              </button>
             </div>
           </ModalOverlay>
         );
