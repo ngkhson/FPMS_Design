@@ -184,10 +184,6 @@ const AdminTransactions: React.FC = () => {
               <option value="SUCCESS">Thành công</option>
               <option value="FAILED">Thất bại</option>
             </select>
-
-            <button className="btn btn-secondary font-semibold" style={{ height: '42px', padding: '0 1.2rem' }}>
-              Lọc
-            </button>
           </div>
         </div>
 
