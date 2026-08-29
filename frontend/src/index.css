@@ -108,10 +108,10 @@ button {
 
 /* Utilities */
 .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 1rem !important;
 }
 
 .flex { display: flex; }
