@@ -57,7 +57,7 @@ const Checkout: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold mb-2">Thanh toán cọc thành công!</h2>
           <p className="text-muted mb-6">Đơn đặt sân của bạn đã được xác nhận vào hệ thống (CONFIRMED).</p>
-          
+
           <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Sân bóng:</span>
@@ -76,7 +76,7 @@ const Checkout: React.FC = () => {
               <span className="font-semibold text-warning">{formatPrice(remainingAmount)}</span>
             </div>
           </div>
-          
+
           <div className="flex flex-col gap-3">
             <button className="btn btn-primary w-full py-3" onClick={() => navigate('/my-bookings')}>
               Xem Đơn Đặt Sân Của Tôi
@@ -100,7 +100,7 @@ const Checkout: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold mb-2 text-danger">Thanh toán không thành công!</h2>
           <p className="text-muted mb-6">Giao dịch thanh toán tiền cọc chưa được hoàn tất hoặc đã bị hủy.</p>
-          
+
           <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Sân bóng:</span>
@@ -135,18 +135,18 @@ const Checkout: React.FC = () => {
 
   // 3. Màn hình chính: Xác nhận thông tin & Thanh toán
   return (
-    <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
-      <button 
-        className="flex items-center gap-2 text-muted hover:text-primary transition-all mb-4" 
+    <div className="max-w-[1400px] mx-auto pt-8 px-4 pb-12">
+      <button
+        className="flex items-center gap-2 text-muted hover:text-primary transition-all mb-4"
         onClick={() => navigate(-1)}
         style={{ fontWeight: 500 }}
       >
         <ArrowLeft size={18} /> Quay lại
       </button>
 
-      <div 
+      <div
         className="mb-8 shadow-lg relative overflow-hidden"
-        style={{ 
+        style={{
           borderRadius: '1rem',
           background: 'linear-gradient(135deg, rgba(5,150,105,0.9) 0%, rgba(16,185,129,0.85) 50%, rgba(6,182,212,0.9) 100%), url("https://images.unsplash.com/photo-1518605368461-1ee7e53f0b2f?q=80&w=2070&auto=format&fit=crop") center/cover no-repeat',
           color: 'white',

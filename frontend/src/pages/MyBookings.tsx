@@ -151,7 +151,7 @@ const MyBookings: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
+    <div className="max-w-[1400px] mx-auto pt-8 px-4 pb-12">
       {/* Banner */}
       <div
         className="mb-8 shadow-lg"
