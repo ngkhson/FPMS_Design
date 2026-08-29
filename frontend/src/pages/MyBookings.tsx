@@ -285,8 +285,8 @@ const MyBookings: React.FC = () => {
                         <div className="flex justify-center">{getStatusBadge(booking.status)}</div>
                       </td>
                       <td className="p-4 font-semibold text-center">{formatPrice(slot?.basePrice || 0)}</td>
-                      <td className="p-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
+                      <td className="p-4 text-left pl-20">
+                        <div className="flex items-center justify-start gap-2">
                           {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                             <button
                               className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition"
