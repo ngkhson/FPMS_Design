@@ -250,15 +250,15 @@ const MyBookings: React.FC = () => {
 
         {/* Desktop Table */}
         <div className="hidden md:block" style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <th className="p-4 font-semibold">Mã đơn</th>
-                <th className="p-4 font-semibold">Ngày đá</th>
-                <th className="p-4 font-semibold">Sân / Khung giờ</th>
-                <th className="p-4 font-semibold">Trạng thái</th>
-                <th className="p-4 font-semibold">Tổng tiền</th>
-                <th className="p-4 font-semibold text-right">Thao tác</th>
+                <th className="p-4 font-semibold text-center">Mã đơn</th>
+                <th className="p-4 font-semibold text-center">Ngày đá</th>
+                <th className="p-4 font-semibold text-center">Sân / Khung giờ</th>
+                <th className="p-4 font-semibold text-center">Trạng thái</th>
+                <th className="p-4 font-semibold text-center">Tổng tiền</th>
+                <th className="p-4 font-semibold text-center">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -275,16 +275,18 @@ const MyBookings: React.FC = () => {
 
                   return (
                     <tr key={booking.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td className="p-4 font-semibold">#{booking.id.toUpperCase()}</td>
-                      <td className="p-4">{booking.date}</td>
-                      <td className="p-4">
+                      <td className="p-4 font-semibold text-center">#{booking.id.toUpperCase()}</td>
+                      <td className="p-4 text-center">{booking.date}</td>
+                      <td className="p-4 text-center">
                         <div className="font-semibold">{pitch?.name}</div>
                         <div className="text-sm text-muted">{slot?.startTime} - {slot?.endTime}</div>
                       </td>
-                      <td className="p-4">{getStatusBadge(booking.status)}</td>
-                      <td className="p-4 font-semibold">{formatPrice(slot?.basePrice || 0)}</td>
-                      <td className="p-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="p-4 text-center">
+                        <div className="flex justify-center">{getStatusBadge(booking.status)}</div>
+                      </td>
+                      <td className="p-4 font-semibold text-center">{formatPrice(slot?.basePrice || 0)}</td>
+                      <td className="p-4 text-center">
+                        <div className="flex items-center justify-center gap-2">
                           {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
                             <button
                               className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition"
