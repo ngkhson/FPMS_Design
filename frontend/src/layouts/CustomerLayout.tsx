@@ -56,10 +56,10 @@ const CustomerLayout: React.FC = () => {
   };
 
   return (
-    <div className="customer-layout">
-      <header className="navbar">
-        <div className="container flex items-center justify-between">
-          <Link to="/" className="font-bold text-2xl" style={{ color: 'var(--color-primary)' }}>
+    <div className="flex flex-col min-h-screen">
+      <header className="bg-bg-surface border-b border-border py-4 sticky top-0 z-50">
+        <div className="max-w-[1200px] mx-auto px-4 w-full flex items-center justify-between">
+          <Link to="/" className="font-bold text-2xl text-primary">
             Soccer365
           </Link>
           
@@ -70,7 +70,7 @@ const CustomerLayout: React.FC = () => {
             <Link to="/my-bookings" className="font-semibold">Đơn Của Tôi</Link>
             
             <div className="flex items-center gap-4">
-              <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }} title="Chuyển đổi giao diện">
+              <button onClick={toggleTheme} className="btn btn-secondary p-2 rounded-full" title="Chuyển đổi giao diện">
                 {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
               </button>
               
@@ -78,16 +78,14 @@ const CustomerLayout: React.FC = () => {
                 <>
                   <Link 
                     to="/profile" 
-                    className={`btn ${isProfilePage ? 'btn-primary' : 'btn-secondary'} flex items-center gap-2 font-semibold`} 
-                    style={{ padding: '0 1rem', height: '40px', justifyContent: 'center' }}
+                    className={`btn ${isProfilePage ? 'btn-primary' : 'btn-secondary'} flex items-center gap-2 font-semibold px-4 h-[40px] justify-center`} 
                   >
                     <User size={18} />
                     <span>Hồ Sơ</span>
                   </Link>
                   <button 
                     onClick={handleLogout} 
-                    className="btn btn-secondary flex items-center gap-1.5 font-semibold" 
-                    style={{ padding: '0 1rem', height: '40px', justifyContent: 'center', color: 'var(--color-danger)' }}
+                    className="btn btn-secondary flex items-center gap-1.5 font-semibold px-4 h-[40px] justify-center text-danger" 
                     title="Đăng xuất"
                   >
                     <LogOut size={18} />
@@ -96,10 +94,10 @@ const CustomerLayout: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/register" className="btn btn-secondary font-semibold" style={{ padding: '0.5rem 1.2rem' }}>
+                  <Link to="/register" className="btn btn-secondary font-semibold px-5 py-2">
                     Đăng ký
                   </Link>
-                  <Link to="/login" className="btn btn-primary font-semibold" style={{ padding: '0.5rem 1.2rem' }}>
+                  <Link to="/login" className="btn btn-primary font-semibold px-5 py-2">
                     Đăng nhập
                   </Link>
                 </>
@@ -109,12 +107,11 @@ const CustomerLayout: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
-            <button onClick={toggleTheme} className="btn btn-secondary" style={{ padding: '0.5rem', borderRadius: '50%' }}>
+            <button onClick={toggleTheme} className="btn btn-secondary p-2 rounded-full">
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
             <button 
-              className="btn btn-secondary" 
-              style={{ padding: '0.5rem' }} 
+              className="btn btn-secondary p-2 rounded-md" 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -124,19 +121,18 @@ const CustomerLayout: React.FC = () => {
 
         {/* Mobile Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-surface)' }}>
-            <div className="container flex flex-col gap-3 py-4">
+          <div className="md:hidden border-t border-border bg-bg-surface">
+            <div className="max-w-[1200px] mx-auto px-4 w-full flex flex-col gap-3 py-4">
               <Link to="/" className="font-semibold py-2">Trang Chủ</Link>
               <Link to="/book-pitch" className="font-semibold py-2">Đặt Sân</Link>
               <Link to="/my-bookings" className="font-semibold py-2">Đơn Của Tôi</Link>
               {showUserMenu && <Link to="/profile" className="font-semibold py-2">Hồ Sơ Của Tôi</Link>}
               
-              <div className="pt-2 border-t flex flex-col gap-2" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="pt-2 border-t border-border flex flex-col gap-2">
                 {showUserMenu ? (
                   <button 
                     onClick={handleLogout} 
-                    className="btn btn-secondary font-semibold w-full flex items-center justify-center gap-2"
-                    style={{ color: 'var(--color-danger)', padding: '0.75rem' }}
+                    className="btn btn-secondary font-semibold w-full flex items-center justify-center gap-2 text-danger p-3"
                   >
                     <LogOut size={20} />
                     <span>Đăng xuất</span>
@@ -157,24 +153,24 @@ const CustomerLayout: React.FC = () => {
         )}
       </header>
 
-      <main className="customer-main">
+      <main className="flex-grow py-8">
         <div className="animate-fade-in">
           <Outlet />
         </div>
       </main>
 
       <footer className="modern-footer">
-        <div className="container text-sm text-muted">
-          <div className="flex items-center gap-2 font-bold" style={{ color: 'var(--color-primary)' }}>
+        <div className="max-w-[1200px] mx-auto px-4 w-full text-sm text-text-muted flex flex-col md:flex-row items-center md:justify-between gap-4">
+          <div className="flex items-center gap-2 font-bold text-primary">
             Soccer365 © {new Date().getFullYear()}
           </div>
           <div className="text-center md:text-left font-medium">
             Hệ thống Quản lý và Đặt sân bóng đá trực tuyến
           </div>
           <div className="flex items-center gap-6 font-medium">
-            <Link to="/terms">Điều khoản</Link>
-            <Link to="/privacy">Bảo mật</Link>
-            <Link to="/contact">Liên hệ</Link>
+            <Link to="/terms" className="hover:text-primary transition-colors">Điều khoản</Link>
+            <Link to="/privacy" className="hover:text-primary transition-colors">Bảo mật</Link>
+            <Link to="/contact" className="hover:text-primary transition-colors">Liên hệ</Link>
           </div>
         </div>
       </footer>
