@@ -285,32 +285,34 @@ const MyBookings: React.FC = () => {
                         <div className="flex justify-center">{getStatusBadge(booking.status)}</div>
                       </td>
                       <td className="p-4 font-semibold text-center">{formatPrice(slot?.basePrice || 0)}</td>
-                      <td className="p-4 text-left pl-20">
-                        <div className="flex items-center justify-start gap-2">
-                          {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
+                      <td className="p-4 text-center">
+                        <div className="flex justify-center">
+                          <div className="w-[260px] flex items-center justify-start gap-2">
+                            {(booking.status === 'CONFIRMED' || booking.status === 'PENDING') && (
+                              <button
+                                className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition whitespace-nowrap"
+                                style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}
+                                onClick={() => openCancelModal(booking)}
+                              >
+                                Hủy đơn
+                              </button>
+                            )}
+                            {booking.status === 'COMPLETED' && (
+                              <button
+                                className="btn btn-primary text-sm whitespace-nowrap"
+                                style={{ backgroundColor: 'var(--color-secondary)' }}
+                                onClick={() => openPaymentModal(booking)}
+                              >
+                                Thanh toán nốt
+                              </button>
+                            )}
                             <button
-                              className="btn btn-secondary text-sm hover:border-danger hover:text-danger transition"
-                              style={{ borderColor: 'rgba(239, 68, 68, 0.4)' }}
-                              onClick={() => openCancelModal(booking)}
+                              className="btn btn-secondary text-sm whitespace-nowrap"
+                              onClick={() => openDetailsModal(booking)}
                             >
-                              Hủy đơn
+                              Xem chi tiết
                             </button>
-                          )}
-                          {booking.status === 'COMPLETED' && (
-                            <button
-                              className="btn btn-primary text-sm"
-                              style={{ backgroundColor: 'var(--color-secondary)' }}
-                              onClick={() => openPaymentModal(booking)}
-                            >
-                              Thanh toán nốt
-                            </button>
-                          )}
-                          <button
-                            className="btn btn-secondary text-sm"
-                            onClick={() => openDetailsModal(booking)}
-                          >
-                            Xem chi tiết
-                          </button>
+                          </div>
                         </div>
                       </td>
                     </tr>
