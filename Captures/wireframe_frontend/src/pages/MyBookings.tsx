@@ -22,7 +22,8 @@ const MyBookings: React.FC = () => {
     return <span className="font-semibold">[ Trạng thái ]</span>;
   };
 
-  const filteredBookings = mockBookings.filter(b => {
+  const displayBookings = mockBookings.filter(b => ['b1', 'b5', 'b6', 'b7'].includes(b.id));
+  const filteredBookings = displayBookings.filter(b => {
     if (activeTab === 'UPCOMING' && b.status !== 'CONFIRMED' && b.status !== 'IN_PROGRESS' && b.status !== 'PENDING_CANCEL' && b.status !== 'PENDING') return false;
     if (activeTab === 'HISTORY' && b.status !== 'COMPLETED' && b.status !== 'CANCELLED') return false;
 
@@ -212,14 +213,14 @@ const MyBookings: React.FC = () => {
       {/* Cancel Modal */}
       {isCancelModalOpen && selectedBooking && createPortal(
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div className="card animate-fade-in relative p-6 w-full max-w-md">
+          <div className="card animate-fade-in relative p-6" style={{ width: '100%', maxWidth: '520px' }}>
             <button className="absolute top-4 right-4 text-muted hover:text-danger transition" onClick={() => setIsCancelModalOpen(false)}>
               <X size={22} />
             </button>
 
             {/* Header Modal */}
             <div className="flex items-center gap-4 mb-4">
-              <div className="rounded-full flex items-center justify-center flex-shrink-0" style={{ width: '3rem', height: '3rem', backgroundColor: 'rgba(239, 68, 68, 0.12)', color: 'var(--color-danger)' }}>
+              <div className="rounded-full flex items-center justify-center flex-shrink-0" style={{ width: '3rem', height: '3rem', backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)', color: 'var(--color-text-base)' }}>
                 <AlertTriangle size={24} />
               </div>
               <h2 className="text-xl font-bold">Yêu cầu hủy đơn đặt sân</h2>
@@ -237,13 +238,13 @@ const MyBookings: React.FC = () => {
               </div>
               <div className="flex justify-between py-1 border-t mt-1 pt-1.5" style={{ borderColor: 'var(--color-border)' }}>
                 <span className="text-muted">Tiền cọc đã thanh toán:</span>
-                <span className="font-bold text-danger">[ Số tiền ]</span>
+                <span className="font-bold">[ Số tiền ]</span>
               </div>
             </div>
 
             {/* Quy định */}
-            <div className="mb-4 rounded-lg text-xs leading-relaxed" style={{ backgroundColor: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.3)', color: 'var(--color-text-base)', padding: '0.875rem' }}>
-              <div className="flex items-center gap-1.5 font-bold mb-1" style={{ color: 'var(--color-warning)' }}>
+            <div className="mb-4 rounded-lg text-xs leading-relaxed" style={{ backgroundColor: 'var(--color-bg-base)', border: '1px solid var(--color-border)', color: 'var(--color-text-base)', padding: '0.875rem' }}>
+              <div className="flex items-center gap-1.5 font-bold mb-1">
                 <AlertTriangle size={14} />
                 <span>Quy định hủy sân (Chính sách hoàn cọc)</span>
               </div>
@@ -255,7 +256,7 @@ const MyBookings: React.FC = () => {
 
             {/* Form */}
             <div className="mb-5">
-              <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-base)' }}>Lý do hủy đơn <span className="text-danger">(*)</span></label>
+              <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-base)' }}>Lý do hủy đơn (*)</label>
               
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.625rem' }}>
                 {['Bận việc đột xuất', 'Thời tiết xấu / Mưa bão', 'Đổi lịch thi đấu với đối thủ', 'Không đủ thành viên tham gia', 'Đặt nhầm sân / khung giờ'].map((chip, idx) => (
@@ -268,7 +269,7 @@ const MyBookings: React.FC = () => {
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
               <button className="btn btn-secondary" style={{ padding: '0.625rem 1.5rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }} onClick={() => setIsCancelModalOpen(false)}>Hủy bỏ</button>
-              <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)', padding: '0.625rem 1.5rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }} onClick={() => setIsCancelModalOpen(false)}>Xác nhận hủy đơn</button>
+              <button className="btn btn-primary" style={{ padding: '0.625rem 1.5rem', fontSize: '1rem', borderRadius: 'var(--radius-md)' }} onClick={() => setIsCancelModalOpen(false)}>Xác nhận hủy đơn</button>
             </div>
           </div>
         </div>,
@@ -403,20 +404,6 @@ const MyBookings: React.FC = () => {
                 </div>
               )}
 
-              {selectedBooking.status === 'CANCELLED' && selectedBooking.cancelReason && (
-                <div className="rounded-lg text-sm animate-fade-in" style={{ backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '0.875rem' }}>
-                  <div className="flex items-center font-bold mb-1.5" style={{ color: 'var(--color-danger)', gap: '0.375rem' }}>
-                    <X size={16} />
-                    <span>Đơn đã bị hủy</span>
-                  </div>
-                  <div className="text-xs text-muted mb-1">
-                    <strong>Thời gian hủy:</strong> {selectedBooking.cancelRequestedAt || 'Không xác định'}
-                  </div>
-                  <div className="text-xs text-muted">
-                    <strong>Lý do hủy:</strong> <span className="italic">"{selectedBooking.cancelReason}"</span>
-                  </div>
-                </div>
-              )}
 
               <hr className="my-2" style={{ borderColor: 'var(--color-border)', width: '100%', margin: '0.5rem 0' }} />
 

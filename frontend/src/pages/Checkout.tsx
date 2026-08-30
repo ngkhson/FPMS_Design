@@ -120,12 +120,12 @@ const Checkout: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             <button className="btn btn-primary w-full py-3 flex items-center justify-center gap-2" onClick={() => setPaymentStatus('IDLE')}>
               <RefreshCw size={18} /> Thử thanh toán lại
             </button>
-            <button className="btn btn-secondary w-full" onClick={() => navigate('/book-pitch')}>
-              Quay lại chọn khung giờ khác
+            <button className="btn btn-secondary w-full" onClick={() => navigate('/')}>
+              Đặt sân khác
             </button>
           </div>
         </div>

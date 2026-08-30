@@ -49,7 +49,7 @@ const Checkout: React.FC = () => {
           </div>
           <h2 className="text-2xl font-bold mb-2">Thanh toán thành công!</h2>
           <p className="text-muted mb-6">[ Đơn đặt sân của bạn đã được xác nhận (CONFIRMED) ]</p>
-          
+
           <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Sân:</span>
@@ -64,13 +64,13 @@ const Checkout: React.FC = () => {
               <span className="font-semibold text-primary">[ Số tiền ]</span>
             </div>
           </div>
-          
-          <div className="flex flex-col gap-3">
+
+          <div className="flex flex-col gap-5">
             <button className="btn btn-primary w-full" onClick={() => navigate('/my-bookings')}>
               Xem Đơn Đặt Sân Của Tôi
             </button>
-            <button className="btn btn-secondary w-full" onClick={() => setPaymentStatus('IDLE')}>
-              [ Quay lại thông tin đặt sân ]
+            <button className="btn btn-secondary w-full" onClick={() => navigate('/')}>
+              Đặt thêm sân khác
             </button>
           </div>
         </div>
@@ -87,8 +87,8 @@ const Checkout: React.FC = () => {
             <AlertTriangle size={36} className="text-danger" />
           </div>
           <h2 className="text-2xl font-bold mb-2">Thanh toán thất bại!</h2>
-          <p className="text-muted mb-6">[ Giao dịch thanh toán tiền cọc 30% không thành công hoặc đã bị hủy ]</p>
-          
+          <p className="text-muted mb-6">[ Giao dịch thanh toán không thành công hoặc đã bị hủy ]</p>
+
           <div className="p-4 mb-6 text-left" style={{ backgroundColor: 'var(--color-bg-base)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
             <div className="flex justify-between mb-2">
               <span className="text-muted">Sân:</span>
@@ -108,12 +108,12 @@ const Checkout: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             <button className="btn btn-primary w-full" onClick={() => setPaymentStatus('IDLE')}>
               [ Thử thanh toán lại ]
             </button>
-            <button className="btn btn-secondary w-full" onClick={() => navigate('/book-pitch')}>
-              [ Quay lại chọn khung giờ khác ]
+            <button className="btn btn-secondary w-full" onClick={() => navigate('/')}>
+              Đặt sân khác
             </button>
           </div>
         </div>
@@ -124,17 +124,17 @@ const Checkout: React.FC = () => {
   // Màn hình chính: Xác nhận đặt sân & Form thanh toán
   return (
     <div className="max-w-5xl mx-auto pt-8 px-4 pb-12">
-      <button 
-        className="flex items-center gap-2 text-muted hover:text-primary transition-all mb-4" 
+      <button
+        className="flex items-center gap-2 text-muted hover:text-primary transition-all mb-4"
         onClick={() => navigate(-1)}
         style={{ fontWeight: 500 }}
       >
         <ArrowLeft size={18} /> Quay lại
       </button>
 
-      <div 
+      <div
         className="mb-8 shadow-lg relative overflow-hidden"
-        style={{ 
+        style={{
           borderRadius: '1rem',
           background: 'var(--color-bg-elevated)',
           border: '1px solid var(--color-border)',
