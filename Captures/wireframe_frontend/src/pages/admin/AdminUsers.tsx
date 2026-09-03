@@ -22,6 +22,7 @@ const AdminUsers: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewUser, setViewUser] = useState<any>(null);
   const [lockUser, setLockUser] = useState<any>(null);
+  const [unlockUser, setUnlockUser] = useState<any>(null);
   const users = [
     { id: 'U001', name: 'Nguyễn Văn A', email: 'nguyenvana@gmail.com', phone: '0987654321', role: 'CUSTOMER', status: 'ACTIVE' },
     { id: 'U002', name: 'Nguyễn Thu Ngân', email: 'ngan.staff@fpms.com', phone: '0909090909', role: 'STAFF', status: 'ACTIVE' },
@@ -78,7 +79,7 @@ const AdminUsers: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">LIÊN HỆ</th>
                 <th className="p-4 font-semibold text-muted text-sm">VAI TRÒ</th>
                 <th className="p-4 font-semibold text-muted text-sm">TRẠNG THÁI</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm text-left">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -98,14 +99,14 @@ const AdminUsers: React.FC = () => {
                   <td className="p-4">
                     <span className="font-semibold">[ Trạng thái ]</span>
                   </td>
-                  <td className="p-4 text-right">
-                    <div className="flex gap-2 justify-end">
+                  <td className="p-4 text-left">
+                    <div className="flex gap-2 justify-start">
                       {user.status === 'ACTIVE' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
                         <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Khóa tài khoản" onClick={() => setLockUser(user)}>
                           <UserX size={16} />
                         </button>
                       ) : user.status === 'LOCKED' && (user.role === 'CUSTOMER' || user.role === 'STAFF') ? (
-                        <button className="btn btn-secondary text-success" style={{ padding: '0.5rem' }} title="Mở khóa tài khoản">
+                        <button className="btn btn-secondary text-success" style={{ padding: '0.5rem' }} title="Mở khóa tài khoản" onClick={() => setUnlockUser(user)}>
                           <UserCheck size={16} />
                         </button>
                       ) : null}
@@ -185,15 +186,12 @@ const AdminUsers: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold mb-2">Vai trò</label>
-              <select className="w-full" defaultValue={viewUser.role} style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-base)' }}>
-                <option value="CUSTOMER">Khách hàng (CUSTOMER)</option>
-                <option value="STAFF">Nhân viên (STAFF)</option>
-              </select>
+              <input type="text" className="w-full" value={viewUser.role === 'CUSTOMER' ? 'Khách hàng (CUSTOMER)' : viewUser.role === 'STAFF' ? 'Nhân viên (STAFF)' : 'Quản trị viên (ADMIN)'} readOnly style={{ padding: '0.6rem 1rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-surface)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
             </div>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setViewUser(null)}>Đóng</button>
-            <button className="btn btn-primary w-1/2" onClick={() => setViewUser(null)}>Lưu Thay Đổi</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setViewUser(null)}>Đóng</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setViewUser(null)}>Lưu Thay Đổi</button>
           </div>
         </ModalOverlay>
       )}
@@ -202,16 +200,34 @@ const AdminUsers: React.FC = () => {
       {lockUser && (
         <ModalOverlay onClose={() => setLockUser(null)}>
           <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
-            <h2 className="text-xl font-bold">Xác Nhận Thay Đổi Trạng Thái</h2>
+            <h2 className="text-xl font-bold">Xác Nhận Khóa Tài Khoản</h2>
             <button onClick={() => setLockUser(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
           </div>
           <div className="mb-6">
-            <p>Bạn có chắc chắn muốn thay đổi trạng thái của <strong>[ Tên người dùng ]</strong> không?</p>
-            <p className="text-muted text-sm mt-2">Hành động này sẽ thay đổi quyền truy cập của người dùng này vào hệ thống.</p>
+            <p>Bạn có chắc chắn muốn khóa tài khoản của <strong>[ Tên người dùng ]</strong> không?</p>
+            <p className="text-muted text-sm mt-2">Người dùng này sẽ không thể đăng nhập hoặc đặt sân mới cho đến khi được mở khóa lại.</p>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setLockUser(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={() => setLockUser(null)}>Xác nhận</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setLockUser(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setLockUser(null)}>Khóa Tài Khoản</button>
+          </div>
+        </ModalOverlay>
+      )}
+
+      {/* Unlock User Modal */}
+      {unlockUser && (
+        <ModalOverlay onClose={() => setUnlockUser(null)}>
+          <div className="flex justify-between items-center mb-6" style={{ flexShrink: 0 }}>
+            <h2 className="text-xl font-bold">Xác Nhận Mở Khóa</h2>
+            <button onClick={() => setUnlockUser(null)} className="text-muted hover:text-[var(--color-text-base)]"><X size={24} /></button>
+          </div>
+          <div className="mb-6">
+            <p>Bạn có chắc chắn muốn mở khóa tài khoản của <strong>[ Tên người dùng ]</strong> không?</p>
+            <p className="text-muted text-sm mt-2">Người dùng này sẽ có thể đăng nhập và tiếp tục sử dụng hệ thống.</p>
+          </div>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setUnlockUser(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setUnlockUser(null)}>Mở Khóa</button>
           </div>
         </ModalOverlay>
       )}
