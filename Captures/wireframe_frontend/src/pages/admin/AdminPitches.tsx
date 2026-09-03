@@ -62,7 +62,7 @@ const AdminPitches: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">TÊN SÂN</th>
                 <th className="p-4 font-semibold text-muted text-sm">LOẠI SÂN</th>
                 <th className="p-4 font-semibold text-muted text-sm">TRẠNG THÁI</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm text-left">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -78,8 +78,8 @@ const AdminPitches: React.FC = () => {
                   <td className="p-4">
                     <span className="font-semibold">[ Trạng thái ]</span>
                   </td>
-                  <td className="p-4 text-right">
-                    <div className="flex gap-2 justify-end">
+                  <td className="p-4 text-left">
+                    <div className="flex gap-2 justify-start">
                       {pitch.status === 'AVAILABLE' ? (
                         <button className="btn btn-secondary text-primary" style={{ padding: '0.5rem' }} title="Cài đặt bảo trì" onClick={() => setMaintenancePitch(pitch)}>
                           <Settings size={16} />
@@ -147,9 +147,9 @@ const AdminPitches: React.FC = () => {
               </select>
             </div>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setEditPitch(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={() => setEditPitch(null)}>Lưu Thay Đổi</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setEditPitch(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setEditPitch(null)}>Lưu Thay Đổi</button>
           </div>
         </ModalOverlay>
       )}
@@ -165,10 +165,11 @@ const AdminPitches: React.FC = () => {
             <p>Bạn có chắc chắn muốn thay đổi trạng thái của sân <strong>[ Tên sân ]</strong> không?</p>
             <p className="text-muted text-sm mt-2">Thao tác này sẽ ảnh hưởng đến việc khách hàng có thể đặt sân hay không.</p>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setMaintenancePitch(null)}>Hủy bỏ</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setMaintenancePitch(null)}>Hủy bỏ</button>
             <button 
-              className="btn btn-primary w-1/2" 
+              className="btn btn-primary" 
+              style={{ flex: 1, padding: '0.875rem' }} 
               onClick={() => setMaintenancePitch(null)}
             >
               Xác nhận

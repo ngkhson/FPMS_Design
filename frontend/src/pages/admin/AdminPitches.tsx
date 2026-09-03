@@ -62,7 +62,7 @@ const AdminPitches: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">TÊN SÂN</th>
                 <th className="p-4 font-semibold text-muted text-sm">LOẠI SÂN</th>
                 <th className="p-4 font-semibold text-muted text-sm">TRẠNG THÁI</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm text-left">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -81,8 +81,8 @@ const AdminPitches: React.FC = () => {
                       : <span className="badge badge-warning">Đang bảo trì</span>
                     }
                   </td>
-                  <td className="p-4 text-right">
-                    <div className="flex gap-2 justify-end">
+                  <td className="p-4 text-left">
+                    <div className="flex gap-2 justify-start">
                       {pitch.status === 'AVAILABLE' ? (
                         <button className="btn btn-secondary text-primary" style={{ padding: '0.5rem' }} title="Cài đặt bảo trì" onClick={() => setMaintenancePitch(pitch)}>
                           <Settings size={16} />
