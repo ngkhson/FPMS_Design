@@ -38,7 +38,7 @@ const AdminTimeSlots: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">PHÂN LOẠI</th>
                 <th className="p-4 font-semibold text-muted text-sm">GIÁ SÂN 5 (VNĐ)</th>
                 <th className="p-4 font-semibold text-muted text-sm">GIÁ SÂN 7 (VNĐ)</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm text-left">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -54,9 +54,11 @@ const AdminTimeSlots: React.FC = () => {
                   <td className="p-4 font-semibold text-muted">
                     [ Số tiền ]
                   </td>
-                  <td className="p-4 text-right flex gap-2 justify-end">
-                    <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Chỉnh sửa" onClick={() => setEditSlot(slot)}><Edit size={16} /></button>
-                    <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Xóa ca" onClick={() => setDeleteSlot(slot)}><Trash2 size={16} /></button>
+                  <td className="p-4 text-left">
+                    <div className="flex gap-2 justify-start">
+                      <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Chỉnh sửa" onClick={() => setEditSlot(slot)}><Edit size={16} /></button>
+                      <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Xóa ca" onClick={() => setDeleteSlot(slot)}><Trash2 size={16} /></button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -123,9 +125,9 @@ const AdminTimeSlots: React.FC = () => {
               </select>
             </div>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setEditSlot(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={() => setEditSlot(null)}>Lưu Thay Đổi</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setEditSlot(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setEditSlot(null)}>Lưu Thay Đổi</button>
           </div>
         </ModalOverlay>
       )}
@@ -141,9 +143,9 @@ const AdminTimeSlots: React.FC = () => {
             <p>Bạn có chắc chắn muốn xóa ca <strong>[ Khung giờ ]</strong> không?</p>
             <p className="text-muted text-sm mt-2">Lưu ý: Bạn không thể xóa ca nếu đang có khách hàng đặt lịch trong khung giờ này vào những ngày sắp tới.</p>
           </div>
-          <div style={{ flexShrink: 0, paddingTop: '1rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem' }}>
-            <button className="btn btn-secondary w-1/2" onClick={() => setDeleteSlot(null)}>Hủy bỏ</button>
-            <button className="btn btn-primary w-1/2" onClick={() => setDeleteSlot(null)}>Xác nhận Xóa</button>
+          <div style={{ flexShrink: 0, paddingTop: '1.25rem', marginTop: 'auto', borderTop: '1px solid var(--color-border)', display: 'flex', gap: '1rem', width: '100%' }}>
+            <button className="btn btn-secondary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setDeleteSlot(null)}>Hủy bỏ</button>
+            <button className="btn btn-primary" style={{ flex: 1, padding: '0.875rem' }} onClick={() => setDeleteSlot(null)}>Xác nhận Xóa</button>
           </div>
         </ModalOverlay>
       )}

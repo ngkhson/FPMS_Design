@@ -38,7 +38,7 @@ const AdminTimeSlots: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">PHÂN LOẠI</th>
                 <th className="p-4 font-semibold text-muted text-sm">GIÁ SÂN 5 (VNĐ)</th>
                 <th className="p-4 font-semibold text-muted text-sm">GIÁ SÂN 7 (VNĐ)</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm text-left">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -57,9 +57,11 @@ const AdminTimeSlots: React.FC = () => {
                   <td className="p-4 font-semibold text-muted">
                     {new Intl.NumberFormat('vi-VN').format(slot.basePrice + 100000)} đ
                   </td>
-                  <td className="p-4 text-right flex gap-2 justify-end">
-                    <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Chỉnh sửa" onClick={() => setEditSlot(slot)}><Edit size={16} /></button>
-                    <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Xóa ca" onClick={() => setDeleteSlot(slot)}><Trash2 size={16} /></button>
+                  <td className="p-4 text-left">
+                    <div className="flex gap-2 justify-start">
+                      <button className="btn btn-secondary" style={{ padding: '0.5rem' }} title="Chỉnh sửa" onClick={() => setEditSlot(slot)}><Edit size={16} /></button>
+                      <button className="btn btn-secondary text-danger" style={{ padding: '0.5rem' }} title="Xóa ca" onClick={() => setDeleteSlot(slot)}><Trash2 size={16} /></button>
+                    </div>
                   </td>
                 </tr>
               ))}
