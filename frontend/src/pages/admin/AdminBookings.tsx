@@ -73,9 +73,9 @@ const AdminBookings: React.FC = () => {
   return (
     <div style={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column' }}>
       <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <div className="flex items-center justify-between mb-6" style={{ flexShrink: 0 }}>
+        <div className="flex items-center justify-between mb-6 gap-4" style={{ flexShrink: 0 }}>
           <div className="flex gap-4 items-center">
-            <h2 className="text-xl font-semibold mr-2">Danh sách Đơn</h2>
+            <h2 className="text-xl font-semibold mr-2 whitespace-nowrap">Danh sách Đơn</h2>
             <select
               className="btn btn-secondary"
               style={{ height: '42px', fontWeight: 'normal', fontFamily: 'inherit', outline: 'none', border: '1px solid var(--color-border)' }}
@@ -92,15 +92,15 @@ const AdminBookings: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex gap-4 items-center">
-            <div className="flex items-center gap-2" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 1rem' }}>
+          <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2" style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.75rem' }}>
               <Search size={16} className="text-muted" />
               <input
                 type="text"
                 placeholder="Tìm mã đơn, tên khách..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '180px' }}
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: 'var(--color-text-base)', fontFamily: 'inherit', width: '175px' }}
               />
             </div>
 
@@ -117,7 +117,7 @@ const AdminBookings: React.FC = () => {
 
             <div
               className="flex items-center gap-2"
-              style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 1rem', cursor: 'pointer' }}
+              style={{ height: '42px', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-bg-base)', padding: '0 0.75rem', cursor: 'pointer' }}
               onClick={() => {
                 if (dateInputRef.current) {
                   try {
@@ -136,7 +136,7 @@ const AdminBookings: React.FC = () => {
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
-            <button className="btn btn-primary" style={{ height: '42px' }} onClick={() => setIsCreateModalOpen(true)}>Tạo đơn tại quầy</button>
+            <button className="btn btn-primary whitespace-nowrap flex-shrink-0" style={{ height: '42px' }} onClick={() => setIsCreateModalOpen(true)}>Tạo đơn tại quầy</button>
           </div>
         </div>
 
@@ -149,7 +149,7 @@ const AdminBookings: React.FC = () => {
                 <th className="p-4 font-semibold text-muted text-sm">SÂN / GIỜ</th>
                 <th className="p-4 font-semibold text-muted text-sm">TRẠNG THÁI</th>
                 <th className="p-4 font-semibold text-muted text-sm">TÀI CHÍNH</th>
-                <th className="p-4 font-semibold text-muted text-sm text-right">THAO TÁC</th>
+                <th className="p-4 font-semibold text-muted text-sm">THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -178,20 +178,22 @@ const AdminBookings: React.FC = () => {
                         <div className="text-sm font-semibold text-danger">Còn nợ: {formatPrice(price - deposit)}</div>
                       )}
                     </td>
-                    <td className="p-4 text-right flex gap-2 justify-end">
-                      {booking.status === 'PENDING' && (
-                        <>
-                          <button className="btn btn-primary" onClick={() => setApproveBookingId(booking.id)}>Duyệt đơn</button>
-                          <button className="btn btn-secondary text-danger" onClick={() => setAdminCancelBookingId(booking.id)}>Hủy & Hoàn tiền</button>
-                        </>
-                      )}
-                      {booking.status === 'IN_PROGRESS' && (
-                        <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => setCheckoutBookingId(booking.id)}>Thu tiền & Đóng ca</button>
-                      )}
+                    <td className="p-4">
+                      <div className="flex gap-2">
+                        {booking.status === 'PENDING' && (
+                          <>
+                            <button className="btn btn-primary" onClick={() => setApproveBookingId(booking.id)}>Duyệt đơn</button>
+                            <button className="btn btn-secondary text-danger" onClick={() => setAdminCancelBookingId(booking.id)}>Hủy & Hoàn tiền</button>
+                          </>
+                        )}
+                        {booking.status === 'IN_PROGRESS' && (
+                          <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-secondary)' }} onClick={() => setCheckoutBookingId(booking.id)}>Thu tiền & Đóng ca</button>
+                        )}
 
-                      {booking.status === 'PENDING_CANCEL' && (
-                        <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
-                      )}
+                        {booking.status === 'PENDING_CANCEL' && (
+                          <button className="btn btn-primary" style={{ backgroundColor: 'var(--color-danger)' }} onClick={() => setCancelBookingId(booking.id)}>Duyệt Hủy & Hoàn tiền</button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );

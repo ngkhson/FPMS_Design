@@ -104,7 +104,7 @@ const AdminTransactions: React.FC = () => {
         </div>
 
         <div className="card border-l-4" style={{ borderLeft: '4px solid var(--color-secondary)' }}>
-          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (VNPAY)</div>
+          <div className="text-muted text-sm font-semibold mb-1">TỔNG THU (CHUYỂN KHOẢN)</div>
           <div className="text-2xl font-bold">{formatPrice(2500000)}</div>
           <div className="text-xs text-muted mt-2">Đã cộng vào tài khoản ngân hàng</div>
         </div>
